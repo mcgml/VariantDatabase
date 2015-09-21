@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.grid', 'ui.grid.selection', 'ui.bootstrap'])
+var app = angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.grid', 'ui.grid.selection', 'ui.grid.exporter', 'ui.bootstrap', 'ui-notification'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/query', {
@@ -9,25 +9,50 @@ angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.grid',
         });
     }])
 
-    .controller('QueryCtrl',  ['$scope', '$http', '$interval', 'uiGridConstants', '$modal', function ($scope, $http, $interval, uiGridConstants, $modal) {
+    .config(function(NotificationProvider) {
+        NotificationProvider.setOptions(
+            {
+                delay: 2500,
+                startTop: 20,
+                startRight: 10,
+                verticalSpacing: 20,
+                horizontalSpacing: 20,
+                positionX: 'right',
+                positionY: 'bottom'
+            }
+        )
+    })
+
+    .controller('QueryCtrl',  ['$scope', '$http', '$interval', 'uiGridConstants', '$modal', 'Notification', function ($scope, $http, $interval, uiGridConstants, $modal, Notification) {
 
         $scope.workflows = [ "AllVariants", "AutosomalDomainant", "AutosomalRecessive", "X-Linked", "Y-Linked", "MT-Linked" ];
 
         $scope.gridOptions = {
-            enableRowSelection: true,
-            enableRowHeaderSelection: false,
-            enableFiltering: true,
             enableSorting: true,
-            multiSelect : false,
-            modifierKeysToMultiSelect : false,
-            noUnselect : true,
+            enableFiltering: true,
+            enableRowSelection: true,
+            enableSelectAll: true,
+            enableRowHeaderSelection: true,
+            enableGridMenu: true,
+            exporterCsvFilename: 'data.csv',
+            exporterMenuPdf: false,
+            exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
+            onRegisterApi: function (gridApi){
+                $scope.gridApi = gridApi;
+            },
+            appScopeProvider: {
+                onDblClick : function(row) {
+                    $scope.fullVariantInfo(row.entity);
+                }
+            },
+            rowTemplate: "<div ng-dblclick=\"grid.appScope.onDblClick(row)\" ng-repeat=\"(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name\" class=\"ui-grid-cell\" ng-class=\"{ 'ui-grid-row-header-cell': col.isRowHeader }\" ui-grid-cell ></div>",
             columnDefs: [
                 { name: "Variant", width: "10%" },
                 { name: "Id", width: "10%" },
                 { name: "Inheritance", width: "10%" },
                 { name: "Symbol", width: "10%" },
-                { name: "Transcript", width: "12.5%" },
-                { name: "Consequence", width: "27.25%" },
+                { name: "Transcript", width: "11.5%" },
+                { name: "Consequence", width: "25%" },
                 { name: "HGVSc", displayName: "HGVSc", width: "10%" },
                 { name: "HGVSp", displayName: "HGVSp", width: "10%" }
             ]
@@ -83,16 +108,15 @@ angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.grid',
                 }
             }).then(function(response) {
                 $scope.gridOptions.data = response.data;
-                // $interval whilst we wait for the grid to digest the data we just gave it
-                $interval( function() {$scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);}, 0, 1);
+                Notification('Operation successful');
             }, function(response) {
-                console.log("ERROR: " + response);
+                Notification.error(response);
             });
+
         };
 
         //modal variant info
-        $scope.items = ['item1', 'item2', 'item3'];
-        $scope.fullVariantInfo = function () {
+        $scope.fullVariantInfo = function (entity)  {
 
             var modalInstance = $modal.open({
                 animation: true,
@@ -101,34 +125,58 @@ angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.grid',
                 size: 'lg',
                 resolve: {
                     items: function () {
-                        return $scope.items;
+                        return entity;
                     }
                 }
             });
 
-            modalInstance.result.then(function (selectedItem) {
-                $scope.selected = selectedItem;
-            }, function () {
-                console.log('Modal dismissed at: ' + new Date());
+        };
+
+        //bubble chart
+        $scope.generate = function(){
+            // Generate random data
+            var bubbles = [];
+
+            var mult = 40;
+            var add = 5;
+
+            bubbles.push({
+                x: 0,
+                r: (0.01 * mult) + add,
+                label: "filter0"
             });
 
+            bubbles.push({
+                x: 1,
+                r: (0.1 * mult) + add,
+                label: "filter1"
+            });
+
+            bubbles.push({
+                x: 2,
+                r: (1 * mult) + add,
+                label: "filter2"
+            });
+
+            $scope.bubbles = bubbles;
+        };
+
+        $scope.generate();
+
+        $scope.handleClick = function(d){
+            alert(JSON.stringify(d));
         };
 
     }])
 
-    .controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+    .controller('ModalInstanceCtrl', function ($scope, $modalInstance, $window, items) {
 
         $scope.items = items;
-        $scope.selected = {
-            item: $scope.items[0]
-        };
 
-        $scope.ok = function () {
-            $modalInstance.close($scope.selected.item);
-        };
-
-        $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
+        $scope.close = function () {
+            $modalInstance.dismiss();
         };
 
     });
+
+angular.d3KitAdapter.plug(app, 'bubbleChart', BubbleChart);

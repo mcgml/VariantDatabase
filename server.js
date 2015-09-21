@@ -8,11 +8,15 @@ var db = require("seraph")("http://localhost:7474");
 var morgan = require('morgan');             // log requests to the console (express4)
 var bodyParser = require('body-parser');    // pull information from HTML POST (express4)
 var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
+var favicon = require('serve-favicon');
+var path = require('path');
 
-// configuration =================
-app.use(express.static(__dirname + '/app'));                 // set the static files location /public/img will be /img for users
-app.use('/node_modules',  express.static(__dirname + '/node_modules')); //redirect requests to node_modules folder
-app.use('/bower_components',  express.static(__dirname + '/bower_components')); //redirect requests to bower_components folder
+// configuration ================
+app.use(express.static(path.join(__dirname, 'app')));                 // set the static files location /public/img will be /img for users
+app.use('/fonts',  express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'fonts'))); //redirect requests to fonts folder
+app.use('/node_modules',  express.static(path.join(__dirname, 'node_modules'))); //redirect requests to node_modules folder
+app.use('/bower_components',  express.static(path.join(__dirname, 'bower_components'))); //redirect requests to bower_components folder
+app.use(favicon(path.join(__dirname,'app','app.ico')));
 app.use(morgan('dev'));                                         // log every request to the console
 app.use(bodyParser.urlencoded({'extended':'true'}));            // parse application/x-www-form-urlencoded
 app.use(bodyParser.json());                                     // parse application/json

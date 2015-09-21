@@ -1,48 +1,42 @@
-<div ng-controller="QueryCtrl">
-    <script type="text/ng-template" id="myModalContent.html">
-        <div class="modal-header">
-            <h3 class="modal-title">I'm a modal!</h3>
+<script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-header">
+        <h3 class="modal-title">{{items.Variant}}</h3>
+    </div>
+    <div class="modal-body">
+        <ul ng-repeat="(key, value) in items" ng-if="value!=null && key!='Variant'">
+            <td><strong>{{ key }}:</strong> {{ value }}</td>
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" type="button" ng-click="close()">Close</button>
+    </div>
+</script>
+<div class="col-md-3">
+    <input type="text" class="form-control" placeholder="Enter sample" ng-model="selectedAnalysis" typeahead="analysis as analysis.SampleId for analysis in analyses | filter:$viewValue | limitTo:3">
+</div>
+<div class="col-md-3">
+    <input type="text" class="form-control" placeholder="Enter virtual panel" ng-model="selectedPanel" typeahead="panel as panel.PanelName for panel in virtualPanels | filter:$viewValue | limitTo:3">
+</div>
+<div class="col-md-3">
+    <input type="text" class="form-control" placeholder="Enter filter workflow" ng-model="selectWorkflow" typeahead="workflow for workflow in workflows | filter:$viewValue | limitTo:3">
+</div>
+<div class="col-md-3">
+    <button type="button" class="btn btn-success" ng-click="filterVariants()">
+        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+        Search
+    </button>
+    <button type="button" class="btn btn-warning" ng-click="selectedAnalysis = ''; selectedPanel = ''; selectWorkflow = ''; gridOptions.data = [];">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        Clear
+    </button>
+</div>
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <bubble-chart chart-data="bubbles" chart-on-bubble-click="handleClick"></bubble-chart>
         </div>
-        <div class="modal-body">
-            <ul>
-                <li ng-repeat="item in items">
-                    <a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>
-                </li>
-            </ul>
-            Selected: <b>{{ selected.item }}</b>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
-            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
-        </div>
-    </script>
-    <div class="col-md-3">
-        <input type="text" class="form-control" placeholder="Enter sample" ng-model="selectedAnalysis" typeahead="analysis as analysis.SampleId for analysis in analyses | filter:$viewValue | limitTo:3">
     </div>
-    <div class="col-md-3">
-        <input type="text" class="form-control" placeholder="Enter virtual panel" ng-model="selectedPanel" typeahead="panel as panel.PanelName for panel in virtualPanels | filter:$viewValue | limitTo:3">
-    </div>
-    <div class="col-md-3">
-        <input type="text" class="form-control" placeholder="Enter filter workflow" ng-model="selectWorkflow" typeahead="workflow for workflow in workflows | filter:$viewValue | limitTo:3">
-    </div>
-    <div class="col-md-3">
-        <button type="button" class="btn btn-default" ng-click="filterVariants()">
-            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-            Search
-        </button>
-        <button type="button" class="btn btn-default" ng-click="selectedAnalysis = ''; selectedPanel = ''; selectWorkflow = ''; gridOptions.data = [];">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-            Clear
-        </button>
-    </div>
-    <div class="col-md-12">
-        <div ui-grid="gridOptions" class="grid"></div>
-    </div>
-    <div class="col-md-12">
-        <button type="button" class="btn btn-default">
-            <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
-            Export
-        </button>
-        <button type="button" class="btn btn-default" ng-click="fullVariantInfo()">Large modal</button>
-    </div>
+</div>
+<div class="col-md-12">
+    <div ui-grid="gridOptions" ui-grid-selection ui-grid-exporter class="gridTable"></div>
 </div>
