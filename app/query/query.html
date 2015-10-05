@@ -18,14 +18,14 @@
     <input type="text" class="form-control" placeholder="Enter virtual panel" ng-model="selectedPanel" typeahead="panel as panel.PanelName for panel in virtualPanels | filter:$viewValue | limitTo:3">
 </div>
 <div class="col-md-3">
-    <input type="text" class="form-control" placeholder="Enter filter workflow" ng-model="selectWorkflow" typeahead="workflow for workflow in workflows | filter:$viewValue | limitTo:3">
+    <input type="text" class="form-control" placeholder="Enter filter workflow" ng-model="selectedWorkflow" typeahead="workflow as workflow.Name for workflow in workflows | filter:$viewValue | limitTo:3">
 </div>
 <div class="col-md-3">
     <button type="button" class="btn btn-success" ng-click="filterVariants()">
         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
         Search
     </button>
-    <button type="button" class="btn btn-warning" ng-click="selectedAnalysis = ''; selectedPanel = ''; selectWorkflow = ''; gridOptions.data = [];">
+    <button type="button" class="btn btn-warning" ng-click="selectedAnalysis = ''; selectedPanel = ''; selectedWorkflow = '';">
         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         Clear
     </button>
@@ -38,5 +38,19 @@
     </div>
 </div>
 <div class="col-md-12">
-    <div ui-grid="gridOptions" ui-grid-selection ui-grid-exporter class="gridTable"></div>
+    Search by color: <input type="text" ng-model="search.filter">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <td>
+                Item
+            </td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="v in variants | filter: { Filter: search.filter }">
+            <td>{{ v }}</td>
+        </tr>
+        </tbody>
+    </table>
 </div>

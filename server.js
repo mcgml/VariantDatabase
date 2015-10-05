@@ -48,6 +48,34 @@ app.post('/api/cypher', function(req, res) {
     )
 });
 
+app.post('/api/variantfilter', function(req, res) {
+    request.post(
+        {
+            uri:"http://localhost:7474/awmgs/plugins/variantfilter" + req.body.WorkflowPath,
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
+
+app.get('/api/workflows', function(req, res) {
+    request.get (
+        {
+            uri:"http://localhost:7474/awmgs/plugins/variantfilter/workflows",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
+
 app.post('/api/seraph', function(req, res) {
     db.query(req.body.query, req.body.params, function(err, result) {
         if (err) throw err;
