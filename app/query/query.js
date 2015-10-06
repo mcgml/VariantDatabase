@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.grid', 'ui.grid.selection', 'ui.grid.exporter', 'ui.bootstrap', 'ui-notification'])
+var app = angular.module('variantdb.query', ['ngRoute', 'ui.bootstrap', 'ui-notification'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/query', {
@@ -23,7 +23,7 @@ var app = angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 
         )
     })
 
-    .controller('QueryCtrl',  ['$scope', '$http', '$interval', 'uiGridConstants', '$modal', 'Notification', function ($scope, $http, $interval, uiGridConstants, $modal, Notification) {
+    .controller('QueryCtrl', ['$scope', '$http', '$modal', 'Notification', function ($scope, $http, $modal, Notification) {
 
         //get available filtering workflows
         $http.get('/api/workflows').then(function(response) {
@@ -55,6 +55,7 @@ var app = angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 
             console.log("ERROR: " + response);
         });
 
+        //stratify variants
         $scope.filterVariants = function(){
             $http.post('/api/variantfilter',
                 {
@@ -62,10 +63,11 @@ var app = angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 
                     RunId : $scope.selectedAnalysis.RunId,
                     LibraryId : $scope.selectedAnalysis.LibraryId,
                     PanelName : $scope.selectedPanel.PanelName,
-                    WorkflowPath :  $scope.selectedWorkflow.Path
+                    WorkflowPath : $scope.selectedWorkflow.Path
                 }
             ).then(function(response) {
-                    $scope.variants = response.data;
+                    $scope.filteredVariants = response.data;
+                    $scope.selectedFilter = $scope.filteredVariants.Filters.length - 1; //show pass variants on page load
                     $scope.createBubbleChart();
                     Notification('Operation successful');
                 }, function(response) {
@@ -73,33 +75,23 @@ var app = angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 
                 });
         };
 
-        /*$http.post('/api/seraph', {
-            query:
-            "MATCH (s:Sample)-[:HAS_ANALYSIS]->(r:RunInfo)-[i]->(v:Variant)-[:IN_SYMBOL]->(sy:Symbol)<-[:CONTAINS_SYMBOL]-(p:VirtualPanel) " +
-            "WHERE s.SampleId = {SampleId} " +
-            "AND r.RunId = {RunId} " +
-            "AND r.LibraryId = {LibraryId} " +
-            "AND i.Quality > 30 " +
-            "AND p.PanelName = {PanelName} " +
-            "OPTIONAL MATCH (v)-[c]->(a:Annotation)-[:IN_FEATURE]->(f:Feature)<-[b:HAS_PROTEIN_CODING_BIOTYPE]-(sy)-[:HAS_ASSOCIATED_DISORDER]->(d:Disorder) " +
-            "RETURN v.VariantId as Variant,v.Id as Id," +
-            "CASE type(i) WHEN 'HAS_HOM_VARIANT' THEN 'HOM' WHEN 'HAS_HET_VARIANT' THEN 'HET' END AS Inheritance,f.FeatureId as Transcript, a.Exon as Exon, a.Intron as Intron, type(c) as Consequence," +
-            "a.HGVSc as HGVSc,a.HGVSp as HGVSp,a.Sift as SIFT,a.Polyphen as PolyPhen,sy.SymbolId as Symbol",
-            params: {
-                SampleId : "NA128778",
-                RunId : "150716_D00501_0047_BHB092ADXX",
-                LibraryId : "K15-0000",
-                PanelName : "BreastCancer"
-            }
-        }).then(function(response) {
-            $scope.test = response.data;
-            Notification('Operation successful');
-        }, function(response) {
-            Notification.error(response);
-        });*/
+        //get variant annotations
+        $scope.getFunctionalAnnotations = function(variantId){
+            $http.post('/api/seraph', {
+                query:
+                "OPTIONAL MATCH (v:Variant {VariantId:\"" + variantId + "\"})-[c]-(a:Annotation)-[]-(f:Feature)-[b:HAS_PROTEIN_CODING_BIOTYPE]-(sy:Symbol) " +
+                "RETURN f.FeatureId as Feature,a.Exon as Exon, a.Intron as Intron,type(c) as Consequence,a.HGVSc as HGVSc,a.HGVSp as HGVSp,a.Sift as SIFT,a.Polyphen as PolyPhen,sy.SymbolId as Symbol",
+                params: {}
+            }).then(function(response) {
+                $scope.annotation = response.data;
+            }, function(response) {
+                console.log("ERROR: " + response);
+            });
+        };
 
-        //modal variant info
-        $scope.fullVariantInfo = function (entity)  {
+        //show population frequencies
+        $scope.fullVariantInfo = function (variant)  {
+
             var modalInstance = $modal.open({
                 animation: true,
                 templateUrl: 'myModalContent.html',
@@ -107,33 +99,41 @@ var app = angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 
                 size: 'lg',
                 resolve: {
                     items: function () {
-                        return entity;
+                        return variant;
                     }
                 }
             });
+
         };
 
         //make bubble chart
         $scope.createBubbleChart = function() {
             var bubbles = [];
-            var n = 0;
 
-            for (var key in $scope.variants[0]) {
-                if ($scope.variants[0].hasOwnProperty(key)) {
-                    n+=2;
-                    bubbles.push({
-                        x: n,
-                        r: 20,
-                        label: key
-                    });
+            //loop over filters
+            for (var i = 0; i < $scope.filteredVariants.Filters.length; i++) {
+
+                for (var key in $scope.filteredVariants.Filters[i])
+                {
+                    if ($scope.filteredVariants.Filters[i].hasOwnProperty(key)){
+
+                        bubbles.push({
+                            x: i,
+                            r: $scope.filteredVariants.Filters[i][key] * 50,
+                            label: key
+                        });
+
+                    }
                 }
+
             }
 
             $scope.bubbles = bubbles;
         };
 
         $scope.handleClick = function(d){
-            $scope.selectedBubble = d.label;
+            $scope.selectedFilter = d.x;
+            $scope.$apply();
         };
 
     }])

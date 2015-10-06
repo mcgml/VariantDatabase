@@ -20,6 +20,7 @@
   "dependencies": {
     "angular": "^1.4.6",
     "angular-animate": "^1.4.6",
+    "angular-chart.js": "^0.8.4",
     "angular-d3kit-adapter": "0.0.5",
     "angular-route": "^1.4.6",
     "angular-touch": "^1.4.6",

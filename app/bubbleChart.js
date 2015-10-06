@@ -17,7 +17,6 @@ var BubbleChart = d3Kit.factory.createChart(
     function(skeleton){
         var layers = skeleton.getLayerOrganizer();
         var dispatch = skeleton.getDispatcher();
-        var color = d3.scale.category10();
 
         layers.create(['content', 'x-axis']);
 
@@ -46,7 +45,8 @@ var BubbleChart = d3Kit.factory.createChart(
             selection
                 .attr('cx', function(d){return x(d.x);})
                 .attr('r', function(d){return d.r;})
-                .style('fill', function(d, i){return color(i);});
+                .style('fill', "grey")
+                .style("fill-opacity", .8);
 
         }, 10);
 

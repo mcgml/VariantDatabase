@@ -1,9 +1,9 @@
 <script type="text/ng-template" id="myModalContent.html">
     <div class="modal-header">
-        <h3 class="modal-title">{{items.Variant}}</h3>
+        <h3 class="modal-title">{{items.VariantId}}</h3>
     </div>
     <div class="modal-body">
-        <ul ng-repeat="(key, value) in items" ng-if="value!=null && key!='Variant'">
+        <ul ng-repeat="(key, value) in items.Frequencies" ng-if="value!=null">
             <td><strong>{{ key }}:</strong> {{ value }}</td>
         </ul>
     </div>
@@ -25,7 +25,7 @@
         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
         Search
     </button>
-    <button type="button" class="btn btn-warning" ng-click="selectedAnalysis = ''; selectedPanel = ''; selectedWorkflow = '';">
+    <button type="button" class="btn btn-warning" ng-click="selectedAnalysis = ''; selectedPanel = ''; selectedWorkflow = ''; filteredVariants = '';">
         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         Clear
     </button>
@@ -38,19 +38,26 @@
     </div>
 </div>
 <div class="col-md-12">
-    Search by color: <input type="text" ng-model="search.filter">
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <td>
-                Item
-            </td>
+            <td><input type="checkbox"></td>
+            <td>VariantId</td>
+            <td>Inheritance</td>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="v in variants | filter: { Filter: search.filter }">
-            <td>{{ v }}</td>
+        <tr ng-repeat="v in filteredVariants.Variants | filter: { Filter: selectedFilter }" ng-dblclick="fullVariantInfo(v)">
+            <td><input type="checkbox"></td>
+            <td>{{ v.VariantId }}</td>
+            <td>{{ v.Inheritance }}</td>
         </tr>
         </tbody>
     </table>
+</div>
+<div class="col-md-12">
+    <button type="button" class="btn btn-success">
+        <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
+            Export
+    </button>
 </div>
