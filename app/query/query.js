@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('variantdb.query', ['ngRoute', 'ui.bootstrap', 'ui-notification'])
+angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootstrap', 'ui-notification', 'nvd3', 'ui.grid'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/query', {
@@ -23,7 +23,47 @@ var app = angular.module('variantdb.query', ['ngRoute', 'ui.bootstrap', 'ui-noti
         )
     })
 
-    .controller('QueryCtrl', ['$scope', '$http', '$modal', 'Notification', function ($scope, $http, $modal, Notification) {
+    .controller('QueryCtrl', ['$scope', '$http', '$modal', 'Notification', '$log', '$timeout', 'uiGridConstants', function ($scope, $http, $modal, Notification, $log, $timeout, uiGridConstants) {
+
+        //define grid ui options
+        $scope.gridOptions = {
+            enableSorting: true,
+            enableFiltering: true,
+            enableColumnMenus: true,
+            enableRowSelection : true,
+            multiSelect : true,
+            enableRowHeaderSelection : true,
+            showGridFooter:true,
+            onRegisterApi : function(gridApi) {
+
+                $scope.gridApi = gridApi;
+
+                gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+                    var msg = 'row selected ' + row.isSelected;
+                    console.log(msg);
+                });
+
+                gridApi.selection.on.rowSelectionChangedBatch($scope, function (rows) {
+                    var msg = 'rows changed ' + rows.length;
+                    console.log(msg);
+                });
+            }
+        };
+
+        //define grid ui columns
+        $scope.gridOptions.columnDefs = [
+            { field: 'VariantId', displayName: "VariantId", width: '40%' },
+            { field: 'Id', displayName: "Id", width: '20%' },
+            { field: 'Inheritance', displayName: "Inheritance", width: '20%' },
+            { field: 'Filter', displayName: "Filter", width: '20%', visible: false,
+                filter: {
+                    noTerm: true,
+                    condition: function(searchTerm, cellValue) {
+                        return cellValue == $scope.selectedFilter;
+                    }
+                }
+            }
+        ];
 
         //get available filtering workflows
         $http.get('/api/workflows').then(function(response) {
@@ -66,9 +106,8 @@ var app = angular.module('variantdb.query', ['ngRoute', 'ui.bootstrap', 'ui-noti
                     WorkflowPath : $scope.selectedWorkflow.Path
                 }
             ).then(function(response) {
-                    $scope.filteredVariants = response.data;
-                    $scope.selectedFilter = $scope.filteredVariants.Filters.length - 1; //show pass variants on page load
-                    $scope.createBubbleChart();
+                    $scope.gridOptions.data = response.data.Variants;
+                    $scope.variantFilters = response.data.Filters;
                     Notification('Operation successful');
                 }, function(response) {
                     Notification.error(response);
@@ -91,22 +130,42 @@ var app = angular.module('variantdb.query', ['ngRoute', 'ui.bootstrap', 'ui-noti
 
         //show population frequencies
         $scope.fullVariantInfo = function (variant)  {
-
             var modalInstance = $modal.open({
-                animation: true,
+                animation: false,
                 templateUrl: 'myModalContent.html',
                 controller: 'ModalInstanceCtrl',
-                size: 'lg',
                 resolve: {
                     items: function () {
                         return variant;
                     }
                 }
             });
-
         };
 
-        //make bubble chart
+        //create pie navigation chart
+        $scope.donutChartOptions = {
+            chart: {
+                type: 'pieChart',
+                height: 400,
+                donut: true,
+                x: function(d){return d.key;},
+                y: function(d){return d.y;},
+                showLabels: false,
+                pie: {
+                    startAngle: function(d) { return d.startAngle/2 -Math.PI/2 },
+                    endAngle: function(d) { return d.endAngle/2 -Math.PI/2 },
+                    dispatch: {
+                        elementClick: function(e) {
+                            $scope.selectedFilter = e.index;
+                            $scope.gridApi.grid.refresh();
+                        }
+                    }
+                },
+                transitionDuration: 500
+            }
+        };
+
+        /*make bubble chart
         $scope.createBubbleChart = function() {
             var bubbles = [];
 
@@ -119,7 +178,7 @@ var app = angular.module('variantdb.query', ['ngRoute', 'ui.bootstrap', 'ui-noti
 
                         bubbles.push({
                             x: i,
-                            r: $scope.filteredVariants.Filters[i][key] * 50,
+                            r: $scope.filteredVariants.Filters[i][key] * 40 + 4,
                             label: key
                         });
 
@@ -131,14 +190,15 @@ var app = angular.module('variantdb.query', ['ngRoute', 'ui.bootstrap', 'ui-noti
             $scope.bubbles = bubbles;
         };
 
-        $scope.handleClick = function(d){
+        $scope.handleBubbleChartClick = function(d){
             $scope.selectedFilter = d.x;
-            $scope.$apply();
-        };
+            //$scope.$apply();
+        };*/
 
     }])
 
     .controller('ModalInstanceCtrl', function ($scope, $modalInstance, $window, items) {
+
         $scope.items = items;
 
         $scope.close = function () {
@@ -146,5 +206,3 @@ var app = angular.module('variantdb.query', ['ngRoute', 'ui.bootstrap', 'ui-noti
         };
 
     });
-
-angular.d3KitAdapter.plug(app, 'bubbleChart', BubbleChart);

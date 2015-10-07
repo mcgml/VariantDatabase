@@ -38,7 +38,8 @@ var BubbleChart = d3Kit.factory.createChart(
 
             selection.exit().remove();
 
-            selection.enter().append('circle')
+            selection.enter()
+                .append('circle')
                 .attr('cx', function(d){return x(d.x);})
                 .on('click', dispatch.bubbleClick);
 

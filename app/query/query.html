@@ -1,11 +1,9 @@
 <script type="text/ng-template" id="myModalContent.html">
     <div class="modal-header">
-        <h3 class="modal-title">{{items.VariantId}}</h3>
+        <h3 class="modal-title">Title</h3>
     </div>
     <div class="modal-body">
-        <ul ng-repeat="(key, value) in items.Frequencies" ng-if="value!=null">
-            <td><strong>{{ key }}:</strong> {{ value }}</td>
-        </ul>
+        <h1>Body</h1>
     </div>
     <div class="modal-footer">
         <button class="btn btn-warning" type="button" ng-click="close()">Close</button>
@@ -25,39 +23,24 @@
         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
         Search
     </button>
-    <button type="button" class="btn btn-warning" ng-click="selectedAnalysis = ''; selectedPanel = ''; selectedWorkflow = ''; filteredVariants = '';">
+    <button type="button" class="btn btn-warning" ng-click="selectedAnalysis = ''; selectedPanel = ''; selectedWorkflow = ''; gridOptions.data = ''; variantFilters = '';">
         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         Clear
     </button>
 </div>
 <div class="col-md-12">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <bubble-chart chart-data="bubbles" chart-on-bubble-click="handleClick"></bubble-chart>
-        </div>
-    </div>
+    <p></p>
+    <nvd3 id="donutChart" options="donutChartOptions" data="variantFilters"></nvd3>
 </div>
 <div class="col-md-12">
-    <table class="table table-bordered table-striped">
-        <thead>
-        <tr>
-            <td><input type="checkbox"></td>
-            <td>VariantId</td>
-            <td>Inheritance</td>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="v in filteredVariants.Variants | filter: { Filter: selectedFilter }" ng-dblclick="fullVariantInfo(v)">
-            <td><input type="checkbox"></td>
-            <td>{{ v.VariantId }}</td>
-            <td>{{ v.Inheritance }}</td>
-        </tr>
-        </tbody>
-    </table>
+    <div id="variantGrid" ui-grid="gridOptions" class="grid"></div>
 </div>
 <div class="col-md-12">
     <button type="button" class="btn btn-success">
         <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
             Export
     </button>
+</div>
+<div class="col-md-12">
+    <p></p>
 </div>
