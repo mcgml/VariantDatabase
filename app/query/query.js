@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootstrap', 'ui-notification', 'nvd3', 'ui.grid'])
+angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootstrap', 'ui-notification', 'nvd3'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/query', {
@@ -23,56 +23,177 @@ angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootst
         )
     })
 
-    .controller('QueryCtrl', ['$scope', '$http', '$modal', 'Notification', '$log', '$timeout', 'uiGridConstants', function ($scope, $http, $modal, Notification, $log, $timeout, uiGridConstants) {
+    .filter('consequenceStrip', function() {
+        return function (input) {
+            return input.substring(4, input.length - 12);
+        }
+    })
 
-        //define grid ui options
-        $scope.gridOptions = {
-            enableSorting: true,
-            enableFiltering: true,
-            enableColumnMenus: true,
-            enableRowSelection : true,
-            multiSelect : true,
-            enableRowHeaderSelection : true,
-            showGridFooter:true,
-            onRegisterApi : function(gridApi) {
+    .filter('convertVariantToRange', function() {
+        return function (input) {
+            return input; //todo
+        }
+    })
 
-                $scope.gridApi = gridApi;
+    .filter('convertVariantToExAC', function() {
+        return function (input) {
+            return input; //todo
+        }
+    })
 
-                gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                    var msg = 'row selected ' + row.isSelected;
-                    console.log(msg);
-                });
+    .controller('QueryCtrl', ['$scope', '$http', '$modal', 'Notification', function ($scope, $http, $modal, Notification) {
 
-                gridApi.selection.on.rowSelectionChangedBatch($scope, function (rows) {
-                    var msg = 'rows changed ' + rows.length;
-                    console.log(msg);
-                });
-            }
-        };
+        function category20(n) {
+            var cat20 = ["#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896"];
+            return cat20[n % cat20.length];
+        }
 
-        //define grid ui columns
-        $scope.gridOptions.columnDefs = [
-            { field: 'VariantId', displayName: "VariantId", width: '40%' },
-            { field: 'Id', displayName: "Id", width: '20%' },
-            { field: 'Inheritance', displayName: "Inheritance", width: '20%' },
-            { field: 'Filter', displayName: "Filter", width: '20%', visible: false,
-                filter: {
-                    noTerm: true,
-                    condition: function(searchTerm, cellValue) {
-                        return cellValue == $scope.selectedFilter;
+        $scope.chevronClass = "glyphicon glyphicon-chevron-down";
+
+        $scope.testData = [
+            {
+                values: [
+                    {
+                        "label" : "FBN1" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "BRCA1" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "BRCA2" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "ARSE" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "TEST" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "GENE" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "NF1" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "PsS2" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "df" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "evrv" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "vsvsd" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "sdvds" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "dsv" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "sds" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "ebrebrt" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "erve" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "ververe" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "chyy" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "bik7jv" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "wdqwdwq" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "regrebre" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "regver" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "lkn" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "iojo" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "wcw" ,
+                        "value" : Math.random() * 100
+                    } ,
+                    {
+                        "label" : "lmlkmce" ,
+                        "value" : Math.random() * 100
                     }
-                }
+                ]
             }
         ];
 
-        //get available filtering workflows
+        $scope.toggleDetail = function($index, variantId) {
+
+            //get annotation
+            $http.post('/api/seraph', {
+                cache: true,
+                query:
+                "OPTIONAL MATCH (v:Variant {VariantId:\"" + variantId + "\"})-[c]-(a:Annotation)-[]-(f:Feature)-[b:HAS_PROTEIN_CODING_BIOTYPE]-(sy:Symbol) " +
+                "RETURN f.FeatureId as Feature,a.Exon as Exon, a.Intron as Intron,type(c) as Consequence,a.HGVSc as HGVSc,a.HGVSp as HGVSp,a.Sift as SIFT,a.Polyphen as PolyPhen,sy.SymbolId as Symbol",
+                params: {}
+            }).then(function(response) {
+                $scope.annotations = response.data;
+            }, function(response) {
+                console.log("ERROR: " + response);
+            });
+
+            //show row
+            $scope.activePosition = $scope.activePosition == $index ? -1 : $index;
+            if ($scope.chevronClass == "glyphicon glyphicon-chevron-down"){
+                $scope.chevronClass =  "glyphicon glyphicon-chevron-up";
+            } else if ($scope.chevronClass == "glyphicon glyphicon-chevron-up"){
+                $scope.chevronClass =  "glyphicon glyphicon-chevron-down";
+            }
+
+        };
+
+        //get available filtering workflows todo: plugin
         $http.get('/api/workflows').then(function(response) {
             $scope.workflows = response.data;
         }, function(response) {
             console.log("ERROR: " + response);
         });
 
-        //get all analyses
+        //get all analyses todo: plugin
         $http.post('/api/seraph', {
             query:
             "MATCH (s:Sample)-[:HAS_ANALYSIS]->(r:RunInfo) " +
@@ -84,7 +205,7 @@ angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootst
             console.log("ERROR: " + response);
         });
 
-        //get all virtual panels
+        //get all virtual panels todo: plugin
         $http.post('/api/seraph', {
             query:
                 "MATCH (v:VirtualPanel) RETURN v.PanelName as PanelName",
@@ -106,26 +227,13 @@ angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootst
                     WorkflowPath : $scope.selectedWorkflow.Path
                 }
             ).then(function(response) {
-                    $scope.gridOptions.data = response.data.Variants;
-                    $scope.variantFilters = response.data.Filters;
+                    $scope.selectedFilter = -1;
+                    $scope.filteredVariants = response.data;
+                    $scope.coverageData = $scope.testData;
                     Notification('Operation successful');
                 }, function(response) {
-                    Notification.error(response);
+                    console.log("ERROR: " + response);
                 });
-        };
-
-        //get variant annotations
-        $scope.getFunctionalAnnotations = function(variantId){
-            $http.post('/api/seraph', {
-                query:
-                "OPTIONAL MATCH (v:Variant {VariantId:\"" + variantId + "\"})-[c]-(a:Annotation)-[]-(f:Feature)-[b:HAS_PROTEIN_CODING_BIOTYPE]-(sy:Symbol) " +
-                "RETURN f.FeatureId as Feature,a.Exon as Exon, a.Intron as Intron,type(c) as Consequence,a.HGVSc as HGVSc,a.HGVSp as HGVSp,a.Sift as SIFT,a.Polyphen as PolyPhen,sy.SymbolId as Symbol",
-                params: {}
-            }).then(function(response) {
-                $scope.annotation = response.data;
-            }, function(response) {
-                console.log("ERROR: " + response);
-            });
         };
 
         //show population frequencies
@@ -146,18 +254,20 @@ angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootst
         $scope.donutChartOptions = {
             chart: {
                 type: 'pieChart',
-                height: 400,
+                height: 250,
                 donut: true,
+                color : function (d, i) { var key = i === undefined ? d : i; return d.color || category20(key); },
                 x: function(d){return d.key;},
                 y: function(d){return d.y;},
                 showLabels: false,
                 pie: {
-                    startAngle: function(d) { return d.startAngle/2 -Math.PI/2 },
-                    endAngle: function(d) { return d.endAngle/2 -Math.PI/2 },
+                    //startAngle: function(d) { return d.startAngle/2 -Math.PI/2 },
+                    //endAngle: function(d) { return d.endAngle/2 -Math.PI/2 },
                     dispatch: {
                         elementClick: function(e) {
                             $scope.selectedFilter = e.index;
-                            $scope.gridApi.grid.refresh();
+                            $scope.activePosition = -1;
+                            $scope.$apply();
                         }
                     }
                 },
@@ -165,35 +275,25 @@ angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootst
             }
         };
 
-        /*make bubble chart
-        $scope.createBubbleChart = function() {
-            var bubbles = [];
-
-            //loop over filters
-            for (var i = 0; i < $scope.filteredVariants.Filters.length; i++) {
-
-                for (var key in $scope.filteredVariants.Filters[i])
-                {
-                    if ($scope.filteredVariants.Filters[i].hasOwnProperty(key)){
-
-                        bubbles.push({
-                            x: i,
-                            r: $scope.filteredVariants.Filters[i][key] * 40 + 4,
-                            label: key
-                        });
-
-                    }
-                }
-
+        $scope.barChartOptions = {
+            chart: {
+                type: 'discreteBarChart',
+                height: 250,
+                color : function (d, i) { var key = i === undefined ? d : i; return d.color || category20(key); },
+                x: function(d){return d.label;},
+                y: function(d){return d.value;},
+                showValues: false,
+                showXAxis: false,
+                showYAxis: true,
+                "yAxis": {
+                    "axisLabel": "Percentage Coverage"
+                },
+                valueFormat: function(d){
+                    return d3.format(',.4f')(d);
+                },
+                transitionDuration: 500
             }
-
-            $scope.bubbles = bubbles;
         };
-
-        $scope.handleBubbleChartClick = function(d){
-            $scope.selectedFilter = d.x;
-            //$scope.$apply();
-        };*/
 
     }])
 

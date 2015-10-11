@@ -2,7 +2,7 @@ body {
      margin-top: 50px;
 }
 
-button {
+.buttonMargin {
     margin-top: 10px;
     margin-right: 15px;
 }
@@ -12,7 +12,83 @@ input {
     margin-bottom: 20px;
 }
 
-.grid {
-    width: 100%;
-    height: 400px;
+.table-hover > tbody > tr.select-row:hover > td,
+.select-row > td {
+    background: white;
+}
+
+.noSelect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.animate.ng-hide-add {
+    -webkit-animation:0.5s hide;
+    animation:0.5s hide;
+}
+
+@keyframes hide {
+    0% {
+        opacity:1;
+        transform: scale(1);
+    }
+    30% {
+        transform: scale(1.02);
+    }
+    100% {
+        opacity:0;
+        transform: scale(0.5);
+    }
+}
+
+@-webkit-keyframes hide {
+    0% {
+        opacity:1;
+        transform: scale(1);
+    }
+    30% {
+        transform: scale(1.02);
+    }
+    100% {
+        opacity:0;
+        transform: scale(0.5);
+    }
+}
+
+
+.animate.ng-hide-remove {
+    -webkit-animation:0.9s show;
+    animation:0.3s show;
+}
+
+@keyframes show {
+    0% {
+        opacity:0;
+        transform: scale(0.5);
+    }
+    70% {
+        transform: scale(1.02);
+    }
+    100% {
+        opacity:1;
+        transform: scale(1);
+    }
+}
+
+@-webkit-keyframes show {
+    0% {
+        opacity:0;
+        transform: scale(0.5);
+    }
+    70% {
+        transform: scale(1.02);
+    }
+    100% {
+        opacity:1;
+        transform: scale(1);
+    }
 }

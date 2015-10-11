@@ -6,9 +6,12 @@
         <h1>Body</h1>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-warning" type="button" ng-click="close()">Close</button>
+        <button class="btn btn-warning buttonMargin" type="button" ng-click="close()">Close</button>
     </div>
 </script>
+<div class="col-md-12">
+    <p></p>
+</div>
 <div class="col-md-3">
     <input type="text" class="form-control" placeholder="Enter sample" ng-model="selectedAnalysis" typeahead="analysis as analysis.SampleId for analysis in analyses | filter:$viewValue | limitTo:3">
 </div>
@@ -19,26 +22,105 @@
     <input type="text" class="form-control" placeholder="Enter filter workflow" ng-model="selectedWorkflow" typeahead="workflow as workflow.Name for workflow in workflows | filter:$viewValue | limitTo:3">
 </div>
 <div class="col-md-3">
-    <button type="button" class="btn btn-success" ng-click="filterVariants()">
+    <button type="button" class="btn btn-success buttonMargin" ng-click="filterVariants()">
         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
         Search
     </button>
-    <button type="button" class="btn btn-warning" ng-click="selectedAnalysis = ''; selectedPanel = ''; selectedWorkflow = ''; gridOptions.data = ''; variantFilters = '';">
+    <button type="button" class="btn btn-warning buttonMargin" ng-click="selectedAnalysis = ''; selectedPanel = ''; selectedWorkflow = ''; filteredVariants = ''; coverageData = '';">
         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         Clear
     </button>
 </div>
-<div class="col-md-12">
+<div class="col-md-6">
     <p></p>
-    <nvd3 id="donutChart" options="donutChartOptions" data="variantFilters"></nvd3>
+    <nvd3 id="barChart" options="barChartOptions" data="coverageData"></nvd3>
+</div>
+<div class="col-md-6">
+    <p></p>
+    <nvd3 id="donutChart" options="donutChartOptions" data="filteredVariants.Filters"></nvd3>
 </div>
 <div class="col-md-12">
-    <div id="variantGrid" ui-grid="gridOptions" class="grid"></div>
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th width="2.5%"><span class="glyphicon glyphicon-star"></span></th>
+                <th width="2.5%"><span class="glyphicon glyphicon-eye-open"></span></th>
+                <th width="2.5%"><span class="glyphicon glyphicon-list-alt"></span></th>
+                <th width="10%">Pathogenicity</th>
+                <th width="37.5%">Variant</th>
+                <th width="10%">Inheritance</th>
+                <th width="15%">Occurrence</th>
+                <th width="15%">dbSNP</th>
+            </tr>
+        </thead>
+        <tbody ng-repeat="variant in filteredVariants.Variants | filter:{Filter:selectedFilter}">
+            <tr>
+                <td width="2.5%"><input type="checkbox" ng-model="variant.Selected"></td>
+                <td width="2.5%"><span ng-class="variant.Show ? 'glyphicon glyphicon-chevron-up' : 'glyphicon glyphicon-chevron-down'" ng-click="toggleDetail($index, variant.VariantId); variant.Show = !variant.Show"></span></td>
+                <td width="2.5%">
+                    <div class="dropdown">
+                        <a class="glyphicon glyphicon-link" data-toggle="dropdown"></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="http://grch37.ensembl.org/Homo_sapiens/Location/View?r={{variant.VariantId | convertVariantToRange}}" target="_blank">Ensembl</a></li>
+                            <li><a href="http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg19&position=chr{{variant.VariantId | convertVariantToRange}}" target="_blank">UCSC</a></li>
+                            <li><a href="http://exac.broadinstitute.org/variant/{{variant.VariantId | convertVariantToExAC}}" target="_blank">ExAC</a></li>
+                            <li><a href="https://scholar.google.co.uk/schhp?hl=en&as_sdt=0,5" target="_blank">Scholar</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td width="10%">
+                    <button type="button" class="btn btn-success btn-xs"></button>
+                    <button type="button" class="btn btn-warning btn-xs"></button>
+                    <button type="button" class="btn btn-danger btn-xs"></button>
+                    <button type="button" class="btn btn-default btn-xs"></button>
+                </td>
+                <td width="37.5%">{{variant.VariantId}}</td>
+                <td width="10%">{{variant.Inheritance}}</td>
+                <td width="15%"><span>{{variant.SeenTimes}} ({{variant.SeenTimes / variant.TestedTimes}}%)</span></td>
+                <td width="15%"><a ng-show="variant.Id" href="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs={{variant.Id}}" target="_blank">{{variant.Id}}</a></td>
+            </tr>
+            <tr class="select-row animate" ng-show="activePosition == $index">
+                <td colspan="8" width="100%">
+                    <div class="table-responsive">
+                        <table class="table table-condensed">
+                            <thead>
+                            <tr>
+                                <th width="15%">Gene</th>
+                                <th width="15%">Transcript</th>
+                                <th width="10%">Location</th>
+                                <th width="20%">HGVS</th>
+                                <th width="20%">Consequences</th>
+                                <th width="10%">SIFT</th>
+                                <th width="10%">PolyPhen</th>
+                            </tr>
+                            </thead>
+                            <tbody ng-repeat="annotation in annotations">
+                                <tr>
+                                    <td width="15%">{{annotation.Symbol}}</td>
+                                    <td width="15%">{{annotation.Feature}}</td>
+                                    <td width="10%">
+                                        <span ng-show="annotation.Exon">{{annotation.Exon}}</span>
+                                        <span ng-show="annotation.Intron">{{annotation.Intron}}</span>
+                                    </td>
+                                    <td width="20%">{{annotation.HGVSc}} {{annotation.HGVSp}}</td>
+                                    <td width="20%">{{annotation.Consequence | consequenceStrip}}</td>
+                                    <td width="10%">{{annotation.SIFT}}</td>
+                                    <td width="10%">{{annotation.PolyPhen}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 </div>
 <div class="col-md-12">
-    <button type="button" class="btn btn-success">
+    <button type="button" class="btn btn-success buttonMargin">
         <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
-            Export
+        Export
     </button>
 </div>
 <div class="col-md-12">
