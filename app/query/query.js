@@ -41,7 +41,7 @@ angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootst
         }
     })
 
-    .controller('QueryCtrl', ['$scope', '$http', '$modal', 'Notification', function ($scope, $http, $modal, Notification) {
+    .controller('QueryCtrl', ['$scope', '$http', 'Notification', function ($scope, $http, Notification) {
 
         function category20(n) {
             var cat20 = ["#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896"];
@@ -236,20 +236,6 @@ angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootst
                 });
         };
 
-        //show population frequencies
-        $scope.fullVariantInfo = function (variant)  {
-            var modalInstance = $modal.open({
-                animation: false,
-                templateUrl: 'myModalContent.html',
-                controller: 'ModalInstanceCtrl',
-                resolve: {
-                    items: function () {
-                        return variant;
-                    }
-                }
-            });
-        };
-
         //create pie navigation chart
         $scope.donutChartOptions = {
             chart: {
@@ -295,14 +281,4 @@ angular.module('variantdb.query', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootst
             }
         };
 
-    }])
-
-    .controller('ModalInstanceCtrl', function ($scope, $modalInstance, $window, items) {
-
-        $scope.items = items;
-
-        $scope.close = function () {
-            $modalInstance.dismiss();
-        };
-
-    });
+    }]);
