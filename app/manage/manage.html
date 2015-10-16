@@ -1,0 +1,69 @@
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="panel-title">View or Edit Panel</h3>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control noMargin" placeholder="Enter Panel" ng-model="selectedPanel" uib-typeahead="panel as panel.PanelName for panel in virtualPanels | filter:$viewValue | limitTo:5">
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary noMargin" ng-click="getGenes();">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                            <button class="btn btn-warning noMargin" ng-click="selectedPanel = null; genes = null;">
+                                <i class="glyphicon glyphicon-remove"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table ng-show="genes" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th width="2.5%"></th>
+                    <th width="20%">Gene</th>
+                    <th width="80%">OMIM</th>
+                </tr>
+                </thead>
+                <tbody ng-repeat="gene in genes">
+                <tr>
+                    <td width="2.5%">
+                        <span class="glyphicon glyphicon-remove" ng-click="removeGeneFromPanel(gene.SymbolId)"></span></td>
+                    </td>
+                    <td>{{gene.SymbolId}}</td>
+                    <td>{{gene.Title}}</td>
+                </tr>
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="panel-title">View or Edit Variant</h3>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control noMargin" placeholder="Enter Variant" ng-model="selectedVariant">
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary noMargin" ng-click="">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                            <button class="btn btn-warning noMargin" ng-click="selectedVariant = null; variants = null;">
+                                <i class="glyphicon glyphicon-remove"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,31 +1,48 @@
-body {
-     margin-top: 50px;
+/*Padding and margins*/
+.noMargin {
+    margin-top : 0;
+    margin-bottom : 0;
+    margin-left : 0;
+    margin-right : 0;
 }
 
-.buttonMargin {
-    margin-top: 10px;
-    margin-right: 15px;
+.noPadding {
+    padding-top : 0;
+    padding-bottom : 0;
+    padding-left : 0;
+    padding-right : 0;
 }
 
-input {
-    margin-top: 10px;
-    margin-bottom: 20px;
+.jumbotron {
+    margin :0;
+    padding-bottom:0;
+    padding-top : 30px;
 }
 
+input, #searchButton, #clearButton, #exportButton, #variantTable, .panel {
+    margin-top : 15px;
+    margin-bottom : 0;
+}
+
+#clearButton, #exportButton {
+    margin-left : 15px;
+}
+
+#instructionMessage {
+    padding-bottom : 50px;
+}
+
+.panel-title {
+    margin:10px;
+}
+
+/*Disable hover on nested table*/
 .table-hover > tbody > tr.select-row:hover > td,
 .select-row > td {
     background: white;
 }
 
-.noSelect {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
+/*Show/Hide row animation*/
 .animate.ng-hide-add {
     -webkit-animation:0.5s hide;
     animation:0.5s hide;
@@ -93,13 +110,48 @@ input {
     }
 }
 
-/* Specify styling for tooltip contents */
-.tooltip.customClass .tooltip-inner {
-    color: #880000;
-    background-color: #ffff66;
-    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+/*Sigin in page*/
+.form-signin {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
 }
-/* Hide arrow */
-.tooltip.customClass .tooltip-arrow {
-    display: none;
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+    margin-bottom: 10px;
+}
+.form-signin .checkbox {
+    font-weight: normal;
+}
+.form-signin .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
+}
+.form-signin .form-control:focus {
+    z-index: 2;
+}
+.form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/*Disable blue highlight on select*/
+.noSelect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

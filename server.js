@@ -16,6 +16,7 @@ app.use(express.static(path.join(__dirname, 'app')));                 // set the
 app.use('/fonts',  express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'fonts'))); //redirect requests to fonts folder
 app.use('/node_modules',  express.static(path.join(__dirname, 'node_modules'))); //redirect requests to node_modules folder
 app.use('/bower_components',  express.static(path.join(__dirname, 'bower_components'))); //redirect requests to bower_components folder
+app.use('/images',  express.static(path.join(__dirname, 'app', 'images'))); //redirect requests to images folder
 app.use(favicon(path.join(__dirname,'app','images', 'app.ico')));
 app.use(morgan('dev'));                                         // log every request to the console
 app.use(bodyParser.urlencoded({'extended':'true'}));            // parse application/x-www-form-urlencoded
@@ -52,6 +53,20 @@ app.post('/api/variantfilter', function(req, res) {
     request.post(
         {
             uri:"http://localhost:7474/awmgs/plugins/variantfilter" + req.body.WorkflowPath,
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
+
+app.post('/api/variantfilter/populationfrequency', function(req, res) {
+    request.post(
+        {
+            uri:"http://localhost:7474/awmgs/plugins/variantfilter/populationfrequency",
             json: req.body
         },
         function(error, result)

@@ -1,0 +1,121 @@
+<script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Population Frequency</h3>
+    </div>
+    <div class="modal-body">
+        <nvd3 id="barChartPopFreq" options="barChartOptions" data="items"></nvd3>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+<div class="jumbotron">
+    <div class="container">
+        <h1 ng-hide="coverageData || filteredVariants">Welcome to the AWMGS VariantDatabase</h1>
+        <h3 id="instructionMessage" ng-hide="coverageData || filteredVariants">Enter the required information below to get started</h3>
+        <div class="col-md-6"><nvd3 options="barChartOptions" data="coverageData"></nvd3></div>
+        <div class="col-md-6"><nvd3 options="donutChartOptions" data="filteredVariants.Filters"></nvd3></div>
+    </div>
+</div>
+<div class="col-md-3">
+    <input type="text" class="form-control" placeholder="Enter Sample" ng-model="selectedAnalysis" uib-typeahead="analysis as analysis.SampleId for analysis in analyses | filter:$viewValue | limitTo:5">
+</div>
+<div class="col-md-3">
+    <input type="text" class="form-control" placeholder="Enter Panel" ng-model="selectedPanel" uib-typeahead="panel as panel.PanelName for panel in virtualPanels | filter:$viewValue | limitTo:5">
+</div>
+<div class="col-md-3">
+    <input type="text" class="form-control" placeholder="Enter Workflow" ng-model="selectedWorkflow" uib-typeahead="workflow as workflow.Name for workflow in workflows | filter:$viewValue | limitTo:5">
+</div>
+<div class="col-md-3">
+    <button id="searchButton" type="button" class="btn btn-primary" ng-click="processReportRequest();">
+        <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filter
+    </button>
+    <button id="clearButton" type="button" class="btn btn-warning" ng-click="selectedAnalysis = null; selectedPanel = null; selectedWorkflow = null; filteredVariants = null; coverageData = null; annotations = null; activePosition = -1; selectedVariantFilter = -1;">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Clear
+    </button>
+    <button id="exportButton" type="button" class="btn btn-success" ng-click="exportVariants()">
+        <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Export
+    </button>
+</div>
+<div class="col-md-12">
+    <div id="variantTable" class="table-responsive">
+        <table ng-hide="selectedVariantFilter == -1" class="table table-bordered table-hover noSelect">
+            <thead>
+            <tr>
+                <th width="2.5%"><span class="glyphicon glyphicon-star"></span></th>
+                <th width="2.5%"><span class="glyphicon glyphicon-eye-open"></span></th>
+                <th width="2.5%"><span class="glyphicon glyphicon-list-alt"></span></th>
+                <th width="10%">Pathogenicity</th>
+                <th width="52.5%">Variant</th>
+                <th width="10%">Inheritance</th>
+                <th width="10%">Occurrence</th>
+                <th width="10%">dbSNP</th>
+            </tr>
+            </thead>
+            <tbody ng-repeat="variant in filteredVariants.Variants | filter:{Filter:selectedVariantFilter}">
+            <tr>
+                <td width="2.5%"><input type="checkbox" ng-model="variant.Selected"></td>
+                <td width="2.5%"><span ng-class="activePosition == $index ? 'glyphicon glyphicon-chevron-up' : 'glyphicon glyphicon-chevron-down'" ng-click="getVariantAnnotation(variant.VariantId); activePosition == $index ? activePosition = -1 : activePosition = $index;"></span></td>
+                <td width="2.5%">
+                    <div class="dropdown">
+                        <a class="glyphicon glyphicon-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuDivider">
+                            <li><a href="http://grch37.ensembl.org/Homo_sapiens/Location/View?r={{variant.VariantId | convertVariantToRange}}" target="_blank">Ensembl</a></li>
+                            <li><a href="http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg19&position=chr{{variant.VariantId | convertVariantToRange}}" target="_blank">UCSC</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="https://scholar.google.co.uk/scholar?hl=en&q={{variant.VariantId}}" target="_blank">Scholar</a></li>
+                            <li><a href="http://www.ncbi.nlm.nih.gov/pubmed/?term={{variant.VariantId}}" target="_blank">PubMed</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="http://exac.broadinstitute.org/variant/{{variant.VariantId | convertVariantToExAC}}" target="_blank">ExAC</a></li>
+                            <li><a href="http://www.ncbi.nlm.nih.gov/clinvar/?term=25[chr]+AND+51117811:51117811[chrpos37]" target="_blank">Clinvar</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td width="10%">
+                    <button type="button" class="btn btn-default btn-xs noMargin" tooltip-placement="top" uib-tooltip="Internal pathogenicity" ng-click=""></button>
+                    <button type="button" class="btn btn-default btn-xs noMargin" tooltip-placement="top" uib-tooltip="Population frequency" ng-click="openPopulationFrequencyModal(getVariantPopulationFrequency(variant.VariantId));"></button>
+                    <button type="button" class="btn btn-default btn-xs noMargin" tooltip-placement="top" uib-tooltip="Functional consequence" ng-click=""></button>
+                    <button type="button" class="btn btn-default btn-xs noMargin" tooltip-placement="top" uib-tooltip="Amino-acid conservation" ng-click=""></button>
+                </td>
+                <td width="52.5%">{{variant.VariantId}}</td>
+                <td width="10%">{{variant.Inheritance | inheritanceStrip}}</td>
+                <td width="10%"><span>{{variant.SeenTimes}} ({{(variant.SeenTimes / filteredVariants.TestedTimes) * 100 | number:1}}%)</span></td>
+                <td width="10%"><a ng-show="variant.Id" href="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs={{variant.Id}}" target="_blank">{{variant.Id}}</a></td>
+            </tr>
+            <tr class="select-row animate" ng-show="activePosition == $index">
+                <td colspan="8" width="100%">
+                    <div class="table-responsive">
+                        <table class="table table-condensed noMargin noPadding">
+                            <thead>
+                            <tr>
+                                <th width="15%">Gene</th>
+                                <th width="15%">Transcript</th>
+                                <th width="10%">Location</th>
+                                <th width="20%">HGVS</th>
+                                <th width="20%">Consequences</th>
+                                <th width="10%">SIFT</th>
+                                <th width="10%">PolyPhen</th>
+                            </tr>
+                            </thead>
+                            <tbody ng-repeat="annotation in annotations">
+                            <tr>
+                                <td width="15%">{{annotation.Symbol}}</td>
+                                <td width="15%">{{annotation.Feature}}</td>
+                                <td width="10%">
+                                    <span ng-show="annotation.Exon">{{annotation.Exon}}</span>
+                                    <span ng-show="annotation.Intron">{{annotation.Intron}}</span>
+                                </td>
+                                <td width="20%">{{annotation.HGVSc}} {{annotation.HGVSp}}</td>
+                                <td width="20%">{{annotation.Consequence | consequenceStrip}}</td>
+                                <td width="10%">{{annotation.SIFT}}</td>
+                                <td width="10%">{{annotation.PolyPhen}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
