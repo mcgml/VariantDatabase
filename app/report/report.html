@@ -18,13 +18,13 @@
     </div>
 </div>
 <div class="col-md-3">
-    <input type="text" class="form-control" placeholder="Enter Sample" ng-model="selectedAnalysis" uib-typeahead="analysis as analysis.SampleId for analysis in analyses | filter:$viewValue | limitTo:5">
+    <input type="text" class="form-control" placeholder="Enter Sample Identifier" ng-model="selectedAnalysis" uib-typeahead="analysis as analysis.SampleId for analysis in analyses | filter:$viewValue | limitTo:5">
 </div>
 <div class="col-md-3">
-    <input type="text" class="form-control" placeholder="Enter Panel" ng-model="selectedPanel" uib-typeahead="panel as panel.PanelName for panel in virtualPanels | filter:$viewValue | limitTo:5">
+    <input type="text" class="form-control" placeholder="Enter Panel Name" ng-model="selectedPanel" uib-typeahead="panel as panel.PanelName for panel in virtualPanels | filter:$viewValue | limitTo:5">
 </div>
 <div class="col-md-3">
-    <input type="text" class="form-control" placeholder="Enter Workflow" ng-model="selectedWorkflow" uib-typeahead="workflow as workflow.Name for workflow in workflows | filter:$viewValue | limitTo:5">
+    <input type="text" class="form-control" placeholder="Enter Workflow Name" ng-model="selectedWorkflow" uib-typeahead="workflow as workflow.Name for workflow in workflows | filter:$viewValue | limitTo:5">
 </div>
 <div class="col-md-3">
     <button id="searchButton" type="button" class="btn btn-primary" ng-click="processReportRequest();">
