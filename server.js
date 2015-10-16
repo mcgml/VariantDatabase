@@ -2,30 +2,36 @@
 
 // set up ========================
 var express  = require('express');
-var app      = express();                               // create our app w/ express
+var app      = express(); // create our app w/ express
 var request = require('request');
 var db = require("seraph")("http://localhost:7474");
-var morgan = require('morgan');             // log requests to the console (express4)
-var bodyParser = require('body-parser');    // pull information from HTML POST (express4)
+var morgan = require('morgan'); // log requests to the console (express4)
+var bodyParser = require('body-parser'); // pull information from HTML POST (express4)
 var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
+var passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
+var flash    = require('connect-flash');
+var cookieParser = require('cookie-parser');
+var session      = require('express-session');
 var favicon = require('serve-favicon');
 var path = require('path');
 
 // configuration ================
-app.use(express.static(path.join(__dirname, 'app')));                 // set the static files location /public/img will be /img for users
-app.use('/fonts',  express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'fonts'))); //redirect requests to fonts folder
+app.use(express.static(path.join(__dirname, 'app'))); // set the static files location /app
 app.use('/node_modules',  express.static(path.join(__dirname, 'node_modules'))); //redirect requests to node_modules folder
 app.use('/bower_components',  express.static(path.join(__dirname, 'bower_components'))); //redirect requests to bower_components folder
+app.use('/fonts',  express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'fonts'))); //redirect requests to fonts folder
 app.use('/images',  express.static(path.join(__dirname, 'app', 'images'))); //redirect requests to images folder
-app.use(favicon(path.join(__dirname,'app','images', 'app.ico')));
-app.use(morgan('dev'));                                         // log every request to the console
-app.use(bodyParser.urlencoded({'extended':'true'}));            // parse application/x-www-form-urlencoded
-app.use(bodyParser.json());                                     // parse application/json
+app.use(favicon(path.join(__dirname,'app','images', 'app.ico'))); //provide favicon path
+app.use(morgan('dev')); // log every request to the console
+app.use(cookieParser()); // read cookies (needed for auth)
+app.use(bodyParser.urlencoded({'extended':'true'})); // parse application/x-www-form-urlencoded
+app.use(bodyParser.json()); // parse application/json
 app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
 app.use(methodOverride());
 
-// routes ======================================================================
+// auth ========================================================================
 
+// routes ======================================================================
 // api ---------------------------------------------------------------------
 app.post('/api/cypher', function(req, res) {
     request.post(

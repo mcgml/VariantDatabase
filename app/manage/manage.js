@@ -34,7 +34,6 @@ angular.module('variantdb.manage', ['ngRoute', 'ui.bootstrap', 'ui-notification'
                 params: {}
             }).then(function(response) {
                 $scope.getGenes();
-                $scope.$apply();
             }, function(response) {
                 console.log("ERROR: " + response);
             });

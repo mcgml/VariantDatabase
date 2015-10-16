@@ -24,10 +24,6 @@ input, #searchButton, #clearButton, #exportButton, #variantTable, .panel {
     margin-bottom : 0;
 }
 
-#clearButton, #exportButton {
-    margin-left : 15px;
-}
-
 #instructionMessage {
     padding-bottom : 50px;
 }

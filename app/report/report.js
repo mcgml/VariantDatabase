@@ -25,13 +25,21 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
 
     .filter('consequenceStrip', function() {
         return function (input) {
-            return input.substring(4, input.length - 12);
+            if (input != null && input.length > 16){
+                return input.substring(4, input.length - 12);
+            } else {
+                return input;
+            }
         }
     })
 
     .filter('inheritanceStrip', function() {
         return function (input) {
-            return input.substring(4, input.length - 8);
+            if (input != null && input.length > 12){
+                return input.substring(4, input.length - 8);
+            } else {
+                return input;
+            }
         }
     })
 
@@ -140,6 +148,8 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
         };
 
         $scope.getVariantAnnotation = function(variantId) {
+            console.log("OPTIONAL MATCH (v:Variant {VariantId:\"" + variantId + "\"})-[c]-(a:Annotation)-[]-(f:Feature)-[b:HAS_PROTEIN_CODING_BIOTYPE]-(sy:Symbol) " +
+                "RETURN f.FeatureId as Feature,a.Exon as Exon, a.Intron as Intron,type(c) as Consequence,a.HGVSc as HGVSc,a.HGVSp as HGVSp,a.Sift as SIFT,a.Polyphen as PolyPhen,sy.SymbolId as Symbol");
             $http.post('/api/seraph', {
                 cache: true,
                 query:

@@ -43,7 +43,7 @@
                 <tbody ng-repeat="gene in genes | orderBy:sortType:sortReverse | filter:search">
                 <tr>
                     <td width="2.5%">
-                        <span class="glyphicon glyphicon-remove" ng-click="removeGeneFromPanel(gene.SymbolId)"></span>
+                        <span class="glyphicon glyphicon-remove" ng-click="removeGeneFromPanel(gene.Gene)"></span>
                     </td>
                     <td>{{gene.Gene}}</td>
                     <td>{{gene.OMIM}}</td>
