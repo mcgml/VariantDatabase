@@ -32,6 +32,10 @@ input, #searchButton, #clearButton, #exportButton, #variantTable, .panel {
     margin:10px;
 }
 
+#occurrenceFilter, #internalFrequencyFilter, #idFilter, #externalLinkButton, #dbSNPLink {
+    color : black;
+}
+
 /*Disable hover on nested table*/
 .table-hover > tbody > tr.select-row:hover > td,
 .select-row > td {

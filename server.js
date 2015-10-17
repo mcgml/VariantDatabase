@@ -83,6 +83,20 @@ app.post('/api/variantfilter/populationfrequency', function(req, res) {
     )
 });
 
+app.post('/api/variantfilter/functionalannotation', function(req, res) {
+    request.post(
+        {
+            uri:"http://localhost:7474/awmgs/plugins/variantfilter/functionalannotation",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
+
 app.get('/api/workflows', function(req, res) {
     request.get (
         {

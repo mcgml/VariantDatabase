@@ -9,6 +9,10 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
         });
     }])
 
+    .config(['$httpProvider', function($httpProvider) {
+        $httpProvider.defaults.cache = true; // enable http caching
+    }])
+
     .config(function(NotificationProvider) {
         NotificationProvider.setOptions(
             {
@@ -21,26 +25,6 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
                 positionY: 'bottom'
             }
         )
-    })
-
-    .filter('consequenceStrip', function() {
-        return function (input) {
-            if (input != null && input.length > 16){
-                return input.substring(4, input.length - 12);
-            } else {
-                return input;
-            }
-        }
-    })
-
-    .filter('inheritanceStrip', function() {
-        return function (input) {
-            if (input != null && input.length > 12){
-                return input.substring(4, input.length - 8);
-            } else {
-                return input;
-            }
-        }
     })
 
     .filter('convertVariantToRange', function() {
@@ -58,6 +42,7 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
     .controller('ReportCtrl', ['$scope', '$http', 'Notification', '$uibModal', function ($scope, $http, Notification, $uibModal) {
 
         var cat20 = ["#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896"];
+        var pathogenicityClasses = ["btn btn-default btn-xs noMargin", "btn btn-success btn-xs noMargin", "btn btn-warning btn-xs noMargin", "btn btn-danger btn-xs noMargin"];
 
         $scope.selectedVariantFilter = -1;
 
@@ -105,6 +90,10 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
             }
         };
 
+        $scope.getPathogenicityClass = function(index){
+            return pathogenicityClasses[index];
+        };
+
         $scope.processReportRequest = function(){
             if ($scope.selectedAnalysis == '' || $scope.selectedAnalysis == undefined){
                 Notification('Enter Sample');
@@ -120,6 +109,7 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
             }
             $scope.getFilteredVariants();
             $scope.getPanelCoverage();
+            $scope.selectedVariantFilter = -1;
         };
 
         $scope.getFilteredVariants = function(){
@@ -147,23 +137,27 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
             }];
         };
 
-        $scope.getVariantAnnotation = function(variantId) {
-            console.log("OPTIONAL MATCH (v:Variant {VariantId:\"" + variantId + "\"})-[c]-(a:Annotation)-[]-(f:Feature)-[b:HAS_PROTEIN_CODING_BIOTYPE]-(sy:Symbol) " +
-                "RETURN f.FeatureId as Feature,a.Exon as Exon, a.Intron as Intron,type(c) as Consequence,a.HGVSc as HGVSc,a.HGVSp as HGVSp,a.Sift as SIFT,a.Polyphen as PolyPhen,sy.SymbolId as Symbol");
-            $http.post('/api/seraph', {
-                cache: true,
-                query:
-                "OPTIONAL MATCH (v:Variant {VariantId:\"" + variantId + "\"})-[c]-(a:Annotation)-[]-(f:Feature)-[b:HAS_PROTEIN_CODING_BIOTYPE]-(sy:Symbol) " +
-                "RETURN f.FeatureId as Feature,a.Exon as Exon, a.Intron as Intron,type(c) as Consequence,a.HGVSc as HGVSc,a.HGVSp as HGVSp,a.Sift as SIFT,a.Polyphen as PolyPhen,sy.SymbolId as Symbol",
-                params: {}
-            }).then(function(response) {
-                $scope.annotations = response.data;
-            }, function(response) {
-                console.log("ERROR: " + response);
-            });
+        $scope.getAnnotations = function(variantId, status){
+
+            if (!status){
+                $scope.annotations = '';
+                return;
+            }
+
+            $http.post('/api/variantfilter/functionalannotation',
+                {
+                    'VariantId' : variantId
+                }
+            ).then(function(response) {
+                    $scope.annotations = response.data;
+                    Notification('Operation successful');
+                }, function(response) {
+                    console.log("ERROR: " + response);
+                });
         };
 
         $scope.getVariantPopulationFrequency = function(variantId){
+            console.log("hi");
             return $http.post('/api/variantfilter/populationfrequency',
                 {
                     'VariantId' : variantId

@@ -15,8 +15,7 @@ angular.module('variantdb.manage', ['ngRoute', 'ui.bootstrap', 'ui-notification'
             $http.post('/api/seraph', {
                 query:
                     "MATCH (v:VirtualPanel {PanelName:\"" + $scope.selectedPanel.PanelName + "\"})-[:CONTAINS_SYMBOL]->(s:Symbol) " +
-                    "OPTIONAL MATCH (s)-[:HAS_ASSOCIATED_DISORDER]->(d:Disorder)" +
-                    "RETURN s.SymbolId as Gene,d.Title as OMIM;",
+                    "RETURN s.SymbolId as Gene;",
                 params: {}
             }).then(function(response) {
                 $scope.genes = response.data;
