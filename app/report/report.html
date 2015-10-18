@@ -57,10 +57,10 @@
                 <th width="10%"><a id="idFilter" ng-click="sortType = 'Id'; sortReverse = !sortReverse">dbSNP <span ng-class="sortReverse ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom'" ng-show="sortType == 'Id'"></span></a></th>
             </tr>
             </thead>
-            <tbody ng-repeat="variant in filteredVariants.Variants | orderBy:sortType:sortReverse | filter:{Filter:selectedVariantFilter}:true">
+            <tbody ng-repeat="variant in filteredVariants.Variants | orderBy:sortType:sortReverse | filter:{Filter:selectedVariantFilter}:true track by variant.VariantNodeId">
             <tr>
                 <td width="2.5%"><input type="checkbox" ng-model="variant.Selected"></td>
-                <td width="2.5%"><span ng-class="activePosition == $index ? 'glyphicon glyphicon-chevron-up' : 'glyphicon glyphicon-chevron-down'" ng-click="activePosition == $index ? activePosition = -1 : activePosition = $index; getAnnotations(variant.VariantId, activePosition == $index);"></span></td>
+                <td width="2.5%"><span ng-class="activePosition == $index ? 'glyphicon glyphicon-chevron-up' : 'glyphicon glyphicon-chevron-down'" ng-click="activePosition == $index ? activePosition = -1 : activePosition = $index; getAnnotations(variant.VariantNodeId, activePosition == $index);"></span></td>
                 <td width="2.5%">
                     <div class="dropdown">
                         <a id="externalLinkButton" class="glyphicon glyphicon-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></a>
@@ -77,15 +77,15 @@
                     </div>
                 </td>
                 <td width="10%">
-                    <button type="button" ng-class="getPathogenicityClass(variant.Pathogenicity[0])" tooltip-placement="top" uib-tooltip="Internally assigned pathogenicity" ng-click=""></button>
-                    <button type="button" ng-class="getPathogenicityClass(variant.Pathogenicity[1])" tooltip-placement="top" uib-tooltip="Population frequency" ng-click="openPopulationFrequencyModal(getVariantPopulationFrequency(variant.VariantId));"></button>
-                    <button type="button" ng-class="getPathogenicityClass(variant.Pathogenicity[2])" tooltip-placement="top" uib-tooltip="Base conservation" ng-click=""></button>
-                    <button type="button" ng-class="getPathogenicityClass(variant.Pathogenicity[3])" tooltip-placement="top" uib-tooltip="Amino-acid conservation (SIFT/PolyPhen)" ng-click=""></button>
+                    <button type="button" class="btn btn-default btn-xs noMargin squareButton" ng-style="{'background-color' : getPathogenicityStyle(variant.Pathogenicity[0])}" tooltip-placement="top" uib-tooltip="Internally assigned pathogenicity" ng-click=""></button>
+                    <button type="button" class="btn btn-default btn-xs noMargin squareButton" ng-style="{'background-color' : getPathogenicityStyle(variant.Pathogenicity[1])}" tooltip-placement="top" uib-tooltip="Population frequency" ng-click="openPopulationFrequencyModal(getVariantPopulationFrequency(variant.VariantNodeId));"></button>
+                    <button type="button" class="btn btn-default btn-xs noMargin squareButton" ng-style="{'background-color' : getPathogenicityStyle(variant.Pathogenicity[2])}" tooltip-placement="top" uib-tooltip="Base conservation" ng-click=""></button>
+                    <button type="button" class="btn btn-default btn-xs noMargin squareButton" ng-style="{'background-color' : getPathogenicityStyle(variant.Pathogenicity[3])}" tooltip-placement="top" uib-tooltip="Amino-acid conservation (SIFT/PolyPhen)" ng-click=""></button>
                 </td>
                 <td width="42.5%">{{variant.VariantId}}</td>
                 <td width="10%">{{variant.Inheritance}}</td>
                 <td width="10%">{{variant.Occurrence}}</td>
-                <td width="10%">{{variant.InternalFrequency * 100 | number:2}}</td>
+                <td width="10%">{{variant.InternalFrequency}}</td>
                 <td width="10%"><a id="dbSNPLink" ng-show="variant.Id" href="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs={{variant.Id}}" target="_blank">{{variant.Id}}</a></td>
             </tr>
             <tr class="select-row" ng-show="activePosition == $index && annotations != ''">

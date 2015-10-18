@@ -42,11 +42,10 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
     .controller('ReportCtrl', ['$scope', '$http', 'Notification', '$uibModal', function ($scope, $http, Notification, $uibModal) {
 
         var cat20 = ["#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896"];
-        var pathogenicityClasses = ["btn btn-default btn-xs noMargin", "btn btn-success btn-xs noMargin", "btn btn-warning btn-xs noMargin", "btn btn-danger btn-xs noMargin"];
+        var pathogenicityColours = ["white", "#43ac6a", "#e99002", "#f04124"];
 
         $scope.selectedVariantFilter = -1;
 
-        //create pie navigation chart
         $scope.donutChartOptions = {
             chart: {
                 type: 'pieChart',
@@ -90,8 +89,8 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
             }
         };
 
-        $scope.getPathogenicityClass = function(index){
-            return pathogenicityClasses[index];
+        $scope.getPathogenicityStyle = function(index){
+            return pathogenicityColours[index];
         };
 
         $scope.processReportRequest = function(){
@@ -113,13 +112,10 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
         };
 
         $scope.getFilteredVariants = function(){
-            $http.post('/api/variantfilter',
+            $http.post('/api/variantfilter' + $scope.selectedWorkflow.Path,
                 {
-                    'SampleId' : $scope.selectedAnalysis.SampleId,
-                    'RunId' : $scope.selectedAnalysis.RunId,
-                    'LibraryId' : $scope.selectedAnalysis.LibraryId,
-                    'PanelName' : $scope.selectedPanel.PanelName,
-                    'WorkflowPath' : $scope.selectedWorkflow.Path
+                    'RunInfoNodeId' : $scope.selectedAnalysis.RunInfoNodeId,
+                    'PanelNodeId' : $scope.selectedPanel.PanelNodeId
                 }
             ).then(function(response) {
                     $scope.filteredVariants = response.data;
@@ -137,7 +133,7 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
             }];
         };
 
-        $scope.getAnnotations = function(variantId, status){
+        $scope.getAnnotations = function(variantNodeId, status){
 
             if (!status){
                 $scope.annotations = '';
@@ -146,7 +142,7 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
 
             $http.post('/api/variantfilter/functionalannotation',
                 {
-                    'VariantId' : variantId
+                    'NodeId' : variantNodeId
                 }
             ).then(function(response) {
                     $scope.annotations = response.data;
@@ -156,11 +152,10 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
                 });
         };
 
-        $scope.getVariantPopulationFrequency = function(variantId){
-            console.log("hi");
+        $scope.getVariantPopulationFrequency = function(variantNodeId){
             return $http.post('/api/variantfilter/populationfrequency',
                 {
-                    'VariantId' : variantId
+                    'NodeId' : variantNodeId
                 }
             ).then(function(response) {
                     return response.data;
@@ -182,7 +177,7 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
         $scope.openPopulationFrequencyModal = function (items) {
 
             var modalInstance = $uibModal.open({
-                animation: true,
+                animation: false,
                 templateUrl: 'myModalContent.html',
                 controller: 'ModalInstanceCtrl',
                 resolve: {
@@ -198,7 +193,7 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
         $http.post('/api/seraph', { //todo: plugin
             query:
             "MATCH (s:Sample)-[:HAS_ANALYSIS]->(r:RunInfo) " +
-            "RETURN s.SampleId as SampleId,r.LibraryId as LibraryId, r.RunId as RunId",
+            "RETURN s.SampleId as SampleId,r.LibraryId as LibraryId, r.RunId as RunId, ID(r) as RunInfoNodeId",
             params: {}
         }).then(function(response) {
             $scope.analyses = response.data;
@@ -209,7 +204,7 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
         //get all panels
         $http.post('/api/seraph', { //todo: plugin
             query:
-                "MATCH (v:VirtualPanel) RETURN v.PanelName as PanelName",
+                "MATCH (v:VirtualPanel) RETURN v.PanelName as PanelName, ID(v) as PanelNodeId",
             params: {}
         }).then(function(response) {
             $scope.virtualPanels = response.data;

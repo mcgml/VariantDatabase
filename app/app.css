@@ -36,6 +36,13 @@ input, #searchButton, #clearButton, #exportButton, #variantTable, .panel {
     color : black;
 }
 
+.squareButton {
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:5px;
+    padding-right:5px;
+}
+
 /*Disable hover on nested table*/
 .table-hover > tbody > tr.select-row:hover > td,
 .select-row > td {

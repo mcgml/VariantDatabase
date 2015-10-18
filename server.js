@@ -55,10 +55,10 @@ app.post('/api/cypher', function(req, res) {
     )
 });
 
-app.post('/api/variantfilter', function(req, res) {
+app.post('/api/variantfilter/autosomaldominant', function(req, res) {
     request.post(
         {
-            uri:"http://localhost:7474/awmgs/plugins/variantfilter" + req.body.WorkflowPath,
+            uri:"http://localhost:7474/awmgs/plugins/variantfilter/autosomaldominant",
             json: req.body
         },
         function(error, result)
