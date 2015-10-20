@@ -43,6 +43,10 @@ input, #searchButton, #clearButton, #exportButton, #variantTable, .panel {
     padding-right:5px;
 }
 
+#pathCommentBox{
+    resize:none;
+}
+
 /*Disable hover on nested table*/
 .table-hover > tbody > tr.select-row:hover > td,
 .select-row > td {

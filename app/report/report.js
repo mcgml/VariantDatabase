@@ -178,7 +178,7 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
 
             var modalInstance = $uibModal.open({
                 animation: false,
-                templateUrl: 'myModalContent.html',
+                templateUrl: 'templates/populationFrequencyModal.html',
                 controller: 'ModalInstanceCtrl',
                 resolve: {
                     items: function () {
@@ -204,7 +204,8 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
         //get all panels
         $http.post('/api/seraph', { //todo: plugin
             query:
-                "MATCH (v:VirtualPanel) RETURN v.PanelName as PanelName, ID(v) as PanelNodeId",
+                "MATCH (v:VirtualPanel)-[rel:DESIGNED_BY]->(u:User) " +
+                "RETURN v.PanelName as PanelName, ID(v) as PanelNodeId, rel.Date as Date, u.UserName as UserName;",
             params: {}
         }).then(function(response) {
             $scope.virtualPanels = response.data;
