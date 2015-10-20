@@ -75,7 +75,7 @@ angular.module('variantdb.manage', ['ngRoute', 'ui.bootstrap', 'ui-notification'
         };
 
         $scope.getVariantAnnotations = function(){
-            $http.post('/api/variantfilter/functionalannotation',
+            $http.post('/api/variantdatabase/functionalannotation',
                 {
                     'NodeId' : $scope.variantInfo.VariantNodeId
                 }

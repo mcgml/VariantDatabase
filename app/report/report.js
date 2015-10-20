@@ -112,7 +112,7 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
         };
 
         $scope.getFilteredVariants = function(){
-            $http.post('/api/variantfilter' + $scope.selectedWorkflow.Path,
+            $http.post('/api/variantdatabase' + $scope.selectedWorkflow.Path,
                 {
                     'RunInfoNodeId' : $scope.selectedAnalysis.RunInfoNodeId,
                     'PanelNodeId' : $scope.selectedPanel.PanelNodeId
@@ -140,7 +140,7 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
                 return;
             }
 
-            $http.post('/api/variantfilter/functionalannotation',
+            $http.post('/api/variantdatabase/functionalannotation',
                 {
                     'NodeId' : variantNodeId
                 }
@@ -153,7 +153,7 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
         };
 
         $scope.getVariantPopulationFrequency = function(variantNodeId){
-            return $http.post('/api/variantfilter/populationfrequency',
+            return $http.post('/api/variantdatabase/populationfrequency',
                 {
                     'NodeId' : variantNodeId
                 }
@@ -253,4 +253,5 @@ angular.module('variantdb.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.boots
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+
     });

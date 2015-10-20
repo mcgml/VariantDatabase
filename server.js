@@ -55,10 +55,10 @@ app.post('/api/cypher', function(req, res) {
     )
 });
 
-app.post('/api/variantfilter/autosomaldominant', function(req, res) {
+app.post('/api/variantdatabase/autosomaldominantfilter', function(req, res) {
     request.post(
         {
-            uri:"http://localhost:7474/awmgs/plugins/variantfilter/autosomaldominant",
+            uri:"http://localhost:7474/awmgs/plugins/variantdatabase/autosomaldominantfilter",
             json: req.body
         },
         function(error, result)
@@ -69,10 +69,10 @@ app.post('/api/variantfilter/autosomaldominant', function(req, res) {
     )
 });
 
-app.post('/api/variantfilter/populationfrequency', function(req, res) {
+app.post('/api/variantdatabase/populationfrequency', function(req, res) {
     request.post(
         {
-            uri:"http://localhost:7474/awmgs/plugins/variantfilter/populationfrequency",
+            uri:"http://localhost:7474/awmgs/plugins/variantdatabase/populationfrequency",
             json: req.body
         },
         function(error, result)
@@ -83,10 +83,10 @@ app.post('/api/variantfilter/populationfrequency', function(req, res) {
     )
 });
 
-app.post('/api/variantfilter/functionalannotation', function(req, res) {
+app.post('/api/variantdatabase/functionalannotation', function(req, res) {
     request.post(
         {
-            uri:"http://localhost:7474/awmgs/plugins/variantfilter/functionalannotation",
+            uri:"http://localhost:7474/awmgs/plugins/variantdatabase/functionalannotation",
             json: req.body
         },
         function(error, result)
@@ -97,10 +97,10 @@ app.post('/api/variantfilter/functionalannotation', function(req, res) {
     )
 });
 
-app.get('/api/workflows', function(req, res) {
+app.get('/api/variantdatabase/workflows', function(req, res) {
     request.get (
         {
-            uri:"http://localhost:7474/awmgs/plugins/variantfilter/workflows",
+            uri:"http://localhost:7474/awmgs/plugins/variantdatabase/workflows",
             json: req.body
         },
         function(error, result)
