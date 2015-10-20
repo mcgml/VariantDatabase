@@ -3,7 +3,7 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-6">
-                    <h3 class="panel-title">Add, View or Edit Panel</h3>
+                    <h3 class="panel-title">View Panel</h3>
                 </div>
                 <div class="col-md-6">
                     <div class="input-group">
@@ -12,7 +12,7 @@
                             <button class="btn btn-primary noMargin" ng-click="getGenes();">
                                 <i class="glyphicon glyphicon-search"></i>
                             </button>
-                            <button class="btn btn-warning noMargin" ng-click="selectedPanel = null; genes = null; search = '';">
+                            <button class="btn btn-warning noMargin" ng-click="selectedPanel = null; genes = null; search = null;">
                                 <i class="glyphicon glyphicon-remove"></i>
                             </button>
                         </div>
@@ -24,25 +24,19 @@
             <table ng-show="genes" class="table table-bordered table-hover noSelect">
                 <thead>
                 <tr>
-                    <th colspan="2" width="100%">
+                    <th width="100%">
                         <input type="text" class="form-control noMargin" placeholder="Search" ng-model="search">
                     </th>
                 </tr>
                 <tr>
-                    <th width="2.5%">
-                        <span class="glyphicon glyphicon-plus"></span>
-                    </th>
-                    <th width="97.5">
+                    <th width="100%">
                         <a ng-click="sortType = 'Gene'; sortReverse = !sortReverse">Gene <span ng-class="sortReverse ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom'" ng-show="sortType == 'Gene'"></span></a>
                     </th>
                 </tr>
                 </thead>
                 <tbody ng-repeat="gene in genes | orderBy:sortType:sortReverse | filter:search">
                 <tr>
-                    <td width="2.5">
-                        <span class="glyphicon glyphicon-remove" ng-click="removeGeneFromPanel(gene.Gene)"></span>
-                    </td>
-                    <td width="97.5">{{gene.Gene}}</td>
+                    <td width="100%">{{gene.Gene}}</td>
                 </tr>
                 </tbody>
             </table>
@@ -54,16 +48,16 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-6">
-                    <h3 class="panel-title">View or Edit Variant</h3>
+                    <h3 class="panel-title">View Variant</h3>
                 </div>
                 <div class="col-md-6">
                     <div class="input-group">
                         <input type="text" class="form-control noMargin" placeholder="Enter Variant" ng-model="selectedVariant">
                         <div class="input-group-btn">
-                            <button class="btn btn-primary noMargin" ng-click="getVariantInfo(); getVariantAnnotations();">
+                            <button class="btn btn-primary noMargin" ng-click="getVariantInformation();">
                                 <i class="glyphicon glyphicon-search"></i>
                             </button>
-                            <button class="btn btn-warning noMargin" ng-click="selectedVariant = null; variantInfo = null;">
+                            <button class="btn btn-warning noMargin" ng-click="selectedVariant = null; variantInformation = null;">
                                 <i class="glyphicon glyphicon-remove"></i>
                             </button>
                         </div>
@@ -71,34 +65,32 @@
                 </div>
             </div>
         </div>
-        <div ng-show="variantInfo && variantInfo != '';" class="panel-body">
-            <div class="col-md-4">
+        <div ng-show="variantInformation" class="panel-body">
+            <div class="col-md-6">
                 <h3>Details</h3>
-                <p><b>dbSNP: </b>{{variantInfo.dbSNP}}</p>
-                <p><b>Occurrence: </b></p>
-                <h3>Pathogenicity</h3>
-                <p><b>Class: </b>
-                    <select ng-model="variantInfo.Class">
-                        <option value="0">Artefact</option>
-                        <option value="1">Benign</option>
-                        <option value="2">Likely Benign</option>
-                        <option value="3">Unknown Significance</option>
-                        <option value="4">Likely Pathogenic</option>
-                        <option value="5">Pathogenic</option>
-                    </select>
-                </p>
-                <p><b>Comments: </b></p>
-                <textarea id="pathCommentBox" ng-modal="variantInfo.Comment" rows="3" cols="40"></textarea>
-                <p ng-hide="variantInfo.User == null"><b>User: </b>{{variantInfo.User}}</p>
-                <p ng-hide="variantInfo.Time == null"><b>Date: </b>{{variantInfo.Time}}</p>
-                <p></p>
-                <button type="button" class="btn btn-success" ng-click="">
-                    <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Update
-                </button>
+                <p><b>Variant: </b>{{selectedVariant}}</p>
+                <p><b>dbSNP: </b>{{variantInformation.dbSNP}}</p>
+                <p><b>Occurrence: </b>{{variantInformation.Occurrence}}</p>
+                <h3>Pathogenicity
+                    <button class="btn btn-primary btn-xs noMargin">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </button>
+                </h3>
+                <p><b>Class: </b>{{variantInformation.Class}}</p>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-6">
+                <h3>History</h3>
+                <ul class="list-group s-scroll">
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                    <li class="list-group-item">Morbi leo risus</li>
+                    <li class="list-group-item">Porta ac consectetur ac</li>
+                    <li class="list-group-item">Vestibulum at eros</li>
+                </ul>
+            </div>
+            <div class="col-md-12">
+                <h3>Functional Consequence</h3>
                 <div class="table-responsive">
-                    <table class="table table-condensed">
+                    <table class="table table-hover">
                         <thead>
                         <tr>
                             <th width="10%">Gene</th>
@@ -128,6 +120,16 @@
                     </table>
                 </div>
             </div>
+            <div class="col-md-6">
+                <h3>Population Frequency</h3>
+                <nvd3 options="barChartOptions" data="populationFrequency"></nvd3>
+            </div>
+            <div class="col-md-6">
+
+            </div>
         </div>
     </div>
+</div>
+<div class="col-md-12">
+    <p></p>
 </div>

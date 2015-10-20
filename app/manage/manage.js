@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('variantdb.manage', ['ngRoute', 'ui.bootstrap', 'ui-notification'])
+angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootstrap', 'ui-notification', 'nvd3'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/manage', {
@@ -23,79 +23,123 @@ angular.module('variantdb.manage', ['ngRoute', 'ui.bootstrap', 'ui-notification'
         )
     })
 
-    .controller('ManageCtrl', ['$scope', '$http', 'Notification', function ($scope, $http, Notification) {
+    .controller('ManageCtrl', ['$scope', '$http', 'Notification', '$uibModal', function ($scope, $http, Notification, $uibModal) {
+
+        var cat20 = ["#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896"];
+
+        $scope.barChartOptions = {
+            chart: {
+                type: 'discreteBarChart',
+                height: 250,
+                noData: "",
+                color : function (d, i) { var key = i === undefined ? d : i; return d.color || cat20[key % cat20.length]; },
+                x: function(d){return d.label;},
+                y: function(d){return d.value;},
+                showValues: false,
+                showXAxis: false,
+                showYAxis: true,
+                "yAxis": {
+                    "axisLabel": "Percentage Coverage"
+                },
+                valueFormat: function(d){
+                    return d3.format(',.4f')(d);
+                },
+                transitionDuration: 500
+            }
+        };
 
         $scope.getGenes = function() {
-            $http.post('/api/seraph', {
-                query:
-                    "MATCH (v:VirtualPanel {PanelName:\"" + $scope.selectedPanel.PanelName + "\"})-[:CONTAINS_SYMBOL]->(s:Symbol) " +
-                    "RETURN s.SymbolId as Gene;",
-                params: {}
-            }).then(function(response) {
-                $scope.genes = response.data;
-            }, function(response) {
-                console.log("ERROR: " + response);
-            });
-        };
-
-        $scope.removeGeneFromPanel = function(symbolId){
-            $http.post('/api/seraph', {
-                query:
-                "MATCH (v:VirtualPanel {PanelName:\"" + $scope.selectedPanel.PanelName + "\"})-[cs:CONTAINS_SYMBOL]->(s:Symbol {SymbolId:\"" + symbolId + "\"}) " +
-                "DELETE cs;",
-                params: {}
-            }).then(function(response) {
-                $scope.getGenes();
-            }, function(response) {
-                console.log("ERROR: " + response);
-            });
-        };
-
-        $scope.getVariantInfo = function(){
-            $http.post('/api/seraph', {
-                query:
-                    "MATCH (v:Variant {VariantId:\"" + $scope.selectedVariant + "\"}) " +
-                    "OPTIONAL MATCH (v)<-[p:HAS_ASSOCIATED_PATHOGENICITY]-(u:User) " +
-                    "RETURN v.VariantId as Variant, ID(v) as VariantNodeId, v.Id as dbSNP, p.Class as Class, p.Comment as Comment, p.Time as Time, u.UserName as User;",
-                params: {}
-            }).then(function(response) {
-
-                //check if variant was found
-                if (response.data == '') {
-                    Notification.error($scope.selectedVariant + ' Not Found');
-                    return;
-                }
-
-                $scope.variantInfo = response.data;
-                $scope.getVariantAnnotations();
-
-            }, function(response) {
-                console.log("ERROR: " + response);
-            });
-        };
-
-        $scope.getVariantAnnotations = function(){
-            $http.post('/api/variantdatabase/functionalannotation',
+            $http.post('/api/seraph',
                 {
-                    'NodeId' : $scope.variantInfo.VariantNodeId
-                }
-            ).then(function(response) {
-                    $scope.Annotations = response.data;
+                    query:
+                    "MATCH (v:VirtualPanel) WHERE id(v) = " + $scope.selectedPanel.PanelNodeId + " " +
+                    "MATCH (v)-[:CONTAINS_SYMBOL]->(s:Symbol) " +
+                    "RETURN s.SymbolId as Gene;",
+                    params: {}
+                })
+                .then(function(response) {
+                    $scope.genes = response.data;
                 }, function(response) {
+                    Notification.error(response);
                     console.log("ERROR: " + response);
                 });
         };
 
-        //get all panels
-        $http.post('/api/seraph', { //todo: plugin
-            query:
-            "MATCH (v:VirtualPanel)-[rel:DESIGNED_BY]->(u:User) " +
-            "RETURN v.PanelName as PanelName, ID(v) as PanelNodeId, rel.Date as Date, u.UserName as UserName;",
-            params: {}
-        }).then(function(response) {
-            $scope.virtualPanels = response.data;
-        }, function(response) {
-            console.log("ERROR: " + response);
-        });
+        $scope.getVariantInformation = function(){
+            $http.post('/api/variantdatabase/variantinformation',
+                {
+                    VariantId : $scope.selectedVariant
+                })
+                .then(function(response) {
 
-    }]);
+                    $scope.variantInformation = response.data;
+
+                    getVariantAnnotation($scope.variantInformation.VariantNodeId);
+                    getVariantPopulationFrequency($scope.variantInformation.VariantNodeId);
+
+                }, function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+        };
+
+        $scope.openNewCommentModal = function (items) {
+            var modalInstance = $uibModal.open({
+                animation: false,
+                templateUrl: 'templates/addCommentModal.html',
+                controller: 'ModalInstanceCtrl',
+                resolve: {
+                    items: function () {
+                        return items;
+                    }
+                }
+            });
+        };
+
+        function getVariantPopulationFrequency(nodeId){
+            $http.post('/api/variantdatabase/populationfrequency',
+                {
+                    'NodeId' : nodeId
+                })
+                .then(function(response) {
+                    $scope.populationFrequency = response.data;
+                }, function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+        }
+
+        function getVariantAnnotation(nodeId){
+            $http.post('/api/variantdatabase/functionalannotation',
+                {
+                    'NodeId' : nodeId
+                })
+                .then(function(response) {
+                    $scope.Annotations = response.data;
+                }, function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+        }
+
+        $http.get('/api/variantdatabase/panels', {})
+            .then(function(response) {
+                $scope.virtualPanels = response.data;
+            }, function(response) {
+                Notification.error(response);
+                console.log("ERROR: " + response);
+            });
+
+    }])
+
+    .controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+        $scope.items = items;
+
+        $scope.save = function () {
+            console.log($scope.comment);
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    });

@@ -16,12 +16,12 @@
     <input type="text" class="form-control" placeholder="Enter Workflow Name" ng-model="selectedWorkflow" typeahead-template-url="templates/workflowTypeahead.html" uib-typeahead="workflow as workflow.Name for workflow in workflows | filter:{Name:$viewValue} | limitTo:3">
 </div>
 <div class="col-md-1">
-    <button id="searchButton" type="button" class="btn btn-primary" ng-click="processReportRequest();">
+    <button id="searchButton" type="button" class="btn btn-primary" ng-click="processWorkflowRequest();">
         <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filter
     </button>
 </div>
 <div class="col-md-1">
-    <button id="exportButton" type="button" class="btn btn-success" ng-click="exportVariants()">
+    <button id="exportButton" type="button" class="btn btn-success" ng-click="exportVariants();">
         <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> Save
     </button>
 </div>
@@ -66,10 +66,10 @@
                     </div>
                 </td>
                 <td width="10%">
-                    <button type="button" class="btn btn-default btn-xs noMargin squareButton" ng-style="{'background-color' : getPathogenicityStyle(variant.Pathogenicity[0])}" tooltip-placement="top" uib-tooltip="Internally assigned pathogenicity" ng-click=""></button>
-                    <button type="button" class="btn btn-default btn-xs noMargin squareButton" ng-style="{'background-color' : getPathogenicityStyle(variant.Pathogenicity[1])}" tooltip-placement="top" uib-tooltip="Population frequency" ng-click="openPopulationFrequencyModal(getVariantPopulationFrequency(variant.VariantNodeId));"></button>
-                    <button type="button" class="btn btn-default btn-xs noMargin squareButton" ng-style="{'background-color' : getPathogenicityStyle(variant.Pathogenicity[2])}" tooltip-placement="top" uib-tooltip="Base conservation" ng-click=""></button>
-                    <button type="button" class="btn btn-default btn-xs noMargin squareButton" ng-style="{'background-color' : getPathogenicityStyle(variant.Pathogenicity[3])}" tooltip-placement="top" uib-tooltip="Amino-acid conservation (SIFT/PolyPhen)" ng-click=""></button>
+                    <button type="button" class="btn btn-default btn-xs noMargin squareButton" ng-style="{'background-color' : pathogenicityColours[variant.Pathogenicity[0]]}" tooltip-placement="top" uib-tooltip="Internally assigned pathogenicity" ng-click=""></button>
+                    <button type="button" class="btn btn-default btn-xs noMargin squareButton" ng-style="{'background-color' : pathogenicityColours[variant.Pathogenicity[1]]}" tooltip-placement="top" uib-tooltip="Population frequency" ng-click="openPopulationFrequencyModal(getVariantPopulationFrequency(variant.VariantNodeId));"></button>
+                    <button type="button" class="btn btn-default btn-xs noMargin squareButton" ng-style="{'background-color' : pathogenicityColours[variant.Pathogenicity[2]]}" tooltip-placement="top" uib-tooltip="Base conservation" ng-click=""></button>
+                    <button type="button" class="btn btn-default btn-xs noMargin squareButton" ng-style="{'background-color' : pathogenicityColours[variant.Pathogenicity[3]]}" tooltip-placement="top" uib-tooltip="Amino-acid conservation (SIFT/PolyPhen)" ng-click=""></button>
                 </td>
                 <td width="42.5%">{{variant.VariantId}}</td>
                 <td width="10%">{{variant.Inheritance}}</td>

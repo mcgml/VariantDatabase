@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('variantdb.login', ['ngRoute'])
+angular.module('variantdatabase.login', ['ngRoute'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/login', {

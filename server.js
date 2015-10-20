@@ -4,7 +4,7 @@
 var express  = require('express');
 var app      = express(); // create our app w/ express
 var request = require('request');
-var db = require("seraph")("http://localhost:7474");
+var db = require("seraph")("http://127.0.0.1:7474");
 var morgan = require('morgan'); // log requests to the console (express4)
 var bodyParser = require('body-parser'); // pull information from HTML POST (express4)
 var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
@@ -33,10 +33,107 @@ app.use(methodOverride());
 
 // routes ======================================================================
 // api ---------------------------------------------------------------------
+app.get('/api/variantdatabase/workflows', function(req, res) {
+    request.get (
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/workflows",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
+app.get('/api/variantdatabase/analyses', function(req, res) {
+    request.get (
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/analyses",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
+app.get('/api/variantdatabase/panels', function(req, res) {
+    request.get (
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/panels",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
+app.post('/api/variantdatabase/autosomaldominantworkflow', function(req, res) {
+    request.post(
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/autosomaldominantworkflow",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
+app.post('/api/variantdatabase/variantinformation', function(req, res) {
+    request.post(
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/variantinformation",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
+app.post('/api/variantdatabase/populationfrequency', function(req, res) {
+    request.post(
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/populationfrequency",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
+app.post('/api/variantdatabase/functionalannotation', function(req, res) {
+    request.post(
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/functionalannotation",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
+app.post('/api/seraph', function(req, res) {
+    db.query(req.body.query, req.body.params, function(err, result) {
+        if (err) throw err;
+        res.send(result);
+    });
+});
 app.post('/api/cypher', function(req, res) {
     request.post(
         {
-            uri:"http://localhost:7474/db/data/transaction/commit",
+            uri:"http://127.0.0.1:7474/db/data/transaction/commit",
             json:
             {
                 statements:
@@ -53,69 +150,6 @@ app.post('/api/cypher', function(req, res) {
             res.send(result.body);
         }
     )
-});
-
-app.post('/api/variantdatabase/autosomaldominantfilter', function(req, res) {
-    request.post(
-        {
-            uri:"http://localhost:7474/awmgs/plugins/variantdatabase/autosomaldominantfilter",
-            json: req.body
-        },
-        function(error, result)
-        {
-            if (error) throw err;
-            res.send(result.body);
-        }
-    )
-});
-
-app.post('/api/variantdatabase/populationfrequency', function(req, res) {
-    request.post(
-        {
-            uri:"http://localhost:7474/awmgs/plugins/variantdatabase/populationfrequency",
-            json: req.body
-        },
-        function(error, result)
-        {
-            if (error) throw err;
-            res.send(result.body);
-        }
-    )
-});
-
-app.post('/api/variantdatabase/functionalannotation', function(req, res) {
-    request.post(
-        {
-            uri:"http://localhost:7474/awmgs/plugins/variantdatabase/functionalannotation",
-            json: req.body
-        },
-        function(error, result)
-        {
-            if (error) throw err;
-            res.send(result.body);
-        }
-    )
-});
-
-app.get('/api/variantdatabase/workflows', function(req, res) {
-    request.get (
-        {
-            uri:"http://localhost:7474/awmgs/plugins/variantdatabase/workflows",
-            json: req.body
-        },
-        function(error, result)
-        {
-            if (error) throw err;
-            res.send(result.body);
-        }
-    )
-});
-
-app.post('/api/seraph', function(req, res) {
-    db.query(req.body.query, req.body.params, function(err, result) {
-        if (err) throw err;
-        res.send(result);
-    });
 });
 
 // application -------------------------------------------------------------

@@ -19,6 +19,16 @@
     padding-top : 30px;
 }
 
+.s-scroll {
+    max-height: 150px;
+    overflow-y:auto;
+}
+
+.selecteditem {
+    background-color: activecaption;
+    color:white;
+}
+
 input, #searchButton, #clearButton, #exportButton, #variantTable, .panel {
     margin-top : 15px;
     margin-bottom : 0;
@@ -32,6 +42,10 @@ input, #searchButton, #clearButton, #exportButton, #variantTable, .panel {
     margin:10px;
 }
 
+#commentBox{
+    height:200px;
+}
+
 #occurrenceFilter, #internalFrequencyFilter, #idFilter, #externalLinkButton, #dbSNPLink {
     color : black;
 }
@@ -43,7 +57,7 @@ input, #searchButton, #clearButton, #exportButton, #variantTable, .panel {
     padding-right:5px;
 }
 
-#pathCommentBox{
+textarea {
     resize:none;
 }
 
