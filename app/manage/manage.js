@@ -1,5 +1,7 @@
 'use strict';
 
+//todo add new gene panels
+
 angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootstrap', 'ui-notification', 'nvd3'])
 
     .config(['$routeProvider', function($routeProvider) {
@@ -83,14 +85,76 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
                 });
         };
 
-        $scope.openNewCommentModal = function (items) {
+        $scope.addVariantComment = function(){
+            $http.post('/api/seraph',
+                {
+                    query:
+                    "MATCH (v:Variant) where id(v) = " + $scope.variantInformation.VariantNodeId + " " +
+                    "MATCH (u:User {UserName:\"ml\"})" +
+                    "CREATE (u)-[:HAS_USER_COMMENT {Comment:\"" + $scope.newCommentText + "\", Date:" + new Date().getTime() + "}]->(v)",
+                    params: {}
+                })
+                .then(function(response) {
+                    $scope.getVariantInformation();
+                },
+                function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+        };
+
+        $scope.setVariantPathogenicity = function(){
+            $http.post('/api/seraph',
+                {
+                    query:
+                    "MATCH (v:Variant) where id(v) = " + $scope.variantInformation.VariantNodeId + " " +
+                    "MATCH (u:User {UserName:\"ml\"})" +
+                    "CREATE (u)-[:HAS_ASSIGNED_PATHOGENICITY {Value:toInt(\"" + $scope.selectedPathogenicity + "\"), Date:" + new Date().getTime() + "}]->(v)",
+                    params: {}
+                })
+                .then(function(response) {
+                    $scope.getVariantInformation();
+                },
+                function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+        };
+
+        $scope.openVariantInformationModal = function (variant) {
+
+            $http.post('/api/variantdatabase/populationfrequency',
+                {
+                    'NodeId' : variant.VariantNodeId
+                })
+                .then(function(response) {
+                    variant.PopulationFrequency = response.data;
+                }, function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+
+            $http.post('/api/variantdatabase/functionalannotation',
+                {
+                    'NodeId' : variant.VariantNodeId
+                })
+                .then(function(response) {
+                    variant.Annotation = response.data;
+                    Notification('Operation successful');
+                }, function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+
             var modalInstance = $uibModal.open({
-                animation: false,
-                templateUrl: 'templates/addCommentModal.html',
+                animation: true,
+                templateUrl: 'templates/variantInformation.html',
                 controller: 'ModalInstanceCtrl',
+                windowClass: 'app-modal-window',
+                size: 'lg',
                 resolve: {
                     items: function () {
-                        return items;
+                        return variant;
                     }
                 }
             });
@@ -133,13 +197,32 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
     }])
 
     .controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+        var cat20 = ["#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896"];
         $scope.items = items;
 
-        $scope.save = function () {
-            console.log($scope.comment);
+        $scope.barChartOptions = {
+            chart: {
+                type: 'discreteBarChart',
+                height: 250,
+                noData: "",
+                color : function (d, i) { var key = i === undefined ? d : i; return d.color || cat20[key % cat20.length]; },
+                x: function(d){return d.label;},
+                y: function(d){return d.value;},
+                showValues: false,
+                showXAxis: false,
+                showYAxis: true,
+                "yAxis": {
+                    "axisLabel": "Percentage Coverage"
+                },
+                valueFormat: function(d){
+                    return d3.format(',.4f')(d);
+                },
+                transitionDuration: 500
+            }
         };
 
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+
     });

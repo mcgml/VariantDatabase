@@ -20,8 +20,8 @@
 }
 
 .s-scroll {
-    max-height: 150px;
-    overflow-y:auto;
+    max-height: 475px;
+    overflow-y:scroll;
 }
 
 .selecteditem {
@@ -46,7 +46,7 @@ input, #searchButton, #clearButton, #exportButton, #variantTable, .panel {
     height:200px;
 }
 
-#occurrenceFilter, #internalFrequencyFilter, #idFilter, #externalLinkButton, #dbSNPLink {
+#occurrenceFilter, #internalFrequencyFilter, #idFilter {
     color : black;
 }
 
@@ -59,6 +59,10 @@ input, #searchButton, #clearButton, #exportButton, #variantTable, .panel {
 
 textarea {
     resize:none;
+}
+
+.list-group-item {
+    word-wrap: break-word;
 }
 
 /*Disable hover on nested table*/
@@ -179,4 +183,17 @@ textarea {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.app-modal-window .modal-dialog {
+    width: 1200px;
+}
+
+#igvPicture {
+    padding:0;
+    margin:0;
+}
+
+#igvTd {
+    padding:5px;
 }

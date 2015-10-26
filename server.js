@@ -72,10 +72,10 @@ app.get('/api/variantdatabase/panels', function(req, res) {
         }
     )
 });
-app.post('/api/variantdatabase/autosomaldominantworkflow', function(req, res) {
+app.post('/api/variantdatabase/autosomaldominantworkflowv1', function(req, res) {
     request.post(
         {
-            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/autosomaldominantworkflow",
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/autosomaldominantworkflowv1",
             json: req.body
         },
         function(error, result)
