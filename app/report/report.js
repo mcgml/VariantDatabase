@@ -46,15 +46,16 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
         }
     })
 
-    .filter('convertVariantToClinvar', function(){
-       return function (input){
-           return "(15[Chromosome]) AND 48411007[Base Position for GRCh37]";
-       }
-    })
-
     .filter('convertVariantToExAC', function() {
         return function (input) {
-            return input;
+
+            var split1 = input.split(":");
+            var split2 = split1[1].split(">");
+            var startPosition = split2[0].replace(/\D/g, '');
+            var refAllele = split2[0].replace(/\d/g, '');
+            var altAllele = split2[1].replace(/\d/g, '');
+
+            return split1[0] + '-' + startPosition + '-' + refAllele + '-' + altAllele;
         }
     })
 
@@ -125,15 +126,15 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
         };
 
         $scope.processWorkflowRequest = function(){
-            if ($scope.selectedAnalysis == '' || $scope.selectedAnalysis == undefined){
+            if ($scope.selectedAnalysis === '' || $scope.selectedAnalysis === undefined){
                 Notification.error('Enter Sample');
                 return;
             }
-            if ($scope.selectedPanel == '' || $scope.selectedPanel == undefined){
+            if ($scope.selectedPanel === '' || $scope.selectedPanel === undefined){
                 Notification.error('Enter Panel');
                 return;
             }
-            if ($scope.selectedWorkflow == '' || $scope.selectedWorkflow == undefined){
+            if ($scope.selectedWorkflow === '' || $scope.selectedWorkflow === undefined){
                 Notification.error('Enter Workflow');
                 return;
             }
@@ -163,7 +164,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
             var saved = [];
 
             //skip missing dataset
-            if ($scope.filteredVariants == null) return;
+            if ($scope.filteredVariants === null) return;
 
             for (var key in $scope.filteredVariants.Variants) {
                 if ($scope.filteredVariants.Variants.hasOwnProperty(key)) {
@@ -184,7 +185,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
         };
 
         $scope.launchIGV = function (remoteBamFilePath, variantId){
-            $window.open('http://localhost:60151/load?file=' + remoteBamFilePath + '&locus=' + variantId + '&genome=GRCh37.75', '_blank');
+            $window.open('http://localhost:60151/load?file=' + remoteBamFilePath + '&locus=' + variantId + '&genome=37', '_blank');
         };
 
         $scope.openVariantInformationModal = function (variant) {

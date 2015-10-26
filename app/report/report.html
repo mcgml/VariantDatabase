@@ -30,8 +30,8 @@
     </button>
 </div>
 <div class="col-md-12">
-    <div id="variantTable" class="table-responsive">
-        <table ng-hide="selectedVariantFilter == -1" class="table table-bordered table-hover">
+
+        <table id="variantTable" ng-hide="selectedVariantFilter == -1" class="table table-bordered table-hover">
             <thead>
             <tr>
                 <th width="2.5%"><span class="glyphicon glyphicon-star noSelect"></span></th>
@@ -61,7 +61,7 @@
                     </div>
                 </td>
                 <td width="2.5%" id="igvTd">
-                    <input class="image-responsive noPadding noMargin" type="image" src="/images/igv_icon.png" height="20" width="20" ng-click="launchIGV('/home/ml/bam.bam', variant.VariantId);"/>
+                    <input class="image-responsive noPadding noMargin" type="image" src="/images/igv_icon.png" height="20" width="20" ng-click="launchIGV(selectedAnalysis.remoteBamFilePath, variant.VariantId);"/>
                 </td>
                 <td width="50%">{{variant.VariantId}}</td>
                 <td width="10%">{{variant.Inheritance}}</td>
@@ -71,6 +71,8 @@
             </tr>
             </tbody>
         </table>
-    </div>
+
 </div>
-<div id="downloadLink"></div>
+<div class="col-md-12">
+    <p></p>
+</div>

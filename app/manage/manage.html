@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <div class="table-responsive">
+
             <table ng-show="genes" class="table table-bordered table-hover noSelect">
                 <thead>
                 <tr>
@@ -40,7 +40,7 @@
                 </tr>
                 </tbody>
             </table>
-        </div>
+
     </div>
 </div>
 <div class="col-md-12">
@@ -68,10 +68,10 @@
         <div ng-show="variantInformation" class="panel-body">
             <div class="col-md-6">
                 <h3>Details</h3>
-                <p><b>Variant </b>{{selectedVariant}}</p>
+                <p><b>Variant </b>{{variantInformation.VariantId}}</p>
                 <p><b>dbSNP </b><a ng-show="variantInformation.dbSNP" href="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs={{variantInformation.dbSNP}}" target="_blank">{{variantInformation.dbSNP}}</a></p>
                 <p><b>Occurrence </b>{{variantInformation.Occurrence}}</p>
-                <p><b>Information </b><span class="glyphicon glyphicon-eye-open" ng-click="openVariantInformationModal(variantInformation)"></span></p>
+                <p><b>Functional Annotation </b><span class="glyphicon glyphicon-eye-open" ng-click="openVariantInformationModal(variantInformation)"></span></p>
                 <form role="form">
                     <div class="form-group">
                         <label for="sel1"><h3>Pathogenicity</h3></label>
@@ -108,4 +108,6 @@
         </div>
     </div>
 </div>
-<div class="col-md-12"><p></p></div>
+<div class="col-md-12">
+    <p></p>
+</div>
