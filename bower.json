@@ -16,6 +16,7 @@
     "angular-nvd3": "~1.0.2",
     "angular-ui-notification": "~0.0.14",
     "d3": "~3.5.6",
-    "nvd3": "~1.8.1"
+    "nvd3": "~1.8.1",
+    "file-saver.js": "~1.20150507.2"
   }
 }
