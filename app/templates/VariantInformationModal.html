@@ -7,27 +7,29 @@
             <thead>
             <tr>
                 <th width="10%">Gene</th>
-                <th width="10%">Transcript</th>
-                <th width="15%">Biotype</th>
-                <th width="10%">Location</th>
+                <th width="15%">Transcript</th>
+                <th width="10%">CCDS</th>
+                <th width="15%">Consequence</th>
                 <th width="10%">HGVSc</th>
                 <th width="10%">HGVSp</th>
-                <th width="15%">Consequences</th>
+                <th width="5%">Codons</th>
+                <th width="5%">Location</th>
                 <th width="10%">SIFT</th>
                 <th width="10%">PolyPhen</th>
             </tr>
             </thead>
             <tbody ng-repeat="annotation in items.Annotation">
-            <tr>
-                <td width="10%">{{annotation.Symbol}}</td>
-                <td width="15%">{{annotation.Feature}}</td>
-                <td width="15%">{{annotation.Biotype}}</td>
-                <td width="10%">{{annotation.Location}}</td>
+            <tr ng-style="">
+                <td width="10%">{{annotation.SymbolId}}</td>
+                <td width="15%">{{annotation.FeatureId}}</td>
+                <td width="10%">{{annotation.CCDSId}}</td>
+                <td width="15%">{{annotation.Consequence}}</td>
                 <td width="10%">{{annotation.HGVSc}}</td>
                 <td width="10%">{{annotation.HGVSp}}</td>
-                <td width="15%">{{annotation.Consequence}}</td>
-                <td width="10%">{{annotation.SIFT}}</td>
-                <td width="10%">{{annotation.PolyPhen}}</td>
+                <td width="5%">{{annotation.Codons}}</td>
+                <td width="5%">{{annotation.Location}}</td>
+                <td width="10%">{{annotation.Sift | uppercase}}</td>
+                <td width="10%">{{annotation.Polyphen | uppercase}}</td>
             </tr>
             </tbody>
         </table>

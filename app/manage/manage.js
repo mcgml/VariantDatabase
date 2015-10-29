@@ -25,6 +25,43 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
         )
     })
 
+    .filter('convertAnnotationToKeywordsSearch', function() {
+        return function (input) {
+
+            var allKeywords = [];
+            var returnKeywords = '';
+            var hash = {};
+
+            for (var key in input) {
+                if (input.hasOwnProperty(key)) {
+
+                    if (input[key].hasOwnProperty('SymbolId')){
+                        allKeywords.push(input[key].SymbolId);
+                    }
+
+                    if (input[key].hasOwnProperty('HGVSc')){
+                        allKeywords.push(input[key].HGVSc);
+                    }
+
+                    if (input[key].hasOwnProperty('HGVSp')){
+                        allKeywords.push(input[key].HGVSp);
+                    }
+
+                }
+            }
+
+            //make unique list
+            for (var i = 0; i < allKeywords.length; i++){
+                if (!(allKeywords[i] in hash)) { //it works with objects! in FF, at least
+                    hash[allKeywords[i]] = true;
+                    returnKeywords += "\"" + allKeywords[i] + "\" ";
+                }
+            }
+
+            return returnKeywords;
+        }
+    })
+
     .controller('ManageCtrl', ['$scope', '$http', 'Notification', '$uibModal', function ($scope, $http, Notification, $uibModal) {
 
         var cat20 = ["#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896"];
@@ -54,7 +91,7 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
             $http.post('/api/seraph',
                 {
                     query:
-                    "MATCH (v:VirtualPanel) WHERE id(v) = " + $scope.selectedPanel.PanelNodeId + " " +
+                    "MATCH (v:VirtualPanel) WHERE id(v) = " + $scope.selectedVirtualPanel.PanelNodeId + " " +
                     "MATCH (v)-[:CONTAINS_SYMBOL]->(s:Symbol) " +
                     "RETURN s.SymbolId as Gene;",
                     params: {}
@@ -86,11 +123,17 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
         };
 
         $scope.addVariantComment = function(){
+
+            if ($scope.newCommentText == null || $scope.newCommentText == ''){
+                Notification.error("Enter comment");
+                return;
+            }
+
             $http.post('/api/seraph',
                 {
                     query:
                     "MATCH (v:Variant) where id(v) = " + $scope.variantInformation.VariantNodeId + " " +
-                    "MATCH (u:User {UserName:\"ml\"})" +
+                    "MATCH (u:User {UserId:\"ml\"})" +
                     "CREATE (u)-[:HAS_USER_COMMENT {Comment:\"" + $scope.newCommentText + "\", Date:" + new Date().getTime() + "}]->(v)",
                     params: {}
                 })
@@ -104,12 +147,21 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
         };
 
         $scope.setVariantPathogenicity = function(){
+
+            if ($scope.selectedPathogenicity == null){
+                Notification.error("Select pathogenicity");
+                return;
+            }
+
+            var query = "MATCH (v:Variant) where id(v) = " + $scope.variantInformation.VariantNodeId + " " +
+                "MATCH (u:User {UserId:\"ml\"})" +
+                "CREATE (u)-[:HAS_ASSIGNED_PATHOGENICITY {Value:toInt(\"" + $scope.selectedPathogenicity + "\"), Date:" + new Date().getTime();
+            if ($scope.pathogenicityEvidenceText != null && $scope.pathogenicityEvidenceText != '') query += ", Comment:\"" + $scope.pathogenicityEvidenceText + "\"";
+            query += "}]->(v)";
+
             $http.post('/api/seraph',
                 {
-                    query:
-                    "MATCH (v:Variant) where id(v) = " + $scope.variantInformation.VariantNodeId + " " +
-                    "MATCH (u:User {UserName:\"ml\"})" +
-                    "CREATE (u)-[:HAS_ASSIGNED_PATHOGENICITY {Value:toInt(\"" + $scope.selectedPathogenicity + "\"), Date:" + new Date().getTime() + "}]->(v)",
+                    query: query,
                     params: {}
                 })
                 .then(function(response) {
@@ -148,7 +200,7 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
 
             var modalInstance = $uibModal.open({
                 animation: true,
-                templateUrl: 'templates/variantInformation.html',
+                templateUrl: 'templates/VariantInformationModal.html',
                 controller: 'ModalInstanceCtrl',
                 windowClass: 'app-modal-window',
                 size: 'lg',
@@ -196,7 +248,7 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
 
     }])
 
-    .controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+    .controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items) {
         var cat20 = ["#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896"];
         $scope.items = items;
 
@@ -222,7 +274,7 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
 
     });

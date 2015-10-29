@@ -5,7 +5,6 @@
 //todo fix exac conversion
 //todo add population frequency modal to report page
 //todo fix igv link
-//todo fix dropdown link out menu
 
 angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootstrap', 'ui-notification', 'nvd3'])
 
@@ -69,8 +68,8 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
             for (var key in input) {
                 if (input.hasOwnProperty(key)) {
 
-                    if (input[key].hasOwnProperty('Symbol')){
-                        allKeywords.push(input[key].Symbol);
+                    if (input[key].hasOwnProperty('SymbolId')){
+                        allKeywords.push(input[key].SymbolId);
                     }
 
                     if (input[key].hasOwnProperty('HGVSc')){
@@ -125,12 +124,25 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
             }
         };
 
+        function convertVariantToRangeFunction(variantId){
+            var split1 = variantId.split(":");
+            var split2 = split1[1].split(">");
+
+            var refLength = split2[0].match(/\D/g).length;
+            var altLength = split2[1].match(/\D/g).length;
+
+            var startPosition = split2[0].replace(/\D/g, '');
+            var endPosition = (startPosition - refLength) + altLength;
+
+            return split1[0] + ":" + startPosition + "-" + endPosition;
+        }
+
         $scope.processWorkflowRequest = function(){
             if ($scope.selectedAnalysis === '' || $scope.selectedAnalysis === undefined){
                 Notification.error('Enter Sample');
                 return;
             }
-            if ($scope.selectedPanel === '' || $scope.selectedPanel === undefined){
+            if ($scope.selectedVirtualPanel === '' || $scope.selectedVirtualPanel === undefined){
                 Notification.error('Enter Panel');
                 return;
             }
@@ -148,7 +160,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
             $http.post('/api/variantdatabase' + $scope.selectedWorkflow.Path,
                 {
                     'RunInfoNodeId' : $scope.selectedAnalysis.RunInfoNodeId,
-                    'PanelNodeId' : $scope.selectedPanel.PanelNodeId
+                    'PanelNodeId' : $scope.selectedVirtualPanel.PanelNodeId
                 })
                 .then(function(response) {
                     $scope.filteredVariants = response.data;
@@ -160,7 +172,6 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
         }
 
         $scope.exportVariants = function(){
-
             var saved = [];
 
             //skip missing dataset
@@ -185,7 +196,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
         };
 
         $scope.launchIGV = function (remoteBamFilePath, variantId){
-            $window.open('http://localhost:60151/load?file=' + remoteBamFilePath + '&locus=' + variantId + '&genome=37', '_blank');
+            $window.open('http://localhost:60151/load?file=' + remoteBamFilePath + '&locus=' + convertVariantToRangeFunction(variantId) + '&genome=37', '_blank');
         };
 
         $scope.openVariantInformationModal = function (variant) {
@@ -215,7 +226,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
 
             var modalInstance = $uibModal.open({
                 animation: true,
-                templateUrl: 'templates/variantInformation.html',
+                templateUrl: 'templates/VariantInformationModal.html',
                 controller: 'ModalInstanceCtrl',
                 windowClass: 'app-modal-window',
                 size: 'lg',
@@ -256,7 +267,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
 
     }])
 
-    .controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+    .controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items) {
         var cat20 = ["#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896"];
         $scope.items = items;
 
@@ -282,7 +293,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
         };
 
         $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
 
     });

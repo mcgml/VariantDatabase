@@ -20,7 +20,7 @@
 }
 
 .s-scroll {
-    max-height: 475px;
+    max-height: 250px;
     overflow-y:scroll;
 }
 
@@ -46,7 +46,7 @@ input, #searchButton, #clearButton, #exportButton, #variantTable, .panel {
     height:200px;
 }
 
-#occurrenceFilter, #internalFrequencyFilter, #idFilter {
+#occurrenceFilter, #internalFrequencyFilter, #dbSNPIdFilter {
     color : black;
 }
 
