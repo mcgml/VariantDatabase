@@ -9,7 +9,7 @@
                     <div class="input-group">
                         <input type="text" class="form-control noMargin" placeholder="Enter Virtual Panel Name" ng-model="selectedVirtualPanel" typeahead-template-url="templates/VirtualPanelTypeahead.html" uib-typeahead="virtualPanel as virtualPanel.VirtualPanelName for virtualPanel in virtualPanels | filter:$viewValue | limitTo:5">
                         <div class="input-group-btn">
-                            <button class="btn btn-primary noMargin" ng-click="getGenes();">
+                            <button class="btn btn-primary noMargin" ng-click="getVirtualPanelGenes();">
                                 <i class="glyphicon glyphicon-search"></i>
                             </button>
                             <button class="btn btn-warning noMargin" ng-click="selectedVirtualPanel = ''; genes = ''; search = '';">
@@ -23,19 +23,23 @@
         <table ng-show="genes" class="table table-bordered table-hover noSelect">
             <thead>
             <tr>
-                <th width="100%">
+                <th colspan="2" width="100%">
                     <input type="text" class="form-control noMargin" placeholder="Search" ng-model="search">
                 </th>
             </tr>
             <tr>
-                <th width="100%">
-                    <a ng-click="sortType = 'Gene'; sortReverse = !sortReverse">Gene <span ng-class="sortReverse ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom'" ng-show="sortType == 'Gene'"></span></a>
+                <th width="75%">
+                    <a ng-click="sortType = 'SymbolId'; sortReverse = !sortReverse">Symbol <span ng-class="sortReverse ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom'" ng-show="sortType == 'SymbolId'"></span></a>
+                </th>
+                <th width="25%">
+                    <a ng-click="sortType = 'GeneId'; sortReverse = !sortReverse">Id <span ng-class="sortReverse ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom'" ng-show="sortType == 'GeneId'"></span></a>
                 </th>
             </tr>
             </thead>
             <tbody ng-repeat="gene in genes | orderBy:sortType:sortReverse | filter:search">
             <tr>
-                <td width="100%">{{gene.Gene}}</td>
+                <td width="75%"><a ng-click="openOMIMSymbolLink(gene.SymbolId)">{{gene.SymbolId}}</a></td>
+                <td width="25%"><a ng-click="openEnsemblGeneLink(gene.GeneId)">{{gene.GeneId}}</a></td>
             </tr>
             </tbody>
         </table>
