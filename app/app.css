@@ -20,7 +20,7 @@
 }
 
 .s-scroll {
-    max-height: 250px;
+    max-height: 320px;
     overflow-y:scroll;
 }
 
@@ -46,7 +46,7 @@ input, #searchButton, #clearButton, #exportButton, #variantTable, .panel {
     height:200px;
 }
 
-#occurrenceFilter, #internalFrequencyFilter, #dbSNPIdFilter {
+#occurrenceFilter, #internalFrequencyFilter, #dbSNPIdFilter, #ccdsLink, #symbolLink, #featureLink, #geneIdLink {
     color : black;
 }
 
@@ -142,7 +142,7 @@ textarea {
 /*Sigin in page*/
 .form-signin {
     max-width: 330px;
-    padding: 15px;
+    padding: 0;
     margin: 0 auto;
 }
 .form-signin .form-signin-heading,
@@ -196,4 +196,26 @@ textarea {
 
 #igvTd {
     padding:5px;
+}
+
+#userAccountImage {
+    color : lightgrey;
+    font-size: 300px;
+}
+
+.borderless tbody tr td, .borderless tbody tr th, .borderless thead tr th {
+    border: none;
+}
+
+#userAccountTable > tbody > tr > td, #userAccountTable > tbody > tr > th,
+#featureTable > tbody > tr > td, #featureTable > tbody > tr > th,
+#variantInformationTable > tbody > tr > td, #variantInformationTable > tbody > tr > th {
+    font-size: 14px;
+    padding-left : 0;
+    vertical-align: middle;
+}
+
+#preferredFeatureStar {
+    color: goldenrod;
+    font-size: 20px;
 }

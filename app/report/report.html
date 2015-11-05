@@ -42,7 +42,7 @@
                 <th width="10%">Inheritance</th>
                 <th width="10%"><a id="occurrenceFilter" ng-click="sortType = 'Occurrence'; sortReverse = !sortReverse">Occurrence <span ng-class="sortReverse ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom'" ng-show="sortType == 'Occurrence'"></span></a></th>
                 <th width="10%"><a id="internalFrequencyFilter" ng-click="sortType = 'InternalFrequency'; sortReverse = !sortReverse">Frequency % <span ng-class="sortReverse ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom'" ng-show="sortType == 'InternalFrequency'"></span></a></th>
-                <th width="10%"><a id="dbSNPIdFilter" ng-click="sortType = 'dbSNPId'; sortReverse = !sortReverse">dbSNPId <span ng-class="sortReverse ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom'" ng-show="sortType == 'dbSNPId'"></span></a></th>
+                <th width="10%"><a id="dbSNPIdFilter" ng-click="sortType = 'dbSNPId'; sortReverse = !sortReverse">dbSNP <span ng-class="sortReverse ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom'" ng-show="sortType == 'dbSNPId'"></span></a></th>
             </tr>
             </thead>
             <tbody ng-repeat="variant in filteredVariants.Variants | orderBy:sortType:sortReverse | filter:{Filter:selectedVariantFilter}:true track by variant.VariantNodeId">
@@ -53,10 +53,9 @@
                     <div class="dropdown noSelect">
                         <a id="externalLinkButton" class="glyphicon glyphicon-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></a>
                         <ul class="dropdown-menu">
-                            <li class="dropdown-header">Genome Browsers</li>
+                            <li class="dropdown-header">Browsers</li>
                             <li><a ng-click="openEnsemblLink(variant.VariantId)">Ensembl</a></li>
                             <li><a ng-click="openUCSCLink(variant.VariantId)">UCSC</a></li>
-                            <li class="dropdown-header">Nucleotide search</li>
                             <li><a ng-click="openExACLink(variant.VariantId)">ExAC</a></li>
                         </ul>
                     </div>

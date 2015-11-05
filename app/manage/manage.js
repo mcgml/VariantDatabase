@@ -50,6 +50,20 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
                 });
         };
 
+        $scope.getFeature = function(){
+            $http.post('/api/variantdatabase/featureinformation',
+                {
+                    FeatureId : $scope.selectedFeature
+                })
+                .then(function(response) {
+                    $scope.featureInformation = response.data;
+                    Notification('Operation successful');
+                }, function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+        };
+
         $scope.getVariantInformation = function(){
             $http.post('/api/variantdatabase/variantinformation',
                 {
@@ -81,42 +95,18 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
                 });
         }
 
-        function getVariantAnnotation(nodeId){
+        function getVariantAnnotation(nodeId) {
             $http.post('/api/variantdatabase/functionalannotation',
                 {
-                    'NodeId' : nodeId
+                    'NodeId': nodeId
                 })
-                .then(function(response) {
+                .then(function (response) {
                     $scope.Annotations = response.data;
-                }, function(response) {
+                }, function (response) {
                     Notification.error(response);
                     console.log("ERROR: " + response);
                 });
         }
-
-        $scope.addVariantComment = function(){
-
-            if ($scope.newCommentText == null || $scope.newCommentText == ''){
-                Notification.error("Enter comment");
-                return;
-            }
-
-            $http.post('/api/seraph',
-                {
-                    query:
-                    "MATCH (v:Variant) where id(v) = " + $scope.variantInformation.VariantNodeId + " " +
-                    "MATCH (u:User {UserId:\"ml\"})" +
-                    "CREATE (u)-[:HAS_USER_COMMENT {Comment:\"" + $scope.newCommentText + "\", Date:" + new Date().getTime() + "}]->(v)",
-                    params: {}
-                })
-                .then(function(response) {
-                    $scope.getVariantInformation();
-                },
-                function(response) {
-                    Notification.error(response);
-                    console.log("ERROR: " + response);
-                });
-        };
 
         $scope.setVariantPathogenicity = function(){
 
@@ -138,6 +128,26 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
                 })
                 .then(function(response) {
                     $scope.getVariantInformation();
+                },
+                function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+        };
+
+        $scope.setFeaturePreference = function(){
+            var query = "MATCH (u:User {UserId:\"ml\"}) " +
+                "MATCH (f:Feature) where id(f) = " + $scope.featureInformation.FeatureNodeId + " " +
+                "CREATE (f)-[:HAS_FEATURE_PREFERENCE]->(fp:FeaturePreference)-[:ADDED_BY {Date:" + new Date().getTime() + "}]->(u) ";
+            if ($scope.preferredFeatureEvidenceText != null && $scope.preferredFeatureEvidenceText != '') query += "SET fp.Evidence = \"" + $scope.preferredFeatureEvidenceText + "\"";
+
+            $http.post('/api/seraph',
+                {
+                    query: query,
+                    params: {}
+                })
+                .then(function(response) {
+                    $scope.getFeature();
                 },
                 function(response) {
                     Notification.error(response);
@@ -183,14 +193,6 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
                 }
             });
 
-        };
-
-        $scope.openOMIMSymbolLink = function(id){
-            $window.open('http://omim.org/search?search=' + id, '_blank');
-        };
-
-        $scope.openEnsemblGeneLink = function(id){
-            $window.open('http://grch37.ensembl.org/Homo_sapiens/Location/View?g=' + id, '_blank');
         };
 
         $http.get('/api/variantdatabase/panels', {})

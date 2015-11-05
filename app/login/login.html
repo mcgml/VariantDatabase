@@ -1,6 +1,4 @@
 <div class="col-md-4">
-</div>
-<div class="col-md-4">
     <form class="form-signin">
         <h2 class="form-signin-heading">Please sign in</h2>
         <label for="inputEmail" class="sr-only">Email address</label>
@@ -10,5 +8,23 @@
         <button class="btn btn-md btn-primary btn-block" type="submit">Sign in</button>
     </form>
 </div>
+<div class="col-md-8">
+    <h2>Dashboard</h2>
+    <div id="featureAuthorisationPanel" class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <h3 class="panel-title">Authorise Preferred Transcripts <span class="badge">{{featuresForAuthorisation.length}}</span></h3>
+            </div>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item s-scroll" ng-repeat="item in featuresForAuthorisation">
+                <h4><a id="symbolLink" href="http://omim.org/search?search={{item.SymbolId}}" target="_blank">{{item.SymbolId}}</a> <a id="featureLink" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{item.FeatureId}}" target="_blank">{{item.FeatureId}}</a> <span ng-click="acceptFeaturePreference(item.FeaturePreferenceNodeId)" class="glyphicon glyphicon-ok"></span> <span ng-click="rejectFeaturePreference(item.FeaturePreferenceNodeId)" class="glyphicon glyphicon-remove"></span></h4>
+                <h5>{{item.Evidence}}</h5>
+                <h6>{{item.UserId}} ({{item.Date | date:"dd/MM/yy"}})</h6>
+            </li>
+        </ul>
+    </div>
+</div>
 <div class="col-md-4">
+
 </div>

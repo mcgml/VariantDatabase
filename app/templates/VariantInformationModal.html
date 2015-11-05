@@ -25,21 +25,22 @@
                     <div class="dropdown noSelect">
                         <a id="externalLinkButton" class="glyphicon glyphicon-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuDivider">
-                            <li class="dropdown-header">Literature search</li>
-                            <li><a ng-click="openGoogleScholarLink(annotation)">Google</a></li>
-                            <li><a ng-click="openClinVarLink(annotation)">Clinvar</a></li>
-                            <li class="dropdown-header">Protein domain search</li>
-                            <li ng-show="annotation.Pfam_domain"><a ng-click="openPfamLink(annotation.Pfam_domain)">Pfam</a></li>
-                            <li ng-show="annotation.hmmpanther"><a ng-click="openPantherLink(annotation.hmmpanther)">PANTHER</a></li>
-                            <li ng-show="annotation.prosite"><a ng-click="openPrositeLink(annotation.prosite)">PROSITE</a></li>
-                            <li ng-show="annotation.Superfamily_domains"><a ng-click="openSuperfamilyLink(annotation.Superfamily_domains)">Superfamily</a></li>
+                            <li class="dropdown-header">Web Search</li>
+                            <li><a ng-click="openGoogleScholarLink(annotation)">Google Scholar</a></li>
+                            <li><a ng-click="openClinVarLink(annotation)">ClinVar</a></li>
+                            <li><a href="http://www.hgvs.org/locus-specific-mutation-databases/?field_hgnc_gene_symbol_title={{annotation.SymbolId}}" target="_blank">LSDB</a></li>
+                            <li class="dropdown-header">Protein Database</li>
+                            <li ng-class="{disabled: !annotation.Pfam_domain}"><a ng-click="openPfamLink(annotation.Pfam_domain)">Pfam</a></li>
+                            <li ng-class="{disabled: !annotation.hmmpanther}"><a ng-click="openPantherLink(annotation.hmmpanther)">PANTHER</a></li>
+                            <li ng-class="{disabled: !annotation.prosite}"><a ng-click="openPrositeLink(annotation.prosite)">PROSITE</a></li>
+                            <li ng-class="{disabled: !annotation.Superfamily_domains}"><a ng-click="openSuperfamilyLink(annotation.Superfamily_domains)">Superfamily</a></li>
                         </ul>
                     </div>
                 </div>
             </td>
-            <td width="10%">{{annotation.SymbolId}}</td>
-            <td width="10%">{{annotation.FeatureId}}</td>
-            <td width="10%">{{annotation.CCDSId}}</td>
+            <td width="10%"><a id="symbolLink" href="http://omim.org/search?search={{annotation.SymbolId}}" target="_blank">{{annotation.SymbolId}}</a></td>
+            <td width="10%"><a id="featureLink" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{annotation.FeatureId}}" target="_blank">{{annotation.FeatureId}}</a></td>
+            <td width="10%"><a id="ccdsLink" href="http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&DATA={{annotation.CCDSId}}" target="_blank">{{annotation.CCDSId}}</a></td>
             <td width="17.5%">{{annotation.Consequence}}</td>
             <td width="10%">{{annotation.HGVSc}}</td>
             <td width="10%">{{annotation.HGVSp}}</td>

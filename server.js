@@ -98,6 +98,19 @@ app.post('/api/variantdatabase/variantinformation', function(req, res) {
         }
     )
 });
+app.post('/api/variantdatabase/featureinformation', function(req, res) {
+    request.post(
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/featureinformation",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
 app.post('/api/variantdatabase/populationfrequency', function(req, res) {
     request.post(
         {

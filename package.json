@@ -14,6 +14,7 @@
     "cookie-parser": "^1.4.0",
     "express": "^4.13.3",
     "express-session": "^1.12.0",
+    "font-awesome": "^4.4.0",
     "jquery": "^2.1.4",
     "method-override": "^2.3.5",
     "morgan": "^1.6.1",
