@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootstrap', 'ui-notification', 'nvd3'])
+angular.module('variantdatabase.search', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootstrap', 'ui-notification', 'nvd3'])
 
     .config(['$routeProvider', function($routeProvider) {
-        $routeProvider.when('/manage', {
-            templateUrl: 'manage/manage.html',
-            controller: 'ManageCtrl'
+        $routeProvider.when('/search', {
+            templateUrl: 'search/search.html',
+            controller: 'SearchCtrl'
         });
     }])
 
-    .controller('ManageCtrl', ['$scope', '$http', 'Notification', '$uibModal', '$window', function ($scope, $http, Notification, $uibModal, $window) {
+    .controller('SearchCtrl', ['$scope', '$http', 'Notification', '$uibModal', '$window', function ($scope, $http, Notification, $uibModal, $window) {
         var cat20 = ["#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896"];
 
         $scope.barChartOptions = {
@@ -31,6 +31,38 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
                 },
                 transitionDuration: 500
             }
+        };
+
+        function convertVariantToRangeFunction(variantId){
+            var split1 = variantId.split(":");
+            var split2 = split1[1].split(">");
+
+            var refLength = split2[0].match(/\D/g).length;
+            var altLength = split2[1].match(/\D/g).length;
+
+            var startPosition = split2[0].replace(/\D/g, '');
+            var endPosition = (startPosition - refLength) + altLength;
+
+            return split1[0] + ":" + startPosition + "-" + endPosition;
+        }
+
+        $scope.openEnsemblLink = function(variantId){
+            $window.open('http://grch37.ensembl.org/Homo_sapiens/Location/View?r=' + convertVariantToRangeFunction(variantId), '_blank');
+        };
+
+        $scope.openUCSCLink = function(variantId){
+            $window.open('http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg19&position=chr' + convertVariantToRangeFunction(variantId), '_blank');
+        };
+
+        $scope.openExACLink = function(variantId){
+
+            var split1 = variantId.split(":");
+            var split2 = split1[1].split(">");
+            var startPosition = split2[0].replace(/\D/g, '');
+            var refAllele = split2[0].replace(/\d/g, '');
+            var altAllele = split2[1].replace(/\d/g, '');
+
+            $window.open('http://exac.broadinstitute.org/variant/' + split1[0] + '-' + startPosition + '-' + refAllele + '-' + altAllele, '_blank');
         };
 
         $scope.getVirtualPanelGenes = function() {
@@ -64,17 +96,17 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
                 });
         };
 
-        $scope.getVariantInformation = function(){
-            $http.post('/api/variantdatabase/variantinformation',
+        $scope.getVariantAnnotation = function(){
+            $http.post('/api/variantdatabase/variantannotation',
                 {
                     VariantId : $scope.selectedVariant
                 })
                 .then(function(response) {
 
-                    $scope.variantInformation = response.data;
+                    $scope.variantAnnotation = response.data;
 
-                    getVariantAnnotation($scope.variantInformation.VariantNodeId);
-                    getVariantPopulationFrequency($scope.variantInformation.VariantNodeId);
+                    getVariantAnnotation($scope.variantAnnotation.VariantNodeId);
+                    getVariantPopulationFrequency($scope.variantAnnotation.VariantNodeId);
 
                 }, function(response) {
                     Notification.error(response);
@@ -135,11 +167,22 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
                 });
         };
 
-        $scope.setFeaturePreference = function(){
-            var query = "MATCH (u:User {UserId:\"ml\"}) " +
-                "MATCH (f:Feature) where id(f) = " + $scope.featureInformation.FeatureNodeId + " " +
-                "CREATE (f)-[:HAS_FEATURE_PREFERENCE]->(fp:FeaturePreference)-[:ADDED_BY {Date:" + new Date().getTime() + "}]->(u) ";
-            if ($scope.preferredFeatureEvidenceText != null && $scope.preferredFeatureEvidenceText != '') query += "SET fp.Evidence = \"" + $scope.preferredFeatureEvidenceText + "\"";
+        $scope.changeFeaturePreference = function(featureInformation){
+            var query;
+
+            if(featureInformation.Preferred){
+                query = "MATCH (u:User {UserId:\"ml\"}) " +
+                    "MATCH (f:Feature) where id(f) = " + $scope.featureInformation.FeatureNodeId + " " +
+                    "MATCH (f)-[:HAS_FEATURE_PREFERENCE]->(fp:FeaturePreference) " +
+                    "CREATE (fp)-[rel:REMOVED_BY {Date:" + new Date().getTime() + "}]->(u)";
+                if ($scope.preferredFeatureEvidenceText != null && $scope.preferredFeatureEvidenceText != '') query += "SET rel.Evidence = \"" + $scope.preferredFeatureEvidenceText + "\"";
+
+            } else {
+                query = "MATCH (u:User {UserId:\"ml\"}) " +
+                    "MATCH (f:Feature) where id(f) = " + $scope.featureInformation.FeatureNodeId + " " +
+                    "CREATE (f)-[:HAS_FEATURE_PREFERENCE]->(fp:FeaturePreference)-[rel:ADDED_BY {Date:" + new Date().getTime() + "}]->(u) ";
+                if ($scope.preferredFeatureEvidenceText != null && $scope.preferredFeatureEvidenceText != '') query += "SET rel.Evidence = \"" + $scope.preferredFeatureEvidenceText + "\"";
+            }
 
             $http.post('/api/seraph',
                 {
@@ -155,7 +198,7 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
                 });
         };
 
-        $scope.openVariantInformationModal = function (variant) {
+        $scope.openVariantAnnotationModal = function (variant) {
 
             $http.post('/api/variantdatabase/populationfrequency',
                 {
@@ -182,8 +225,8 @@ angular.module('variantdatabase.manage', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
 
             var modalInstance = $uibModal.open({
                 animation: true,
-                templateUrl: 'templates/VariantInformationModal.html',
-                controller: 'VariantInformationCtrl',
+                templateUrl: 'templates/VariantAnnotationModal.html',
+                controller: 'VariantAnnotationCtrl',
                 windowClass: 'app-modal-window',
                 size: 'lg',
                 resolve: {

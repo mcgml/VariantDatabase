@@ -19,7 +19,7 @@ angular.module('variantdatabase.account', ['ngRoute', 'ngAnimate', 'ngTouch', 'u
                 params: {}
             })
             .then(function(response) {
-                $scope.userInfomation = response.data[0];
+                $scope.userInformation = response.data[0];
             },
             function(response) {
                 Notification.error(response);

@@ -1,7 +1,7 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-angular.module('variantdatabase', [ 'ngRoute', 'variantdatabase.login', 'variantdatabase.report', 'variantdatabase.manage', 'variantdatabase.account'])
+angular.module('variantdatabase', [ 'ngRoute', 'variantdatabase.login', 'variantdatabase.report', 'variantdatabase.search', 'variantdatabase.account', 'variantdatabase.admin'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.otherwise(
@@ -24,7 +24,16 @@ angular.module('variantdatabase', [ 'ngRoute', 'variantdatabase.login', 'variant
         )
     })
 
-    .controller('VariantInformationCtrl', function ($scope, $uibModalInstance, items, $window) {
+    .controller('VariantOccurrenceCtrl', function ($scope, $uibModalInstance, items, $window) {
+        $scope.items = items;
+
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+
+    })
+
+    .controller('VariantAnnotationCtrl', function ($scope, $uibModalInstance, items, $window) {
 
         var cat20 = ["#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896"];
         $scope.items = items;
@@ -77,11 +86,19 @@ angular.module('variantdatabase', [ 'ngRoute', 'variantdatabase.login', 'variant
         }
 
         $scope.openGoogleScholarLink = function(annotation){
-            $window.open('https://scholar.google.co.uk/scholar?q=' + keywordSearchFromAnnotationObject(annotation), '_blank');
+            var search = keywordSearchFromAnnotationObject(annotation);
+            if(search === undefined || search === ''){
+                return;
+            }
+            $window.open('https://scholar.google.co.uk/scholar?q=' + search, '_blank');
         };
 
         $scope.openClinVarLink = function(annotation){
-            $window.open('http://www.ncbi.nlm.nih.gov/clinvar/?term=' + keywordSearchFromAnnotationObject(annotation), '_blank');
+            var search = keywordSearchFromAnnotationObject(annotation);
+            if(search === undefined || search === ''){
+                return;
+            }
+            $window.open('http://www.ncbi.nlm.nih.gov/clinvar/?term=' + search, '_blank');
         };
 
         $scope.openPfamLink = function(accessions){

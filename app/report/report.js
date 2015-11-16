@@ -85,7 +85,11 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
             $window.open('http://exac.broadinstitute.org/variant/' + split1[0] + '-' + startPosition + '-' + refAllele + '-' + altAllele, '_blank');
         };
 
-        $scope.getFiteredVariants = function () {
+        $scope.openDbSnpLink = function(dbSNPId){
+            $window.open('http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=' + dbSNPId, '_blank');
+        };
+
+        $scope.getFilteredVariants = function () {
 
             //reset piechart filter
             $scope.selectedVariantFilter = -1;
@@ -110,7 +114,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
 
         };
 
-        $scope.openVariantInformationModal = function (variant) {
+        $scope.openVariantAnnotationModal = function (variant) {
 
             $http.post('/api/variantdatabase/populationfrequency',
                 {
@@ -136,13 +140,44 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
 
             var modalInstance = $uibModal.open({
                 animation: true,
-                templateUrl: 'templates/VariantInformationModal.html',
-                controller: 'VariantInformationCtrl',
+                templateUrl: 'templates/VariantAnnotationModal.html',
+                controller: 'VariantAnnotationCtrl',
                 windowClass: 'app-modal-window',
-                size: 'lg',
                 resolve: {
                     items: function () {
                         return variant;
+                    }
+                }
+            });
+        };
+
+        $scope.openVariantOccurrenceModal = function (variantId) {
+            var seen = {};
+
+            $http.post('/api/seraph',
+                {
+                    query: "MATCH (v:Variant {VariantId:\"" + variantId + "\"})-[rel]-(r:RunInfo)-[]-(s:Sample) return type(rel) as genotype, r, s;",
+                    params: {}
+                }
+            )
+                .then(function(response) {
+                    seen.Occurrences = response.data;
+                },
+                    function(response) {
+                        Notification.error(response);
+                        console.log("ERROR: " + response);
+                    });
+
+            seen.VariantId = variantId;
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'templates/VariantOccurrenceModal.html',
+                controller: 'VariantOccurrenceCtrl',
+                windowClass: 'app-modal-window',
+                resolve: {
+                    items: function () {
+                        return seen;
                     }
                 }
             });

@@ -1,0 +1,35 @@
+<div class="col-md-12">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <h3 class="panel-title">Preferred Transcripts <span class="badge">{{featuresForAuthorisation.length}}</span></h3>
+                </div>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item s-scroll" ng-repeat="item in featuresForAuthorisation">
+                    <h4><a id="symbolLink" href="http://omim.org/search?search={{item.SymbolId}}" target="_blank">{{item.SymbolId}}</a> <a id="featureLink" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{item.FeatureId}}" target="_blank">{{item.FeatureId}}</a> <i class="fa fa-check" ng-click="acceptFeaturePreference(item.FeaturePreferenceNodeId)"></i> <i class="fa fa-times" ng-click="rejectFeaturePreference(item.FeaturePreferenceNodeId)"></i></h4>
+                    <h5>{{item.Evidence}}</h5>
+                    <h6>{{item.UserId}} ({{item.Date | date:"dd/MM/yy"}})</h6>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <h3 class="panel-title">Variant Pathogenicity <span class="badge">{{variantsForAuthorisation.length}}</span></h3>
+                </div>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item s-scroll" ng-repeat="item in variantsForAuthorisation">
+
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-4">
+
+    </div>
+</div>

@@ -9,11 +9,11 @@
                     <div class="input-group">
                         <input type="text" class="form-control noMargin" placeholder="Enter Variant" ng-model="selectedVariant">
                         <div class="input-group-btn">
-                            <button class="btn btn-primary noMargin" ng-click="getVariantInformation();">
-                                <i class="glyphicon glyphicon-search"></i>
+                            <button class="btn btn-primary noMargin" ng-click="getVariantAnnotation();">
+                                <i class="fa fa-search"></i>
                             </button>
                             <button class="btn btn-warning noMargin" ng-click="selectedVariant = ''; variantInformation = '';">
-                                <i class="glyphicon glyphicon-remove"></i>
+                                <i class="fa fa-times"></i>
                             </button>
                         </div>
                     </div>
@@ -28,7 +28,20 @@
                     <tr><th>Variant</th><td>{{variantInformation.VariantId}}</td></tr>
                     <tr><th>dbSNP</th><td><a ng-show="variantInformation.dbSNPId" href="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs={{variantInformation.dbSNPId}}" target="_blank">{{variantInformation.dbSNPId}}</a></td></tr>
                     <tr><th>Occurrence</th><td>{{variantInformation.Occurrence}}</td></tr>
-                    <tr><th>Functional Annotation <span class="glyphicon glyphicon-eye-open" ng-click="openVariantInformationModal(variantInformation)"></span></th><td></td></tr>
+                    <tr><th>Functional Annotation</th><td><i class="fa fa-info-circle" ng-click="openVariantAnnotationModal(variantInformation)"></i></td></tr>
+                    <tr><th>Links</th>
+                        <td>
+                            <div class="dropdown noSelect">
+                                <i class="fa fa-external-link"></i>
+                                <ul class="dropdown-menu">
+                                    <li class="dropdown-header">Browsers</li>
+                                    <li><a ng-click="openEnsemblLink(variantInformation.VariantId)">Ensembl</a></li>
+                                    <li><a ng-click="openUCSCLink(variantInformation.VariantId)">UCSC</a></li>
+                                    <li><a ng-click="openExACLink(variantInformation.VariantId)">ExAC</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
                 <form role="form">
@@ -48,7 +61,7 @@
                     <textarea class="form-control" placeholder="Give evidence" rows="3" id="pathogenicityEvidence" ng-model="pathogenicityEvidenceText"></textarea>
                 </div>
                 <button type="button" class="btn btn-success" ng-click="setVariantPathogenicity()">
-                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Update
+                    <i class="fa fa-pencil"></i> Update
                 </button>
             </div>
             <div class="col-md-6">
@@ -76,10 +89,10 @@
                         <input type="text" class="form-control noMargin" placeholder="Enter Transcript" ng-model="selectedFeature">
                         <div class="input-group-btn">
                             <button class="btn btn-primary noMargin" ng-click="getFeature();">
-                                <i class="glyphicon glyphicon-search"></i>
+                                <i class="fa fa-search"></i>
                             </button>
                             <button class="btn btn-warning noMargin" ng-click="selectedFeature = ''; featureInformation = '';">
-                                <i class="glyphicon glyphicon-remove"></i>
+                                <i class="fa fa-times"></i>
                             </button>
                         </div>
                     </div>
@@ -88,7 +101,7 @@
         </div>
         <div ng-show="featureInformation" class="panel-body">
             <div class="col-md-6">
-                <h3>Details <span id="preferredFeatureStar" ng-show="featureInformation.Preferred" class="glyphicon glyphicon-star"></span></h3>
+                <h3>Details <i ng-show="featureInformation.Preferred" class="fa fa-star"></i></h3>
                 <table id="featureTable" class="table borderless noSelect">
                     <tbody>
                     <tr><th>Transcript</th><td><a id="featureLink" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{featureInformation.FeatureId}}" target="_blank">{{featureInformation.FeatureId}}</a></td></tr>
@@ -102,15 +115,15 @@
                 <div class="form-group">
                     <textarea class="form-control" placeholder="Give evidence" rows="3" ng-model="preferredFeatureEvidenceText"></textarea>
                 </div>
-                <button type="button" class="btn btn-success" ng-click="setFeaturePreference(); preferredFeatureEvidenceText = ''">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Update
+                <button type="button" ng-class="{'btn btn-success': !featureInformation.Preferred, 'btn btn-warning': featureInformation.Preferred}" ng-click="changeFeaturePreference(featureInformation); preferredFeatureEvidenceText = ''">
+                    <i class="fa fa-pencil"></i> Update
                 </button>
             </div>
             <div class="col-md-6">
                 <h3>History <span class="badge">{{featureInformation.History.length}}</span></h3>
                 <ul class="list-group s-scroll">
                     <li class="list-group-item" ng-repeat="item in featureInformation.History | orderBy:'Date':true">
-                        <h5>{{item.Evidence}}</h5>
+                        <h5>{{item.AddEvidence}}</h5>
                         <h6>Added by {{item.AddedByUserId}} ({{item.AddedDate | date:"dd/MM/yy"}})</h6>
                         <h6 ng-show="item.AuthorisedByUserId">Authorised by {{item.AuthorisedByUserId}} ({{item.AuthorisedDate | date:"dd/MM/yy"}})</h6>
                     </li>
@@ -124,17 +137,17 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-6">
-                    <h3 class="panel-title">Search Panels</h3>
+                    <h3 class="panel-title"><i class="fa fa-list"></i> Search Panels</h3>
                 </div>
                 <div class="col-md-6">
                     <div class="input-group">
                         <input type="text" class="form-control noMargin" placeholder="Enter Panel" ng-model="selectedVirtualPanel" typeahead-template-url="templates/VirtualPanelTypeahead.html" uib-typeahead="virtualPanel as virtualPanel.VirtualPanelName for virtualPanel in virtualPanels | filter:$viewValue | limitTo:5">
                         <div class="input-group-btn">
                             <button class="btn btn-primary noMargin" ng-click="getVirtualPanelGenes();">
-                                <i class="glyphicon glyphicon-search"></i>
+                                <i class="fa fa-search"></i>
                             </button>
                             <button class="btn btn-warning noMargin" ng-click="selectedVirtualPanel = ''; genes = ''; search = '';">
-                                <i class="glyphicon glyphicon-remove"></i>
+                                <i class="fa fa-times"></i>
                             </button>
                         </div>
                     </div>
@@ -149,11 +162,11 @@
                 </th>
             </tr>
             <tr>
-                <th width="75%">
-                    <a ng-click="sortType = 'SymbolId'; sortReverse = !sortReverse">Symbol <span ng-class="sortReverse ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom'" ng-show="sortType == 'SymbolId'"></span></a>
+                <th width="75%" ng-click="sortType = 'SymbolId'; sortReverse = !sortReverse">
+                    Symbol <i ng-class="sortReverse ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" ng-show="sortType == 'SymbolId'"></i>
                 </th>
-                <th width="25%">
-                    <a ng-click="sortType = 'GeneId'; sortReverse = !sortReverse">Id <span ng-class="sortReverse ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom'" ng-show="sortType == 'GeneId'"></span></a>
+                <th width="25%" ng-click="sortType = 'GeneId'; sortReverse = !sortReverse">
+                    Ensembl Id <i ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" ng-show="sortType == 'GeneId'"></i>
                 </th>
             </tr>
             </thead>

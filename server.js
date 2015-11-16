@@ -19,7 +19,7 @@ var path = require('path');
 app.use(express.static(path.join(__dirname, 'app'))); // set the static files location /app
 app.use('/node_modules',  express.static(path.join(__dirname, 'node_modules'))); //redirect requests to node_modules folder
 app.use('/bower_components',  express.static(path.join(__dirname, 'bower_components'))); //redirect requests to bower_components folder
-app.use('/fonts',  express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'fonts'))); //redirect requests to fonts folder
+//app.use('/fonts',  express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'fonts'))); //redirect requests to fonts folder
 app.use('/images',  express.static(path.join(__dirname, 'app', 'images'))); //redirect requests to images folder
 app.use(favicon(path.join(__dirname,'app','images', 'app.ico'))); //provide favicon path
 app.use(morgan('dev')); // log every request to the console
@@ -85,10 +85,10 @@ app.post('/api/variantdatabase/autosomaldominantworkflowv1', function(req, res) 
         }
     )
 });
-app.post('/api/variantdatabase/variantinformation', function(req, res) {
+app.post('/api/variantdatabase/variantannotation', function(req, res) {
     request.post(
         {
-            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/variantinformation",
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/variantannotation",
             json: req.body
         },
         function(error, result)
