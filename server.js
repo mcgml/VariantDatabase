@@ -85,10 +85,10 @@ app.post('/api/variantdatabase/autosomaldominantworkflowv1', function(req, res) 
         }
     )
 });
-app.post('/api/variantdatabase/variantannotation', function(req, res) {
+app.post('/api/variantdatabase/variantinformation', function(req, res) {
     request.post(
         {
-            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/variantannotation",
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/variantinformation",
             json: req.body
         },
         function(error, result)

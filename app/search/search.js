@@ -74,17 +74,17 @@ angular.module('variantdatabase.search', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
                 });
         };
 
-        $scope.getVariantAnnotation = function(){
-            $http.post('/api/variantdatabase/variantannotation',
+        $scope.getVariantInformation = function(){
+            $http.post('/api/variantdatabase/variantinformation',
                 {
                     VariantId : $scope.selectedVariant
                 })
                 .then(function(response) {
 
-                    $scope.variantAnnotation = response.data;
+                    $scope.variantInformation = response.data;
 
-                    getVariantAnnotation($scope.variantAnnotation.VariantNodeId);
-                    getVariantPopulationFrequency($scope.variantAnnotation.VariantNodeId);
+                    getVariantAnnotation($scope.variantInformation.VariantNodeId);
+                    getVariantPopulationFrequency($scope.variantInformation.VariantNodeId);
 
                 }, function(response) {
                     Notification.error(response);
