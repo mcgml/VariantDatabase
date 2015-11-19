@@ -1,5 +1,5 @@
 <div class="jumbotron">
-    <div id="jumbotronContainer" class="container">
+    <div class="container">
         <div ng-hide="filteredVariants">
             <h1>Welcome to the AWMGS<br>Variant Database</h1>
             <h3>Enter the required information below to get started</h3>
@@ -38,10 +38,10 @@
             <th width="2.5%"><i class="fa fa-star"></i></th>
             <th width="2.5%"><i class="fa fa-info-circle"></i></th>
             <th width="2.5%"><i class="fa fa-external-link"></i></th>
-            <th width="2.5%" id="igvTh">
-                <img class="image-responsive noPadding noMargin" src="/images/igv_icon.png" height="20" width="20">
-            </th>
-            <th width="60%">Variant</th>
+            <th width="2.5%"><i class="fa fa-eye"></i></th>
+            <th width="45%">Variant</th>
+            <th width="10%">1000 Genomes</th>
+            <th width="10%">ExAC</th>
             <th width="7.5%">Genotype</th>
             <th width="7.5%" ng-click="sortType = 'Occurrence'; sortReverse = !sortReverse">Observed <i ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" ng-show="sortType == 'Occurrence'"></i></th>
             <th width="7.5%" ng-click="sortType = 'InternalFrequency'; sortReverse = !sortReverse">Frequency <i ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" ng-show="sortType == 'InternalFrequency'"></i></th>
@@ -51,7 +51,7 @@
         <tbody ng-repeat="variant in filteredVariants.Variants | orderBy:sortType:sortReverse | filter:{Filter:selectedVariantFilter}:true track by variant.VariantNodeId">
         <tr>
             <td width="2.5%"><input type="checkbox" ng-model="variant.Selected"></td>
-            <td width="2.5%"><i class="fa fa-info-circle" ng-click="openVariantAnnotationModal(variant)"></i></td>
+            <td width="2.5%" ng-click="openVariantAnnotationModal(variant)"><i class="fa fa-info-circle"></i></td>
             <td width="2.5%">
                 <div class="dropdown noSelect">
                     <i class="fa fa-external-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></i>
@@ -59,18 +59,37 @@
                         <li class="dropdown-header">Browsers</li>
                         <li><a ng-click="openEnsemblLink(variant.VariantId)">Ensembl</a></li>
                         <li><a ng-click="openUCSCLink(variant.VariantId)">UCSC</a></li>
+                        <li><a ng-click="open1kgLink(variant.VariantId)">1000 Genomes</a></li>
                         <li><a ng-click="openExACLink(variant.VariantId)">ExAC</a></li>
                     </ul>
                 </div>
             </td>
-            <td width="2.5%" id="igvTd">
-                <input class="image-responsive noPadding noMargin" type="image" src="/images/igv_icon.png" height="20" width="20" ng-click="launchIGV(selectedAnalysis.RemoteBamFilePath, variant.VariantId);"/>
+            <td width="2.5%" ng-click="launchIGV(selectedAnalysis.RemoteBamFilePath, variant.VariantId)"><i class="fa fa-eye"></i></td>
+            <td width="45%">{{variant.VariantId}}</td>
+            <td width="10%" align="center">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sq-xs" ng-style="{'background-color' : (variant.onekGPhase3_EAS_AF | pct2colour)}"></button>
+                    <button type="button" class="btn btn-sq-xs" ng-style="{'background-color' : (variant.onekGPhase3_EUR_AF | pct2colour)}"></button>
+                    <button type="button" class="btn btn-sq-xs" ng-style="{'background-color' : (variant.onekGPhase3_AFR_AF | pct2colour)}"></button>
+                    <button type="button" class="btn btn-sq-xs" ng-style="{'background-color' : (variant.onekGPhase3_AMR_AF | pct2colour)}"></button>
+                    <button type="button" class="btn btn-sq-xs" ng-style="{'background-color' : (variant.onekGPhase3_SAS_AF | pct2colour)}"></button>
+                </div>
             </td>
-            <td width="60%">{{variant.VariantId}}</td>
+            <td width="10%" align="center">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sq-xs" ng-style="{'background-color' : (variant.ExAC_AFR_AF | pct2colour)}"></button>
+                    <button type="button" class="btn btn-sq-xs" ng-style="{'background-color' : (variant.ExAC_AMR_AF | pct2colour)}"></button>
+                    <button type="button" class="btn btn-sq-xs" ng-style="{'background-color' : (variant.ExAC_EAS_AF | pct2colour)}"></button>
+                    <button type="button" class="btn btn-sq-xs" ng-style="{'background-color' : (variant.ExAC_FIN_AF | pct2colour)}"></button>
+                    <button type="button" class="btn btn-sq-xs" ng-style="{'background-color' : (variant.ExAC_NFE_AF | pct2colour)}"></button>
+                    <button type="button" class="btn btn-sq-xs" ng-style="{'background-color' : (variant.ExAC_OTH_AF | pct2colour)}"></button>
+                    <button type="button" class="btn btn-sq-xs" ng-style="{'background-color' : (variant.ExAC_SAS_AF | pct2colour)}"></button>
+                </div>
+            </td>
             <td width="7.5%">{{variant.Inheritance}}</td>
-            <td width="7.5%" ng-click="openVariantOccurrenceModal(variant.VariantId)">{{variant.Occurrence}}</td>
+            <td width="7.5%"><a id="occurrenceLink" ng-click="openVariantOccurrenceModal(variant)">{{variant.Occurrence}}</a></td>
             <td width="7.5%">{{variant.InternalFrequency}}%</td>
-            <td width="7.5%" ng-click="!variant.dbSNPId || openDbSnpLink(variant.dbSNPId)">{{variant.dbSNPId}}</td>
+            <td width="7.5%"><a id="dbSNPIdFilter" ng-click="!variant.dbSNPId || openDbSnpLink(variant.dbSNPId)">{{variant.dbSNPId}}</a></td>
         </tr>
         </tbody>
     </table>

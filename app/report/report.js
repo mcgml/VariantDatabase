@@ -1,11 +1,8 @@
 'use strict';
 
-//todo turn off up/downstream effects + intergenic effects
-//todo add validated transcript fields
 //todo fix exac conversion
-//todo add population frequency modal to report page
+//todo add population frequency heatmap
 //todo add new gene panels
-//todo add drop down rows to annotation table -- include protein domains. Also add LSDB links
 //todo add fields and output for SHIRE import
 
 angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootstrap', 'ui-notification', 'nvd3'])
@@ -17,11 +14,29 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
         });
     }])
 
+    .filter('pct2colour', function() {
+        return function (input) {
+            if (input == 0 || input <= 1){
+                return '#d62728';
+            } else if (input > 1 && input <= 10 ){
+                return '#e99002';
+            } else if (input > 10) {
+                return '#43ac6a';
+            }
+        };
+    })
+
     .controller('ReportCtrl', ['$scope', '$window', '$http', 'Notification', '$uibModal', function ($scope, $window, $http, Notification, $uibModal) {
 
-        var cat20 = ["#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896"];
+        var cat20 = ["#008cba", "#aec7e8", "#e99002", "#ffbb78", "#43ac6a", "#98df8a", "#d62728", "#ff9896"];
         $scope.items = ['item1', 'item2', 'item3'];
         $scope.selectedVariantFilter = -1;
+
+        $scope.getGreenToRed = function(percent){
+            r = percent<50 ? 255 : Math.floor(255-(percent*2-100)*255/100);
+            g = percent>50 ? 255 : Math.floor((percent*2)*255/100);
+            return 'rgb('+r+','+g+',0)';
+        };
 
         $scope.donutChartOptions = {
             chart: {
@@ -74,6 +89,10 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
             $window.open('http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg19&position=chr' + convertVariantToRangeFunction(variantId), '_blank');
         };
 
+        $scope.open1kgLink = function(variantId){
+            $window.open('http://browser.1000genomes.org/Homo_sapiens/Location/View?r=' + convertVariantToRangeFunction(variantId), '_blank');
+        };
+
         $scope.openExACLink = function(variantId){
 
             var split1 = variantId.split(":");
@@ -116,17 +135,6 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
 
         $scope.openVariantAnnotationModal = function (variant) {
 
-            $http.post('/api/variantdatabase/populationfrequency',
-                {
-                    'NodeId' : variant.VariantNodeId
-                })
-                .then(function(response) {
-                    variant.PopulationFrequency = response.data;
-                }, function(response) {
-                    Notification.error(response);
-                    console.log("ERROR: " + response);
-                });
-
             $http.post('/api/variantdatabase/functionalannotation',
                 {
                     'NodeId' : variant.VariantNodeId
@@ -151,29 +159,55 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
             });
         };
 
-        $scope.openVariantOccurrenceModal = function (variantId) {
+        $scope.openVariantOccurrenceModal = function (variant) {
             var seen = {};
 
-            $http.post('/api/seraph',
+            $http.post('/api/variantdatabase/variantobservations',
                 {
-                    query: "MATCH (v:Variant {VariantId:\"" + variantId + "\"})-[rel]-(r:RunInfo)-[]-(s:Sample) return type(rel) as genotype, r, s;",
-                    params: {}
-                }
-            )
+                    'NodeId' : variant.VariantNodeId
+                })
                 .then(function(response) {
                     seen.Occurrences = response.data;
-                },
-                    function(response) {
-                        Notification.error(response);
-                        console.log("ERROR: " + response);
-                    });
+                }, function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
 
-            seen.VariantId = variantId;
+            seen.VariantId = variant.VariantId;
 
             var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: 'templates/VariantOccurrenceModal.html',
                 controller: 'VariantOccurrenceCtrl',
+                windowClass: 'app-modal-window',
+                resolve: {
+                    items: function () {
+                        return seen;
+                    }
+                }
+            });
+        };
+
+        $scope.openVariantPopulationFrequencyModal = function (variant) {
+            var seen = {};
+
+            $http.post('/api/variantdatabase/populationfrequency',
+                {
+                    'NodeId' : variant.VariantNodeId
+                })
+                .then(function(response) {
+                    seen.PopulationFrequency = response.data;
+                }, function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+
+            seen.VariantId = variant.VariantId;
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'templates/VariantPopulationFrequencyModal.html',
+                controller: 'VariantPopulationFrequencyCtrl',
                 windowClass: 'app-modal-window',
                 resolve: {
                     items: function () {

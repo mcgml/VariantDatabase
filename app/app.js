@@ -27,6 +27,23 @@ angular.module('variantdatabase', [ 'ngRoute', 'variantdatabase.login', 'variant
     .controller('VariantOccurrenceCtrl', function ($scope, $uibModalInstance, items, $window) {
         $scope.items = items;
 
+        function convertVariantToRangeFunction(variantId){
+            var split1 = variantId.split(":");
+            var split2 = split1[1].split(">");
+
+            var refLength = split2[0].match(/\D/g).length;
+            var altLength = split2[1].match(/\D/g).length;
+
+            var startPosition = split2[0].replace(/\D/g, '');
+            var endPosition = (startPosition - refLength) + altLength;
+
+            return split1[0] + ":" + startPosition + "-" + endPosition;
+        }
+
+        $scope.launchIGV = function (remoteBamFilePath, variantId){
+            $window.open('http://localhost:60151/load?file=' + remoteBamFilePath + '&locus=' + convertVariantToRangeFunction(variantId) + '&genome=37', '_blank');
+        };
+
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
@@ -34,30 +51,7 @@ angular.module('variantdatabase', [ 'ngRoute', 'variantdatabase.login', 'variant
     })
 
     .controller('VariantAnnotationCtrl', function ($scope, $uibModalInstance, items, $window) {
-
-        var cat20 = ["#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896"];
         $scope.items = items;
-
-        $scope.barChartOptions = {
-            chart: {
-                type: 'discreteBarChart',
-                height: 250,
-                noData: "",
-                color : function (d, i) { var key = i === undefined ? d : i; return d.color || cat20[key % cat20.length]; },
-                x: function(d){return d.label;},
-                y: function(d){return d.value;},
-                showValues: false,
-                showXAxis: false,
-                showYAxis: true,
-                "yAxis": {
-                    "axisLabel": "Percentage Coverage"
-                },
-                valueFormat: function(d){
-                    return d3.format(',.4f')(d);
-                },
-                transitionDuration: 500
-            }
-        };
 
         function keywordSearchFromAnnotationObject(annotation){
             var keywords = '';

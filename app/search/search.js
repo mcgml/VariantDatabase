@@ -10,28 +10,6 @@ angular.module('variantdatabase.search', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
     }])
 
     .controller('SearchCtrl', ['$scope', '$http', 'Notification', '$uibModal', '$window', function ($scope, $http, Notification, $uibModal, $window) {
-        var cat20 = ["#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896"];
-
-        $scope.barChartOptions = {
-            chart: {
-                type: 'discreteBarChart',
-                height: 250,
-                noData: "",
-                color : function (d, i) { var key = i === undefined ? d : i; return d.color || cat20[key % cat20.length]; },
-                x: function(d){return d.label;},
-                y: function(d){return d.value;},
-                showValues: false,
-                showXAxis: false,
-                showYAxis: true,
-                "yAxis": {
-                    "axisLabel": "Percentage Coverage"
-                },
-                valueFormat: function(d){
-                    return d3.format(',.4f')(d);
-                },
-                transitionDuration: 500
-            }
-        };
 
         function convertVariantToRangeFunction(variantId){
             var split1 = variantId.split(":");

@@ -5,28 +5,26 @@
     <table class="table table-condensed noMargin noPadding">
         <thead>
         <tr>
-            <th width="2.5%" id="igvTh"><img class="image-responsive noPadding noMargin" src="/images/igv_icon.png" height="20" width="20"></th>
-            <th>SampleId</th>
-            <th>Genotype</th>
-            <th>WorklistId</th>
-            <th>PanelName</th>
-            <th>RunId</th>
-            <th>PipelineName</th>
-            <th>PipelineVersion</th>
+            <th width="2.5%"><i class="fa fa-eye"></i></th>
+            <th width="15%">SampleId</th>
+            <th width="10%">Genotype</th>
+            <th width="15%">WorklistId</th>
+            <th width="15%">PanelName</th>
+            <th width="20%">RunId</th>
+            <th width="15%">PipelineName</th>
+            <th width="7.5%">PipelineVersion</th>
         </tr>
         </thead>
         <tbody ng-repeat="occurrence in items.Occurrences">
         <tr>
-            <td width="2.5%" id="igvTd">
-                <input class="image-responsive noPadding noMargin" type="image" src="/images/igv_icon.png" height="20" width="20" ng-click="launchIGV(selectedAnalysis.RemoteBamFilePath, variant.VariantId);"/>
-            </td>
-            <td>{{occurrence.s.SampleId}}</td>
-            <td>{{occurrence.genotype}}</td>
-            <td>{{occurrence.r.WorklistId}}</td>
-            <td>{{occurrence.r.SupplierPanelName}}</td>
-            <td>{{occurrence.r.RunId}}</td>
-            <td>{{occurrence.r.PipelineName}}</td>
-            <td>{{occurrence.r.PipelineVersion}}</td>
+            <td width="2.5%" ng-click="launchIGV(occurrence.RemoteBamFilePath, items.VariantId)"><i class="fa fa-eye"></i></td>
+            <td width="15%">{{occurrence.SampleId}}</td>
+            <td width="10%">{{occurrence.Inheritance}}</td>
+            <td width="15%">{{occurrence.WorklistId}}</td>
+            <td width="15%">{{occurrence.SupplierPanelName}}</td>
+            <td width="20%">{{occurrence.RunId}}</td>
+            <td width="15%">{{occurrence.PipelineName}}</td>
+            <td width="7.5%">{{occurrence.PipelineVersion}}</td>
         </tr>
         </tbody>
 

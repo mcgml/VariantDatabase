@@ -137,7 +137,7 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-6">
-                    <h3 class="panel-title"><i class="fa fa-list"></i> Search Panels</h3>
+                    <h3 class="panel-title">Search Panels</h3>
                 </div>
                 <div class="col-md-6">
                     <div class="input-group">
@@ -154,7 +154,7 @@
                 </div>
             </div>
         </div>
-        <table ng-show="genes" class="table table-bordered table-hover noSelect">
+        <table ng-show="genes" class="table table-bordered table-hover">
             <thead>
             <tr>
                 <th colspan="2" width="100%">
@@ -166,7 +166,7 @@
                     Symbol <i ng-class="sortReverse ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" ng-show="sortType == 'SymbolId'"></i>
                 </th>
                 <th width="25%" ng-click="sortType = 'GeneId'; sortReverse = !sortReverse">
-                    Ensembl Id <i ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" ng-show="sortType == 'GeneId'"></i>
+                    Ensembl Id <i ng-class="sortReverse ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" ng-show="sortType == 'GeneId'"></i>
                 </th>
             </tr>
             </thead>
