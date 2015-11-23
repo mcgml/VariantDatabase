@@ -5,11 +5,11 @@
         </div>
         <div class="panel-body">
             <div class="col-md-4">
-                <i id="userAccountImage" class="fa fa-user-md"></i>
+                <i id="user-account-image" class="fa fa-user-md"></i>
             </div>
             <div class="col-md-8">
                 <h2>Your Settings</h2>
-                <table id="userAccountTable" class="table borderless noSelect">
+                <table id="user-account-table" class="table borderless no-select">
                     <tbody>
                     <tr><th>User Id</th><td>{{userInformation.UserId}}</td></tr>
                     <tr><th>Account Type</th><td>{{userInformation.AccountType}}</td></tr>
@@ -19,7 +19,7 @@
                     <tr><th>Phone</th><td>{{userInformation.ContactNumber}}</td></tr>
                     <tr><th>Password</th>
                         <td>
-                            <input type="text" class="form-control noMargin" placeholder="********" ng-model="newPassword">
+                            <input type="text" class="form-control no-margin" placeholder="********" ng-model="newPassword">
                         </td>
                         <td>
                             <button type="button" class="btn btn-success" ng-click="updatePassword()">

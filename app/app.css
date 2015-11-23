@@ -1,140 +1,97 @@
 /*Padding and margins*/
-.noMargin {
+.no-margin {
     margin-top : 0;
     margin-bottom : 0;
     margin-left : 0;
     margin-right : 0;
 }
-
-.noPadding {
+.no-padding {
     padding-top : 0;
     padding-bottom : 0;
     padding-left : 0;
     padding-right : 0;
 }
-
 .jumbotron {
     height:300px;
     margin :0;
     padding-bottom:0;
     padding-top : 25px;
 }
-
-.s-scroll {
-    max-height: 320px;
-    overflow-y:scroll;
+.btn-sq-xs {
+    width: 8px !important;
+    height: 8px !important;
+    padding : 2px !important;
+    margin : 1px !important;
 }
-
-.selecteditem {
-    background-color: activecaption;
-    color:white;
-}
-
-input, #searchButton, #clearButton, #exportButton, #variantTable, .panel {
+input, #search-button, #clear-button, #export-button, #variant-table, .panel {
     margin-top : 15px;
     margin-bottom : 0;
 }
-
 .panel-title {
     margin:10px;
 }
 
-#commentBox{
-    height:200px;
+/*list group*/
+.s-scroll {
+    max-height: 320px;
+    overflow-y:scroll;
 }
-
-#occurrenceFilter, #internalFrequencyFilter, #dbSNPIdFilter, #ccdsLink, #symbolLink,
-#featureLink, #geneIdLink, #occurrenceLink {
-    color : black;
-}
-
-textarea {
-    resize:none;
-}
-
 .list-group-item {
     word-wrap: break-word;
 }
 
-.btn-sq-xs {
-    width: 10px !important;
-    height: 10px !important;
-    padding : 2px;
-    background-color: lightgrey;
+/* Specify styling for tooltip contents */
+.tooltip.customClass .tooltip-inner {
+    color: #880000;
+    background-color: #ffff66;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+.tooltip.customClass .tooltip-arrow {
+    display: none;
 }
 
-/*Disable hover on nested table*/
-.table-hover > tbody > tr.select-row:hover > td,
-.select-row > td {
-    background: white;
+/*Disable blue highlight on select*/
+.no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
-/*Show/Hide row animation*/
-.animate.ng-hide-add {
-    -webkit-animation:0.5s hide;
-    animation:0.5s hide;
+/*modal*/
+.app-modal-window .modal-dialog {
+    width: 95%;
 }
 
-@keyframes hide {
-    0% {
-        opacity:1;
-        transform: scale(1);
-    }
-    30% {
-        transform: scale(1.02);
-    }
-    100% {
-        opacity:0;
-        transform: scale(0.5);
-    }
+/*user account page*/
+#user-account-image {
+    color : lightgrey;
+    font-size: 350px;
 }
 
-@-webkit-keyframes hide {
-    0% {
-        opacity:1;
-        transform: scale(1);
-    }
-    30% {
-        transform: scale(1.02);
-    }
-    100% {
-        opacity:0;
-        transform: scale(0.5);
-    }
+/*Styling for external links*/
+#occurrence-filter, #internal-frequency-filter, #dbSNP-id-filter, #ccds-link, #symbol-link,
+#feature-link, #gene-id-link, #occurrence-link {
+    color : black;
 }
 
-
-.animate.ng-hide-remove {
-    -webkit-animation:0.9s show;
-    animation:0.3s show;
+/*Grid styles*/
+.borderless tbody tr td, .borderless tbody tr th, .borderless thead tr th {
+    border: none;
+}
+#user-account-table > tbody > tr > td, #user-account-table > tbody > tr > th,
+#feature-table > tbody > tr > td, #feature-table > tbody > tr > th,
+#variant-information-table > tbody > tr > td, #variant-information-table > tbody > tr > th {
+    font-size: 14px;
+    padding-left : 0;
+    vertical-align: middle;
 }
 
-@keyframes show {
-    0% {
-        opacity:0;
-        transform: scale(0.5);
-    }
-    70% {
-        transform: scale(1.02);
-    }
-    100% {
-        opacity:1;
-        transform: scale(1);
-    }
-}
-
-@-webkit-keyframes show {
-    0% {
-        opacity:0;
-        transform: scale(0.5);
-    }
-    70% {
-        transform: scale(1.02);
-    }
-    100% {
-        opacity:1;
-        transform: scale(1);
-    }
+/*text box styles*/
+textarea {
+    resize:none;
 }
 
 /*Sigin in page*/
@@ -171,72 +128,4 @@ textarea {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-}
-
-/*Disable blue highlight on select*/
-.noSelect {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.app-modal-window .modal-dialog {
-    width: 1200px;
-}
-
-#igvPicture {
-    padding:0;
-    margin:0;
-}
-
-#igvTd, #igvTh {
-    padding:5px;
-}
-
-#userAccountImage {
-    color : lightgrey;
-    font-size: 350px;
-}
-
-.borderless tbody tr td, .borderless tbody tr th, .borderless thead tr th {
-    border: none;
-}
-
-#userAccountTable > tbody > tr > td, #userAccountTable > tbody > tr > th,
-#featureTable > tbody > tr > td, #featureTable > tbody > tr > th,
-#variantInformationTable > tbody > tr > td, #variantInformationTable > tbody > tr > th {
-    font-size: 14px;
-    padding-left : 0;
-    vertical-align: middle;
-}
-
-#preferredFeatureStar {
-    color: goldenrod;
-    font-size: 20px;
-}
-
-#externalLinkButton{
-    font-size: 18px;
-}
-
-#tickGlyphicon{
-    color:green;
-}
-
-#crossGlyphicon{
-    color:red;
-}
-
-/* Specify styling for tooltip contents */
-.tooltip.customClass .tooltip-inner {
-    color: #880000;
-    background-color: #ffff66;
-    box-shadow: 0 6px 12px rgba(0,0,0,.175);
-}
-/* Hide arrow */
-.tooltip.customClass .tooltip-arrow {
-    display: none;
 }

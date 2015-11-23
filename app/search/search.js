@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('variantdatabase.search', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootstrap', 'ui-notification', 'nvd3'])
+angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notification', 'nvd3'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/search', {
@@ -84,26 +84,12 @@ angular.module('variantdatabase.search', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
                     $scope.variantInformation = response.data;
 
                     getVariantAnnotation($scope.variantInformation.VariantNodeId);
-                    getVariantPopulationFrequency($scope.variantInformation.VariantNodeId);
 
                 }, function(response) {
                     Notification.error(response);
                     console.log("ERROR: " + response);
                 });
         };
-
-        function getVariantPopulationFrequency(nodeId){
-            $http.post('/api/variantdatabase/populationfrequency',
-                {
-                    'NodeId' : nodeId
-                })
-                .then(function(response) {
-                    $scope.populationFrequency = response.data;
-                }, function(response) {
-                    Notification.error(response);
-                    console.log("ERROR: " + response);
-                });
-        }
 
         function getVariantAnnotation(nodeId) {
             $http.post('/api/variantdatabase/functionalannotation',
@@ -177,17 +163,6 @@ angular.module('variantdatabase.search', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
         };
 
         $scope.openVariantAnnotationModal = function (variant) {
-
-            $http.post('/api/variantdatabase/populationfrequency',
-                {
-                    'NodeId' : variant.VariantNodeId
-                })
-                .then(function(response) {
-                    variant.PopulationFrequency = response.data;
-                }, function(response) {
-                    Notification.error(response);
-                    console.log("ERROR: " + response);
-                });
 
             $http.post('/api/variantdatabase/functionalannotation',
                 {

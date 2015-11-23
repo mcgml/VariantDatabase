@@ -19,9 +19,9 @@ var path = require('path');
 app.use(express.static(path.join(__dirname, 'app'))); // set the static files location /app
 app.use('/node_modules',  express.static(path.join(__dirname, 'node_modules'))); //redirect requests to node_modules folder
 app.use('/bower_components',  express.static(path.join(__dirname, 'bower_components'))); //redirect requests to bower_components folder
-//app.use('/fonts',  express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'fonts'))); //redirect requests to fonts folder
 app.use('/images',  express.static(path.join(__dirname, 'app', 'images'))); //redirect requests to images folder
-app.use(favicon(path.join(__dirname,'app','images', 'app.ico'))); //provide favicon path
+app.use('/fonts',  express.static(path.join(__dirname, 'app', 'fonts'))); //redirect requests to fonts folder
+app.use(favicon(path.join(__dirname,'app','images', 'favicon-stethoscope.ico'))); //provide favicon path
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.urlencoded({'extended':'true'})); // parse application/x-www-form-urlencoded
@@ -102,19 +102,6 @@ app.post('/api/variantdatabase/featureinformation', function(req, res) {
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/featureinformation",
-            json: req.body
-        },
-        function(error, result)
-        {
-            if (error) throw err;
-            res.send(result.body);
-        }
-    )
-});
-app.post('/api/variantdatabase/populationfrequency', function(req, res) {
-    request.post(
-        {
-            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/populationfrequency",
             json: req.body
         },
         function(error, result)

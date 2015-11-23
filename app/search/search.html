@@ -7,12 +7,12 @@
                 </div>
                 <div class="col-md-6">
                     <div class="input-group">
-                        <input type="text" class="form-control noMargin" placeholder="Enter Variant" ng-model="selectedVariant">
+                        <input type="text" class="form-control no-margin" placeholder="Enter Variant" ng-model="selectedVariant">
                         <div class="input-group-btn">
-                            <button class="btn btn-primary noMargin" ng-click="getVariantInformation();">
+                            <button class="btn btn-primary no-margin" ng-click="getVariantInformation();">
                                 <i class="fa fa-search"></i>
                             </button>
-                            <button class="btn btn-warning noMargin" ng-click="selectedVariant = ''; variantInformation = '';">
+                            <button class="btn btn-warning no-margin" ng-click="selectedVariant = ''; variantInformation = '';">
                                 <i class="fa fa-times"></i>
                             </button>
                         </div>
@@ -23,7 +23,7 @@
         <div ng-show="variantInformation" class="panel-body">
             <div class="col-md-6">
                 <h3>Details</h3>
-                <table id="variantInformationTable" class="table borderless noSelect">
+                <table id="variant-information-table" class="table borderless no-select">
                     <tbody>
                     <tr><th>Variant</th><td>{{variantInformation.VariantId}}</td></tr>
                     <tr><th>dbSNP</th><td><a ng-show="variantInformation.dbSNPId" href="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs={{variantInformation.dbSNPId}}" target="_blank">{{variantInformation.dbSNPId}}</a></td></tr>
@@ -31,7 +31,7 @@
                     <tr><th>Functional Annotation</th><td><i class="fa fa-info-circle" ng-click="openVariantAnnotationModal(variantInformation)"></i></td></tr>
                     <tr><th>Links</th>
                         <td>
-                            <div class="dropdown noSelect">
+                            <div class="dropdown">
                                 <i class="fa fa-external-link"></i>
                                 <ul class="dropdown-menu">
                                     <li class="dropdown-header">Browsers</li>
@@ -47,7 +47,7 @@
                 <form role="form">
                     <div class="form-group">
                         <h3>Pathogenicity</h3>
-                        <select class="form-control" id="sel1" ng-model="selectedPathogenicity">
+                        <select class="form-control" ng-model="selectedPathogenicity">
                             <option value="0">Artefact</option>
                             <option value="1">Benign Variant</option>
                             <option value="2">Likely Benign Variant</option>
@@ -58,7 +58,7 @@
                     </div>
                 </form>
                 <div class="form-group">
-                    <textarea class="form-control" placeholder="Give evidence" rows="3" id="pathogenicityEvidence" ng-model="pathogenicityEvidenceText"></textarea>
+                    <textarea class="form-control" placeholder="Give evidence" rows="3" ng-model="pathogenicityEvidenceText"></textarea>
                 </div>
                 <button type="button" class="btn btn-success" ng-click="setVariantPathogenicity()">
                     <i class="fa fa-pencil"></i> Update
@@ -86,12 +86,12 @@
                 </div>
                 <div class="col-md-6">
                     <div class="input-group">
-                        <input type="text" class="form-control noMargin" placeholder="Enter Transcript" ng-model="selectedFeature">
+                        <input type="text" class="form-control no-margin" placeholder="Enter Transcript" ng-model="selectedFeature">
                         <div class="input-group-btn">
-                            <button class="btn btn-primary noMargin" ng-click="getFeature();">
+                            <button class="btn btn-primary no-margin" ng-click="getFeature();">
                                 <i class="fa fa-search"></i>
                             </button>
-                            <button class="btn btn-warning noMargin" ng-click="selectedFeature = ''; featureInformation = '';">
+                            <button class="btn btn-warning no-margin" ng-click="selectedFeature = ''; featureInformation = '';">
                                 <i class="fa fa-times"></i>
                             </button>
                         </div>
@@ -102,11 +102,11 @@
         <div ng-show="featureInformation" class="panel-body">
             <div class="col-md-6">
                 <h3>Details <i ng-show="featureInformation.Preferred" class="fa fa-star"></i></h3>
-                <table id="featureTable" class="table borderless noSelect">
+                <table id="feature-table" class="table borderless no-select">
                     <tbody>
-                    <tr><th>Transcript</th><td><a id="featureLink" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{featureInformation.FeatureId}}" target="_blank">{{featureInformation.FeatureId}}</a></td></tr>
+                    <tr><th>Transcript</th><td><a id="feature-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{featureInformation.FeatureId}}" target="_blank">{{featureInformation.FeatureId}}</a></td></tr>
                     <tr><th>Strand</th><td>{{featureInformation.Strand}}</td></tr>
-                    <tr><th>CCDS</th><td><a id="ccdsLink" href="http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&DATA={{featureInformation.CCDSId}}" target="_blank">{{featureInformation.CCDSId}}</a></td></tr>
+                    <tr><th>CCDS</th><td><a id="ccds-link" href="http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&DATA={{featureInformation.CCDSId}}" target="_blank">{{featureInformation.CCDSId}}</a></td></tr>
                     <tr><th>Type</th><td>{{featureInformation.FeatureType}}</td></tr>
                     <tr><th>Exons</th><td>{{featureInformation.TotalExons}}</td></tr>
                     </tbody>
@@ -141,12 +141,12 @@
                 </div>
                 <div class="col-md-6">
                     <div class="input-group">
-                        <input type="text" class="form-control noMargin" placeholder="Enter Panel" ng-model="selectedVirtualPanel" typeahead-template-url="templates/VirtualPanelTypeahead.html" uib-typeahead="virtualPanel as virtualPanel.VirtualPanelName for virtualPanel in virtualPanels | filter:$viewValue | limitTo:5">
+                        <input type="text" class="form-control no-margin" placeholder="Enter Panel" ng-model="selectedVirtualPanel" typeahead-template-url="templates/VirtualPanelTypeahead.html" uib-typeahead="virtualPanel as virtualPanel.VirtualPanelName for virtualPanel in virtualPanels | filter:$viewValue | limitTo:5">
                         <div class="input-group-btn">
-                            <button class="btn btn-primary noMargin" ng-click="getVirtualPanelGenes();">
+                            <button class="btn btn-primary no-margin" ng-click="getVirtualPanelGenes();">
                                 <i class="fa fa-search"></i>
                             </button>
-                            <button class="btn btn-warning noMargin" ng-click="selectedVirtualPanel = ''; genes = ''; search = '';">
+                            <button class="btn btn-warning no-margin" ng-click="selectedVirtualPanel = ''; genes = ''; search = '';">
                                 <i class="fa fa-times"></i>
                             </button>
                         </div>
@@ -154,11 +154,11 @@
                 </div>
             </div>
         </div>
-        <table ng-show="genes" class="table table-bordered table-hover">
+        <table ng-show="genes" class="table table-bordered table-hover no-select">
             <thead>
             <tr>
                 <th colspan="2" width="100%">
-                    <input type="text" class="form-control noMargin" placeholder="Search" ng-model="search">
+                    <input type="text" class="form-control no-margin" placeholder="Search" ng-model="search">
                 </th>
             </tr>
             <tr>
@@ -172,8 +172,8 @@
             </thead>
             <tbody ng-repeat="gene in genes | orderBy:sortType:sortReverse | filter:search">
             <tr>
-                <td width="75%"><a id="symbolLink" href="http://omim.org/search?search={{gene.SymbolId}}" target="_blank">{{gene.SymbolId}}</a></td>
-                <td width="25%"><a id="geneIdLink" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?g={{gene.GeneId}}" target="_blank">{{gene.GeneId}}</a></td>
+                <td width="75%"><a id="symbol-link" href="http://omim.org/search?search={{gene.SymbolId}}" target="_blank">{{gene.SymbolId}}</a></td>
+                <td width="25%"><a id="gene-id-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?g={{gene.GeneId}}" target="_blank">{{gene.GeneId}}</a></td>
             </tr>
             </tbody>
         </table>

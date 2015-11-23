@@ -1,11 +1,15 @@
 'use strict';
 
-//todo fix exac conversion
-//todo add population frequency heatmap
 //todo add new gene panels
 //todo add fields and output for SHIRE import
+//todo center align population frequencies
+//todo check af calculations
+//todo update preferred transcript to Ensembl definition
+//todo add gene expression data
+//todo add mutation taster
+//todo splicing
 
-angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootstrap', 'ui-notification', 'nvd3'])
+angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notification', 'nvd3'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/report', {
@@ -14,14 +18,40 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
         });
     }])
 
-    .filter('pct2colour', function() {
+    .filter('afpct2colour', function() {
         return function (input) {
-            if (input == 0 || input <= 1){
+            if (input == '' || input == undefined){
+                return '#DCDCDC';
+            } else if (input <= 1){
                 return '#d62728';
             } else if (input > 1 && input <= 10 ){
                 return '#e99002';
             } else if (input > 10) {
                 return '#43ac6a';
+            }
+        };
+    })
+
+    .filter('gerp2colour', function() {
+        return function (input) {
+            if (input == '' || input == undefined){
+                return '#DCDCDC';
+            }
+        };
+    })
+
+    .filter('phylop2colour', function() {
+        return function (input) {
+            if (input == '' || input == undefined){
+                return '#DCDCDC';
+            }
+        };
+    })
+
+    .filter('phastcons2colour', function() {
+        return function (input) {
+            if (input == '' || input == undefined){
+                return '#DCDCDC';
             }
         };
     })
@@ -179,35 +209,6 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui
                 animation: true,
                 templateUrl: 'templates/VariantOccurrenceModal.html',
                 controller: 'VariantOccurrenceCtrl',
-                windowClass: 'app-modal-window',
-                resolve: {
-                    items: function () {
-                        return seen;
-                    }
-                }
-            });
-        };
-
-        $scope.openVariantPopulationFrequencyModal = function (variant) {
-            var seen = {};
-
-            $http.post('/api/variantdatabase/populationfrequency',
-                {
-                    'NodeId' : variant.VariantNodeId
-                })
-                .then(function(response) {
-                    seen.PopulationFrequency = response.data;
-                }, function(response) {
-                    Notification.error(response);
-                    console.log("ERROR: " + response);
-                });
-
-            seen.VariantId = variant.VariantId;
-
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'templates/VariantPopulationFrequencyModal.html',
-                controller: 'VariantPopulationFrequencyCtrl',
                 windowClass: 'app-modal-window',
                 resolve: {
                     items: function () {

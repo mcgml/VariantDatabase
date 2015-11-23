@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('variantdatabase.account', ['ngRoute', 'ngAnimate', 'ngTouch', 'ui.bootstrap', 'ui-notification', 'nvd3'])
+angular.module('variantdatabase.account', ['ngRoute', 'ui-notification'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/account', {
@@ -9,7 +9,7 @@ angular.module('variantdatabase.account', ['ngRoute', 'ngAnimate', 'ngTouch', 'u
         });
     }])
 
-    .controller('AccountCtrl', ['$scope', '$http', 'Notification', '$uibModal', function ($scope, $http, Notification, $uibModal) {
+    .controller('AccountCtrl', ['$scope', '$http', 'Notification', function ($scope, $http, Notification) {
 
         //get user account information
         $http.post('/api/seraph',

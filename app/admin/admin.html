@@ -8,7 +8,7 @@
             </div>
             <ul class="list-group">
                 <li class="list-group-item s-scroll" ng-repeat="item in featuresForAuthorisation">
-                    <h4><a id="symbolLink" href="http://omim.org/search?search={{item.SymbolId}}" target="_blank">{{item.SymbolId}}</a> <a id="featureLink" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{item.FeatureId}}" target="_blank">{{item.FeatureId}}</a> <i class="fa fa-check" ng-click="acceptFeaturePreference(item.FeaturePreferenceNodeId)"></i> <i class="fa fa-times" ng-click="rejectFeaturePreference(item.FeaturePreferenceNodeId)"></i></h4>
+                    <h4><a id="symbol-link" href="http://omim.org/search?search={{item.SymbolId}}" target="_blank">{{item.SymbolId}}</a> <a id="feature-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{item.FeatureId}}" target="_blank">{{item.FeatureId}}</a> <i class="fa fa-check" ng-click="acceptFeaturePreference(item.FeaturePreferenceNodeId)"></i> <i class="fa fa-times" ng-click="rejectFeaturePreference(item.FeaturePreferenceNodeId)"></i></h4>
                     <h5>{{item.Evidence}}</h5>
                     <h6>{{item.UserId}} ({{item.Date | date:"dd/MM/yy"}})</h6>
                 </li>
