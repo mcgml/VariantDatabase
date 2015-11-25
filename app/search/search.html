@@ -3,7 +3,7 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-6">
-                    <h3 class="panel-title"><i class="fa fa-list"></i> Search Variants</h3>
+                    <h3 class="panel-title">Search Variants</h3>
                 </div>
                 <div class="col-md-6">
                     <div class="input-group">
@@ -85,7 +85,7 @@
                 <div class="form-group">
                     <textarea class="form-control" placeholder="Give evidence" rows="3" ng-model="pathogenicityEvidenceText"></textarea>
                 </div>
-                <button type="button" class="btn btn-success" ng-click="setVariantPathogenicity()">
+                <button type="button" class="btn btn-success" ng-click="addVariantPathogenicity()">
                     <i class="fa fa-pencil"></i> Update
                 </button>
             </div>
@@ -93,8 +93,13 @@
                 <h3>History <span class="badge">{{variantInformation.History.length}}</span></h3>
                 <ul class="list-group s-scroll">
                     <li class="list-group-item" ng-repeat="item in variantInformation.History | orderBy:'Date':true">
-                        <p ng-show="item.Classification != null"><b>Pathogenicity Classification {{item.Classification}} added</b></p>
-                        <p>{{item.UserId}} {{item.Date | date:"dd/MM/yy"}}</p>
+                        <p><b>Pathogenicity class {{item.Classification}}</b></p>
+                        <p ng-show="item.AddEvidence != null">{{item.AddEvidence}}</p>
+                        <p>Added {{item.AddedByUserId}} {{item.AddedDate | date:"dd/MM/yy"}}</p>
+                        <p ng-show="item.AddAuthorisedByUserId">Authorised {{item.AddAuthorisedByUserId}} {{item.AddAuthorisedDate | date:"dd/MM/yy"}}</p>
+                        <p ng-show="item.RemovedEvidence != null">{{item.RemovedEvidence}}</p>
+                        <p ng-show="item.RemovedByUserId">Removed {{item.RemovedByUserId}} {{item.RemovedDate | date:"dd/MM/yy"}}</p>
+                        <p ng-show="item.RemoveAuthorisedByUserId">Authorised {{item.RemoveAuthorisedByUserId}} {{item.RemoveAuthorisedDate | date:"dd/MM/yy"}}</p>
                     </li>
                 </ul>
             </div>
@@ -106,7 +111,7 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-6">
-                    <h3 class="panel-title"><i class="fa fa-list"></i> Search Transcripts</h3>
+                    <h3 class="panel-title">Search Transcripts</h3>
                 </div>
                 <div class="col-md-6">
                     <div class="input-group">
@@ -161,7 +166,7 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-6">
-                    <h3 class="panel-title"><i class="fa fa-list"></i> Search Panels</h3>
+                    <h3 class="panel-title">Search Panels</h3>
                 </div>
                 <div class="col-md-6">
                     <div class="input-group">

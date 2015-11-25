@@ -72,6 +72,19 @@ app.get('/api/variantdatabase/panels', function(req, res) {
         }
     )
 });
+app.get('/api/variantdatabase/getnewpathogenicitiesforauthorisation', function(req, res) {
+    request.get (
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/getnewpathogenicitiesforauthorisation",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
 app.post('/api/variantdatabase/autosomaldominantworkflowv1', function(req, res) {
     request.post(
         {
@@ -128,6 +141,45 @@ app.post('/api/variantdatabase/variantobservations', function(req, res) {
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/variantobservations",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
+app.post('/api/variantdatabase/authorisevariantpathogenicity', function(req, res) {
+    request.post(
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/authorisevariantpathogenicity",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
+app.post('/api/variantdatabase/addvariantpathogenicity', function(req, res) {
+    request.post(
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/addvariantpathogenicity",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
+app.post('/api/variantdatabase/removevariantpathogenicity', function(req, res) {
+    request.post(
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/removevariantpathogenicity",
             json: req.body
         },
         function(error, result)

@@ -1,5 +1,5 @@
 <div class="col-md-12">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
@@ -15,21 +15,27 @@
             </ul>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
-                    <h3 class="panel-title">Variant Pathogenicity <span class="badge">{{variantsForAuthorisation.length}}</span></h3>
+                    <h3 class="panel-title">Variant Pathogenicity <span class="badge">{{pathogenicitiesForAuthorisation.length}}</span></h3>
                 </div>
             </div>
-            <ul class="list-group">
-                <li class="list-group-item s-scroll" ng-repeat="item in variantsForAuthorisation">
-
+            <ul class="list-group s-scroll">
+                <li class="list-group-item" ng-repeat="item in pathogenicitiesForAuthorisation | orderBy:'Date':true">
+                    <h4 ng-show="item.AddAction">Class {{item.Classification}} added for {{item.VariantId}}</h4>
+                    <h4 ng-show="!item.AddAction">Class {{item.Classification}} removed for {{item.VariantId}}</h4>
+                    <h5 ng-show="item.Evidence">{{item.Evidence}}</h5>
+                    <h6>{{item.UserId}} ({{item.Date | date:"dd/MM/yy"}})</h6>
+                    <button type="button" class="btn btn-success" ng-click="authoriseVariantPathogenicity(item.PathogenicityNodeId, true)">
+                        <i class="fa fa-check"></i> Accept
+                    </button>
+                    <button type="button" class="btn btn-warning" ng-click="authoriseVariantPathogenicity(item.PathogenicityNodeId, false)">
+                        <i class="fa fa-times"></i> Reject
+                    </button>
                 </li>
             </ul>
         </div>
-    </div>
-    <div class="col-md-4">
-
     </div>
 </div>

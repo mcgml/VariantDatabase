@@ -59,6 +59,41 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
                 });
         };
 
+        $scope.addVariantPathogenicity = function(){
+            $http.post('/api/variantdatabase/addvariantpathogenicity',
+                {
+                    VariantNodeId : $scope.variantInformation.VariantNodeId,
+                    UserNodeId : 0,
+                    Classification : $scope.selectedPathogenicity,
+                    Evidence : $scope.pathogenicityEvidenceText
+
+                })
+                .then(function(response) {
+                    Notification($scope.selectedPathogenicity + ' classification successfully added');
+                    $scope.getVariantInformation();
+                }, function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+        };
+
+        $scope.removeVariantPathogenicity = function(){
+            $http.post('/api/variantdatabase/removevariantpathogenicity',
+                {
+                    PathogenicityNodeId : $scope.variantInformation.PathogenicityNodeId,
+                    UserNodeId : 0,
+                    Evidence : $scope.pathogenicityEvidenceText
+
+                })
+                .then(function(response) {
+                    Notification('Operation successful');
+                    $scope.getVariantInformation();
+                }, function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+        };
+
         $scope.getVariantInformation = function(){
             $http.post('/api/variantdatabase/variantinformation',
                 {
@@ -67,7 +102,6 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
                 .then(function(response) {
 
                     $scope.variantInformation = response.data;
-
                     getVariantAnnotation($scope.variantInformation.VariantNodeId);
 
                 }, function(response) {
@@ -88,36 +122,6 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
                     console.log("ERROR: " + response);
                 });
         }
-
-        $scope.setVariantPathogenicity = function(){
-
-            if ($scope.selectedPathogenicity == null){
-                Notification.error("Select pathogenicity");
-                return;
-            }
-
-            //add variant pathogenicity
-            var query = "MATCH (v:Variant) where id(v) = " + $scope.variantInformation.VariantNodeId + " ";
-            query += "MATCH (u:User {UserId:\"ml\"}) ";
-            query += "CREATE (v)-[:HAS_PATHOGENICITY]->(p:Pathogenicity)-[:ADDED_BY {Classification:toInt(\"" + $scope.selectedPathogenicity + "\"), Date:" + new Date().getTime();
-            if ($scope.pathogenicityEvidenceText != null && $scope.pathogenicityEvidenceText != ''){
-                query += ", Comment:\"" + $scope.pathogenicityEvidenceText + "\"";
-            }
-            query += "}]->(u) ";
-
-            $http.post('/api/seraph',
-                {
-                    query: query,
-                    params: {}
-                })
-                .then(function(response) {
-                    $scope.getVariantInformation();
-                },
-                function(response) {
-                    Notification.error(response);
-                    console.log("ERROR: " + response);
-                });
-        };
 
         $scope.changeFeaturePreference = function(featureInformation){
             var query;

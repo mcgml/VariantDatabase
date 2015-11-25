@@ -33,7 +33,7 @@ input, #search-button, #clear-button, #export-button, #variant-table, .panel {
 
 /*list group*/
 .s-scroll {
-    max-height: 320px;
+    max-height: 250px;
     overflow-y:scroll;
 }
 .list-group-item {
