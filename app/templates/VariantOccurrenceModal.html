@@ -17,7 +17,7 @@
         </thead>
         <tbody ng-repeat="occurrence in items.Occurrences">
         <tr>
-            <td width="2.5%" ng-click="launchIGV(occurrence.RemoteBamFilePath, items.VariantId)"><i class="fa fa-eye"></i></td>
+            <td width="2.5%" ng-click="openIGVLink(occurrence.RemoteBamFilePath, items.VariantId)"><i class="fa fa-eye"></i></td>
             <td width="15%">{{occurrence.SampleId}}</td>
             <td width="10%">{{occurrence.Inheritance}}</td>
             <td width="15%">{{occurrence.WorklistId}}</td>

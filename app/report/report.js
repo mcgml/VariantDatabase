@@ -4,8 +4,6 @@
 //todo add fields and output for SHIRE import
 //todo center align population frequencies
 //todo check af calculations
-//todo update preferred transcript to Ensembl definition
-//todo add gene expression data
 //todo add mutation taster
 //todo splicing
 
@@ -18,63 +16,16 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
         });
     }])
 
-    .filter('afpct2colour', function() {
-        return function (input) {
-            if (input == '' || input == undefined){
-                return '#DCDCDC';
-            } else if (input <= 1){
-                return '#d62728';
-            } else if (input > 1 && input <= 10 ){
-                return '#e99002';
-            } else if (input > 10) {
-                return '#43ac6a';
-            }
-        };
-    })
+    .controller('ReportCtrl', ['$scope', '$window', '$http', 'Notification', '$uibModal', 'framework', function ($scope, $window, $http, Notification, $uibModal, framework) {
 
-    .filter('gerp2colour', function() {
-        return function (input) {
-            if (input == '' || input == undefined){
-                return '#DCDCDC';
-            }
-        };
-    })
-
-    .filter('phylop2colour', function() {
-        return function (input) {
-            if (input == '' || input == undefined){
-                return '#DCDCDC';
-            }
-        };
-    })
-
-    .filter('phastcons2colour', function() {
-        return function (input) {
-            if (input == '' || input == undefined){
-                return '#DCDCDC';
-            }
-        };
-    })
-
-    .controller('ReportCtrl', ['$scope', '$window', '$http', 'Notification', '$uibModal', function ($scope, $window, $http, Notification, $uibModal) {
-
-        var cat20 = ["#008cba", "#aec7e8", "#e99002", "#ffbb78", "#43ac6a", "#98df8a", "#d62728", "#ff9896"];
-        $scope.items = ['item1', 'item2', 'item3'];
         $scope.selectedVariantFilter = -1;
-
-        $scope.getGreenToRed = function(percent){
-            r = percent<50 ? 255 : Math.floor(255-(percent*2-100)*255/100);
-            g = percent>50 ? 255 : Math.floor((percent*2)*255/100);
-            return 'rgb('+r+','+g+',0)';
-        };
-
         $scope.donutChartOptions = {
             chart: {
                 type: 'pieChart',
                 height: 250,
                 noData: "",
                 donut: true,
-                color : function (d, i) { var key = i === undefined ? d : i; return d.color || cat20[key % cat20.length]; },
+                color : function (d, i) { var key = i === undefined ? d : i; return d.color || framework.getScaledCat20(key); },
                 x: function(d){return d.key;},
                 y: function(d){return d.y;},
                 showLabels: false,
@@ -90,63 +41,47 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
             }
         };
 
-        function checkInput(field, value){
-            if (value === '' || value === undefined){
-                Notification.error('Check ' + field + ' input');
-                return false;
-            }
-            return true;
+        function getAnalyses() {
+            $http.get('/api/variantdatabase/analyses', {
+
+            }).then(function(response) {
+                $scope.analyses = response.data;
+            }, function(response) {
+                Notification.error(response);
+                console.log("ERROR: " + response);
+            })
         }
 
-        function convertVariantToRangeFunction(variantId){
-            var split1 = variantId.split(":");
-            var split2 = split1[1].split(">");
+        function getPanels() {
+            $http.get('/api/variantdatabase/panels', {
 
-            var refLength = split2[0].match(/\D/g).length;
-            var altLength = split2[1].match(/\D/g).length;
-
-            var startPosition = split2[0].replace(/\D/g, '');
-            var endPosition = (startPosition - refLength) + altLength;
-
-            return split1[0] + ":" + startPosition + "-" + endPosition;
+            }).then(function(response) {
+                $scope.virtualPanels = response.data;
+            }, function(response) {
+                Notification.error(response);
+                console.log("ERROR: " + response);
+            });
         }
 
-        $scope.openEnsemblLink = function(variantId){
-            $window.open('http://grch37.ensembl.org/Homo_sapiens/Location/View?r=' + convertVariantToRangeFunction(variantId), '_blank');
-        };
+        function getWorkflows() {
+            $http.get('/api/variantdatabase/workflows', {
 
-        $scope.openUCSCLink = function(variantId){
-            $window.open('http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg19&position=chr' + convertVariantToRangeFunction(variantId), '_blank');
-        };
-
-        $scope.open1kgLink = function(variantId){
-            $window.open('http://browser.1000genomes.org/Homo_sapiens/Location/View?r=' + convertVariantToRangeFunction(variantId), '_blank');
-        };
-
-        $scope.openExACLink = function(variantId){
-
-            var split1 = variantId.split(":");
-            var split2 = split1[1].split(">");
-            var startPosition = split2[0].replace(/\D/g, '');
-            var refAllele = split2[0].replace(/\d/g, '');
-            var altAllele = split2[1].replace(/\d/g, '');
-
-            $window.open('http://exac.broadinstitute.org/variant/' + split1[0] + '-' + startPosition + '-' + refAllele + '-' + altAllele, '_blank');
-        };
-
-        $scope.openDbSnpLink = function(dbSNPId){
-            $window.open('http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=' + dbSNPId, '_blank');
-        };
+            }).then(function (response) {
+                $scope.workflows = response.data;
+            }, function (response) {
+                Notification.error(response);
+                console.log("ERROR: " + response);
+            });
+        }
 
         $scope.getFilteredVariants = function () {
 
-            //reset piechart filter
-            $scope.selectedVariantFilter = -1;
+            $scope.selectedVariantFilter = -1; //reset piechart filter
 
             //check input
-            if (!checkInput("Sample", $scope.selectedAnalysis)) return;
-            if (!checkInput("Panel", $scope.selectedVirtualPanel)) return;
-            if (!checkInput("Workflow", $scope.selectedWorkflow)) return;
+            if (!framework.checkInput("Sample", $scope.selectedAnalysis)) return;
+            if (!framework.checkInput("Panel", $scope.selectedVirtualPanel)) return;
+            if (!framework.checkInput("Workflow", $scope.selectedWorkflow)) return;
 
             $http.post('/api/variantdatabase' + $scope.selectedWorkflow.Path,
                 {
@@ -167,7 +102,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
 
             $http.post('/api/variantdatabase/functionalannotation',
                 {
-                    'NodeId' : variant.VariantNodeId
+                    'VariantNodeId' : variant.VariantNodeId
                 })
                 .then(function(response) {
                     variant.Annotation = response.data;
@@ -194,7 +129,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
 
             $http.post('/api/variantdatabase/variantobservations',
                 {
-                    'NodeId' : variant.VariantNodeId
+                    'VariantNodeId' : variant.VariantNodeId
                 })
                 .then(function(response) {
                     seen.Occurrences = response.data;
@@ -241,35 +176,28 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
 
         };
 
-        $scope.launchIGV = function (remoteBamFilePath, variantId){
-            $window.open('http://localhost:60151/load?file=' + remoteBamFilePath + '&locus=' + convertVariantToRangeFunction(variantId) + '&genome=37', '_blank');
+        $scope.openEnsemblVariantLink = function(variant){
+            $window.open(framework.getEnsemblRangeLink() + framework.convertVariantToRange(variant), '_blank');
+        };
+        $scope.openUCSCVariantLink = function(variant){
+            $window.open(framework.getUCSCRangeLink() + framework.convertVariantToRange(variant), '_blank');
+        };
+        $scope.openIGVLink = function(remoteBamPath, variant){
+            $window.open(framework.getIGVLink(remoteBamPath, framework.convertVariantToRange(variant)), '_blank');
+        };
+        $scope.open1kgVariantLink = function(variant){
+            $window.open(framework.get1kgRangeLink() + framework.convertVariantToRange(variant), '_blank');
+        };
+        $scope.openExACVariantLink = function(variant){
+            $window.open(framework.getExACVariantLink() + framework.convertVariantToExAC(variant), '_blank');
+        };
+        $scope.openDbSNPIdVariantLink = function(dbSNPId){
+            $window.open(framework.getDbSNPIdVariantLink() + dbSNPId, '_blank');
         };
 
-        $http.get('/api/variantdatabase/analyses', {
-
-        }).then(function(response) {
-            $scope.analyses = response.data;
-        }, function(response) {
-            Notification.error(response);
-            console.log("ERROR: " + response);
-        });
-
-        $http.get('/api/variantdatabase/panels', {
-
-        }).then(function(response) {
-            $scope.virtualPanels = response.data;
-        }, function(response) {
-            Notification.error(response);
-            console.log("ERROR: " + response);
-        });
-
-        $http.get('/api/variantdatabase/workflows', {
-
-        }).then(function(response) {
-            $scope.workflows = response.data;
-        }, function(response) {
-            Notification.error(response);
-            console.log("ERROR: " + response);
-        });
+        //populate typeaheads on pageload
+        getAnalyses();
+        getPanels();
+        getWorkflows();
 
     }]);

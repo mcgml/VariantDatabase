@@ -11,10 +11,6 @@ angular.module('variantdatabase.admin', ['ngRoute', 'ui-notification'])
 
     .controller('AdminCtrl', ['$scope', 'Notification', '$http', function ($scope, Notification, $http) {
 
-        function isArray(what) {
-            return Object.prototype.toString.call(what) === '[object Array]';
-        }
-
         //get features for authorisation
         function getAddNewFeaturesForAuthorisation(){
             $http.post('/api/seraph',
@@ -29,7 +25,31 @@ angular.module('variantdatabase.admin', ['ngRoute', 'ui-notification'])
                 })
                 .then(function(response) {
                     $scope.featuresForAuthorisation = '';
-                    if (isArray(response.data)){
+                    if (framework.isArray(response.data)){
+                        $scope.featuresForAuthorisation = response.data;
+                    } else if (response.data != '') {
+                        $scope.featuresForAuthorisation = [];
+                        $scope.featuresForAuthorisation.push(response.data);
+                    }
+                }, function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+        }
+
+        //get pathogenicities for authorisation
+        function getAddNewPathogenicitiesForAuthorisation(){
+            $http.post('/api/seraph',
+                {
+                    query:
+                    "MATCH (v:Variant)-[:HAS_PATHOGENICITY]->(p:Pathogenicity)-[rel:ADDED_BY|:REMOVED_BY]->(u:User)" +
+                    "WHERE NOT (p)-[:ADD_AUTHORISED_BY|:REMOVED_AUTHORISED_BY]->(:User) " +
+                    "RETURN v,rel,u;",
+                    params: {}
+                })
+                .then(function(response) {
+                    $scope.featuresForAuthorisation = '';
+                    if (framework.isArray(response.data)){
                         $scope.featuresForAuthorisation = response.data;
                     } else if (response.data != '') {
                         $scope.featuresForAuthorisation = [];
@@ -81,5 +101,6 @@ angular.module('variantdatabase.admin', ['ngRoute', 'ui-notification'])
 
         //load widgets on page load
         getAddNewFeaturesForAuthorisation();
+        getAddNewPathogenicitiesForAuthorisation();
 
     }]);

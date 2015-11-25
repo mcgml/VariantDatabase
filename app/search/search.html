@@ -3,7 +3,7 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-6">
-                    <h3 class="panel-title">Search Variants</h3>
+                    <h3 class="panel-title"><i class="fa fa-list"></i> Search Variants</h3>
                 </div>
                 <div class="col-md-6">
                     <div class="input-group">
@@ -26,18 +26,44 @@
                 <table id="variant-information-table" class="table borderless no-select">
                     <tbody>
                     <tr><th>Variant</th><td>{{variantInformation.VariantId}}</td></tr>
-                    <tr><th>dbSNP</th><td><a ng-show="variantInformation.dbSNPId" href="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs={{variantInformation.dbSNPId}}" target="_blank">{{variantInformation.dbSNPId}}</a></td></tr>
-                    <tr><th>Occurrence</th><td>{{variantInformation.Occurrence}}</td></tr>
                     <tr><th>Functional Annotation</th><td><i class="fa fa-info-circle" ng-click="openVariantAnnotationModal(variantInformation)"></i></td></tr>
+                    <tr><th>dbSNP</th><td><a ng-show="variantInformation.dbSNPId" href="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs={{variantInformation.dbSNPId}}" target="_blank">{{variantInformation.dbSNPId}}</a></td></tr>
+                    <tr><th>Occurrence</th><td><a id="occurrence-link" ng-click="openVariantOccurrenceModal(variantInformation)">{{variantInformation.Occurrence}}</a></td></tr>
+                    <tr><th>Population</th><td>
+                        <div class="btn-toolbar" role="toolbar">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-sq-xs" ng-click="open1kgVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.onekGPhase3_EAS_AF" tooltip-append-to-body="true" uib-tooltip="1KG East Asian {{variantInformation.onekGPhase3_EAS_AF}}%" ng-style="{'background-color' : (variantInformation.onekGPhase3_EAS_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" ng-click="open1kgVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.onekGPhase3_EUR_AF" tooltip-append-to-body="true" uib-tooltip="1KG European {{variantInformation.onekGPhase3_EUR_AF}}%" ng-style="{'background-color' : (variantInformation.onekGPhase3_EUR_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" ng-click="open1kgVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.onekGPhase3_AFR_AF" tooltip-append-to-body="true" uib-tooltip="1KG African {{variantInformation.onekGPhase3_AFR_AF}}%" ng-style="{'background-color' : (variantInformation.onekGPhase3_AFR_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" ng-click="open1kgVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.onekGPhase3_AMR_AF" tooltip-append-to-body="true" uib-tooltip="1KG Mixed American {{variantInformation.onekGPhase3_AMR_AF}}%" ng-style="{'background-color' : (variantInformation.onekGPhase3_AMR_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" ng-click="open1kgVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.onekGPhase3_SAS_AF" tooltip-append-to-body="true" uib-tooltip="1KG South Asian {{variantInformation.onekGPhase3_SAS_AF}}%" ng-style="{'background-color' : (variantInformation.onekGPhase3_SAS_AF | afpct2colour)}"></button>
+                            </div>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-sq-xs" ng-click="openExACVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.ExAC_EAS_AF" tooltip-append-to-body="true" uib-tooltip="ExAC East Asian {{variantInformation.ExAC_EAS_AF}}%" ng-style="{'background-color' : (variantInformation.ExAC_EAS_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" ng-click="openExACVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.ExAC_NFE_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Non-Finnish European {{variantInformation.ExAC_NFE_AF}}%" ng-style="{'background-color' : (variantInformation.ExAC_NFE_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" ng-click="openExACVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.ExAC_AFR_AF" tooltip-append-to-body="true" uib-tooltip="ExAC African {{variantInformation.ExAC_AFR_AF}}%" ng-style="{'background-color' : (variantInformation.ExAC_AFR_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" ng-click="openExACVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.ExAC_AMR_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Latino {{variantInformation.ExAC_AMR_AF}}%" ng-style="{'background-color' : (variantInformation.ExAC_AMR_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" ng-click="openExACVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.ExAC_SAS_AF" tooltip-append-to-body="true" uib-tooltip="ExAC South Asian {{variantInformation.ExAC_SAS_AF}}%" ng-style="{'background-color' : (variantInformation.ExAC_SAS_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" ng-click="openExACVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.ExAC_FIN_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Finnish {{variantInformation.ExAC_FIN_AF}}%" ng-style="{'background-color' : (variantInformation.ExAC_FIN_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" ng-click="openExACVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.ExAC_OTH_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Other {{variantInformation.ExAC_OTH_AF}}%" ng-style="{'background-color' : (variantInformation.ExAC_OTH_AF | afpct2colour)}"></button>
+                            </div>
+                        </div>
+                    </td></tr>
+                    <tr><th>Conservation</th><td>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-sq-xs" tooltip-enable="variantInformation.GERP" tooltip-append-to-body="true" uib-tooltip="GERP {{variantInformation.GERP}}" ng-style="{'background-color' : (variantInformation.GERP | gerp2colour)}"></button>
+                            <button type="button" class="btn btn-sq-xs" tooltip-enable="variantInformation.phyloP" tooltip-append-to-body="true" uib-tooltip="phyloP {{variantInformation.phyloP}}" ng-style="{'background-color' : (variantInformation.phyloP | phylop2colour)}"></button>
+                            <button type="button" class="btn btn-sq-xs" tooltip-enable="variantInformation.phastCons" tooltip-append-to-body="true" uib-tooltip="phastCons {{variantInformation.phastCons}}" ng-style="{'background-color' : (variantInformation.phastCons | phastcons2colour)}"></button>
+                        </div>
+                    </td></tr>
                     <tr><th>Links</th>
                         <td>
                             <div class="dropdown">
-                                <i class="fa fa-external-link"></i>
+                                <i class="fa fa-external-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></i>
                                 <ul class="dropdown-menu">
                                     <li class="dropdown-header">Browsers</li>
-                                    <li><a ng-click="openEnsemblLink(variantInformation.VariantId)">Ensembl</a></li>
-                                    <li><a ng-click="openUCSCLink(variantInformation.VariantId)">UCSC</a></li>
-                                    <li><a ng-click="openExACLink(variantInformation.VariantId)">ExAC</a></li>
+                                    <li><a ng-click="openEnsemblVariantLink(variantInformation.VariantId)">Ensembl</a></li>
+                                    <li><a ng-click="openUCSCVariantLink(variantInformation.VariantId)">UCSC</a></li>
                                 </ul>
                             </div>
                         </td>
@@ -48,7 +74,6 @@
                     <div class="form-group">
                         <h3>Pathogenicity</h3>
                         <select class="form-control" ng-model="selectedPathogenicity">
-                            <option value="0">Artefact</option>
                             <option value="1">Benign Variant</option>
                             <option value="2">Likely Benign Variant</option>
                             <option value="3">Unclassified Variant</option>
@@ -68,8 +93,7 @@
                 <h3>History <span class="badge">{{variantInformation.History.length}}</span></h3>
                 <ul class="list-group s-scroll">
                     <li class="list-group-item" ng-repeat="item in variantInformation.History | orderBy:'Date':true">
-                        <p ng-show="item.Value != null"><b>Pathogenicity Classification {{item.Value}} added</b></p>
-                        <p ng-show="item.Comment != null"><b>{{item.Comment}}</b></p>
+                        <p ng-show="item.Classification != null"><b>Pathogenicity Classification {{item.Classification}} added</b></p>
                         <p>{{item.UserId}} {{item.Date | date:"dd/MM/yy"}}</p>
                     </li>
                 </ul>
@@ -82,7 +106,7 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-6">
-                    <h3 class="panel-title">Search Transcripts</h3>
+                    <h3 class="panel-title"><i class="fa fa-list"></i> Search Transcripts</h3>
                 </div>
                 <div class="col-md-6">
                     <div class="input-group">
@@ -137,7 +161,7 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-6">
-                    <h3 class="panel-title">Search Panels</h3>
+                    <h3 class="panel-title"><i class="fa fa-list"></i> Search Panels</h3>
                 </div>
                 <div class="col-md-6">
                     <div class="input-group">
@@ -154,29 +178,43 @@
                 </div>
             </div>
         </div>
-        <table ng-show="genes" class="table table-bordered table-hover no-select">
-            <thead>
-            <tr>
-                <th colspan="2" width="100%">
-                    <input type="text" class="form-control no-margin" placeholder="Search" ng-model="search">
-                </th>
-            </tr>
-            <tr>
-                <th width="75%" ng-click="sortType = 'SymbolId'; sortReverse = !sortReverse">
-                    Symbol <i ng-class="sortReverse ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" ng-show="sortType == 'SymbolId'"></i>
-                </th>
-                <th width="25%" ng-click="sortType = 'GeneId'; sortReverse = !sortReverse">
-                    Ensembl Id <i ng-class="sortReverse ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" ng-show="sortType == 'GeneId'"></i>
-                </th>
-            </tr>
-            </thead>
-            <tbody ng-repeat="gene in genes | orderBy:sortType:sortReverse | filter:search">
-            <tr>
-                <td width="75%"><a id="symbol-link" href="http://omim.org/search?search={{gene.SymbolId}}" target="_blank">{{gene.SymbolId}}</a></td>
-                <td width="25%"><a id="gene-id-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?g={{gene.GeneId}}" target="_blank">{{gene.GeneId}}</a></td>
-            </tr>
-            </tbody>
-        </table>
+        <div ng-show="genes" class="panel-body">
+            <div class="col-md-6">
+                <h3>Details</h3>
+                <table id="gene-table" class="table borderless no-select">
+                    <tbody>
+                    <tr><th>Panel Name</th><td>{{selectedVirtualPanel.VirtualPanelName}}</td></tr>
+                    <tr><th>Created</th><td>{{selectedVirtualPanel.UserId}} {{selectedVirtualPanel.Date | date:"dd/MM/yy"}}</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <h3>Content</h3>
+                <table class="table table-bordered table-hover no-select">
+                    <thead>
+                    <tr>
+                        <th colspan="2" width="100%">
+                            <input type="text" class="form-control no-margin" placeholder="Search" ng-model="search">
+                        </th>
+                    </tr>
+                    <tr>
+                        <th width="75%" ng-click="sortType = 'SymbolId'; sortReverse = !sortReverse">
+                            Symbol <i ng-class="sortReverse ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" ng-show="sortType == 'SymbolId'"></i>
+                        </th>
+                        <th width="25%" ng-click="sortType = 'GeneId'; sortReverse = !sortReverse">
+                            Ensembl Id <i ng-class="sortReverse ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" ng-show="sortType == 'GeneId'"></i>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody ng-repeat="gene in genes | orderBy:sortType:sortReverse | filter:search">
+                    <tr>
+                        <td width="75%"><a id="symbol-link" href="http://omim.org/search?search={{gene.SymbolId}}" target="_blank">{{gene.SymbolId}}</a></td>
+                        <td width="25%"><a id="gene-id-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?g={{gene.GeneId}}" target="_blank">{{gene.GeneId}}</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 <div class="col-md-12">

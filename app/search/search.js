@@ -1,5 +1,9 @@
 'use strict';
 
+//todo search sample
+//todo search symbol
+//todo search workflow
+
 angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notification', 'nvd3'])
 
     .config(['$routeProvider', function($routeProvider) {
@@ -9,38 +13,19 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
         });
     }])
 
-    .controller('SearchCtrl', ['$scope', '$http', 'Notification', '$uibModal', '$window', function ($scope, $http, Notification, $uibModal, $window) {
+    .controller('SearchCtrl', ['$scope', '$http', 'Notification', '$uibModal', '$window','framework', function ($scope, $http, Notification, $uibModal, $window, framework) {
 
-        function convertVariantToRangeFunction(variantId){
-            var split1 = variantId.split(":");
-            var split2 = split1[1].split(">");
-
-            var refLength = split2[0].match(/\D/g).length;
-            var altLength = split2[1].match(/\D/g).length;
-
-            var startPosition = split2[0].replace(/\D/g, '');
-            var endPosition = (startPosition - refLength) + altLength;
-
-            return split1[0] + ":" + startPosition + "-" + endPosition;
-        }
-
-        $scope.openEnsemblLink = function(variantId){
-            $window.open('http://grch37.ensembl.org/Homo_sapiens/Location/View?r=' + convertVariantToRangeFunction(variantId), '_blank');
+        $scope.openEnsemblVariantLink = function(variant){
+            $window.open(framework.getEnsemblRangeLink() + framework.convertVariantToRange(variant), '_blank');
         };
-
-        $scope.openUCSCLink = function(variantId){
-            $window.open('http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg19&position=chr' + convertVariantToRangeFunction(variantId), '_blank');
+        $scope.openUCSCVariantLink = function(variant){
+            $window.open(framework.getUCSCRangeLink() + framework.convertVariantToRange(variant), '_blank');
         };
-
-        $scope.openExACLink = function(variantId){
-
-            var split1 = variantId.split(":");
-            var split2 = split1[1].split(">");
-            var startPosition = split2[0].replace(/\D/g, '');
-            var refAllele = split2[0].replace(/\d/g, '');
-            var altAllele = split2[1].replace(/\d/g, '');
-
-            $window.open('http://exac.broadinstitute.org/variant/' + split1[0] + '-' + startPosition + '-' + refAllele + '-' + altAllele, '_blank');
+        $scope.openExACVariantLink = function(variant){
+            $window.open(framework.getExACVariantLink() + framework.convertVariantToExAC(variant), '_blank');
+        };
+        $scope.open1kgVariantLink = function(variant){
+            $window.open(framework.get1kgRangeLink() + framework.convertVariantToRange(variant), '_blank');
         };
 
         $scope.getVirtualPanelGenes = function() {
@@ -94,7 +79,7 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
         function getVariantAnnotation(nodeId) {
             $http.post('/api/variantdatabase/functionalannotation',
                 {
-                    'NodeId': nodeId
+                    'VariantNodeId': nodeId
                 })
                 .then(function (response) {
                     $scope.Annotations = response.data;
@@ -111,11 +96,14 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
                 return;
             }
 
-            var query = "MATCH (v:Variant) where id(v) = " + $scope.variantInformation.VariantNodeId + " " +
-                "MATCH (u:User {UserId:\"ml\"})" +
-                "CREATE (u)-[:HAS_ASSIGNED_PATHOGENICITY {Value:toInt(\"" + $scope.selectedPathogenicity + "\"), Date:" + new Date().getTime();
-            if ($scope.pathogenicityEvidenceText != null && $scope.pathogenicityEvidenceText != '') query += ", Comment:\"" + $scope.pathogenicityEvidenceText + "\"";
-            query += "}]->(v)";
+            //add variant pathogenicity
+            var query = "MATCH (v:Variant) where id(v) = " + $scope.variantInformation.VariantNodeId + " ";
+            query += "MATCH (u:User {UserId:\"ml\"}) ";
+            query += "CREATE (v)-[:HAS_PATHOGENICITY]->(p:Pathogenicity)-[:ADDED_BY {Classification:toInt(\"" + $scope.selectedPathogenicity + "\"), Date:" + new Date().getTime();
+            if ($scope.pathogenicityEvidenceText != null && $scope.pathogenicityEvidenceText != ''){
+                query += ", Comment:\"" + $scope.pathogenicityEvidenceText + "\"";
+            }
+            query += "}]->(u) ";
 
             $http.post('/api/seraph',
                 {
@@ -162,11 +150,40 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
                 });
         };
 
+        $scope.openVariantOccurrenceModal = function (variant) {
+            var seen = {};
+
+            $http.post('/api/variantdatabase/variantobservations',
+                {
+                    'VariantNodeId' : variant.VariantNodeId
+                })
+                .then(function(response) {
+                    seen.Occurrences = response.data;
+                }, function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+
+            seen.VariantId = variant.VariantId;
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'templates/VariantOccurrenceModal.html',
+                controller: 'VariantOccurrenceCtrl',
+                windowClass: 'app-modal-window',
+                resolve: {
+                    items: function () {
+                        return seen;
+                    }
+                }
+            });
+        };
+
         $scope.openVariantAnnotationModal = function (variant) {
 
             $http.post('/api/variantdatabase/functionalannotation',
                 {
-                    'NodeId' : variant.VariantNodeId
+                    'VariantNodeId' : variant.VariantNodeId
                 })
                 .then(function(response) {
                     variant.Annotation = response.data;
@@ -191,12 +208,42 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
 
         };
 
-        $http.get('/api/variantdatabase/panels', {})
-            .then(function(response) {
+        function getAnalyses() {
+            $http.get('/api/variantdatabase/analyses', {
+
+            }).then(function(response) {
+                $scope.analyses = response.data;
+            }, function(response) {
+                Notification.error(response);
+                console.log("ERROR: " + response);
+            })
+        }
+
+        function getPanels() {
+            $http.get('/api/variantdatabase/panels', {
+
+            }).then(function(response) {
                 $scope.virtualPanels = response.data;
             }, function(response) {
                 Notification.error(response);
                 console.log("ERROR: " + response);
             });
+        }
+
+        function getWorkflows() {
+            $http.get('/api/variantdatabase/workflows', {
+
+            }).then(function (response) {
+                $scope.workflows = response.data;
+            }, function (response) {
+                Notification.error(response);
+                console.log("ERROR: " + response);
+            });
+        }
+
+        //populate typeaheads on pageload
+        getAnalyses();
+        getPanels();
+        getWorkflows();
 
     }]);

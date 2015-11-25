@@ -62,7 +62,7 @@ input, #search-button, #clear-button, #export-button, #variant-table, .panel {
 
 /*modal*/
 .app-modal-window .modal-dialog {
-    width: 95%;
+    width: 98%;
 }
 
 /*user account page*/
@@ -72,8 +72,8 @@ input, #search-button, #clear-button, #export-button, #variant-table, .panel {
 }
 
 /*Styling for external links*/
-#occurrence-filter, #internal-frequency-filter, #dbSNP-id-filter, #ccds-link, #symbol-link,
-#feature-link, #gene-id-link, #occurrence-link {
+#occurrence-filter, #internal-frequency-filter, #dbSNP-link, #ccds-link, #symbol-link,
+#feature-link, #gene-id-link, #occurrence-link, #annotation-link, #email-link, #neo4j-link {
     color : black;
 }
 
@@ -83,6 +83,8 @@ input, #search-button, #clear-button, #export-button, #variant-table, .panel {
 }
 #user-account-table > tbody > tr > td, #user-account-table > tbody > tr > th,
 #feature-table > tbody > tr > td, #feature-table > tbody > tr > th,
+#about-table > tbody > tr > td, #about-table > tbody > tr > th,
+#gene-table > tbody > tr > td, #gene-table > tbody > tr > th,
 #variant-information-table > tbody > tr > td, #variant-information-table > tbody > tr > th {
     font-size: 14px;
     padding-left : 0;
@@ -97,7 +99,10 @@ textarea {
 /*Sigin in page*/
 .form-signin {
     max-width: 330px;
-    padding: 0;
+    padding-top: 15px;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
     margin: 0 auto;
 }
 .form-signin .form-signin-heading,
