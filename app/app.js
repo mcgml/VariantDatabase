@@ -201,6 +201,67 @@ angular.module('variantdatabase', [ 'ngRoute', 'variantdatabase.login', 'variant
 
     })
 
+    .controller('NewPanelCtrl', function ($scope, $uibModalInstance, items, framework, $http, Notification) {
+        $scope.items = items;
+        $scope.savedGenes = [];
+
+        $scope.checkHGNC = function(){
+            $http({
+                method: 'GET',
+                url: 'http://rest.genenames.org/fetch/symbol/' + $scope.search
+            }).then(function successCallback(response) {
+                $scope.searchedGenes = response.data.response.docs;
+                Notification('Operation successful');
+            }, function errorCallback(response) {
+                Notification.error(response);
+                console.log("ERROR: " + response);
+            });
+        };
+
+        $scope.addGene = function(gene){
+            if (gene.status !== "Approved"){
+                Notification.error("Cannot add unapproved gene");
+                return;
+            }
+            $scope.savedGenes.push(gene);
+        };
+
+        $scope.removeGene = function(i){
+            $scope.savedGenes.splice(i, 1);
+        };
+
+        $scope.saveGenes = function(){
+
+            var upload = [];
+
+            for (var key in $scope.savedGenes) {
+                if ($scope.savedGenes.hasOwnProperty(key)) {
+                    upload.push($scope.savedGenes[key].symbol);
+                }
+            }
+
+            if (upload.length == 0) return;
+
+            $http.post('/api/variantdatabase/addvirtualpanel',
+                {
+                    'UserNodeId' : 0,
+                    'VirtualPanelName' : $scope.items,
+                    'VirtualPanelList' : upload
+                })
+                .then(function(response) {
+                    Notification('Operation successful');
+                }, function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+
+        };
+
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+    })
+
     .controller('VariantOccurrenceCtrl', function ($scope, $uibModalInstance, items, $window, framework) {
         $scope.items = items;
 

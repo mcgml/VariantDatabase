@@ -1,0 +1,66 @@
+<div class="modal-header">
+    <h3 class="modal-title">Create new virtual panel <b>{{items}}</b></h3>
+</div>
+<div class="modal-body">
+    <div class="input-group">
+        <input type="text" class="form-control no-margin" placeholder="Search" ng-model="search">
+        <div class="input-group-btn">
+            <button class="btn btn-primary no-margin" ng-click="checkHGNC();">
+                <i class="fa fa-search"></i>
+            </button>
+            <button class="btn btn-warning no-margin" ng-click="searchedGenes = ''; search = '';">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <h3>Search</h3>
+        <table class="table table-bordered table-hover no-select">
+            <thead>
+            <tr>
+                <th width="2.5%"><i class="fa fa-plus"></i></th>
+                <th width="20%">Gene</th>
+                <th width="40%">Name</th>
+                <th width="17.5%">Location</th>
+                <th width="20%">Status</th>
+            </tr>
+            </thead>
+            <tbody ng-repeat="gene in searchedGenes">
+            <tr>
+                <td width="2.5%" ng-click="addGene(gene)"><i class="fa fa-plus"></i></td>
+                <td width="20%">{{gene.symbol}}</td>
+                <td width="40%">{{gene.name}}</td>
+                <td width="17.5%">{{gene.location}}</td>
+                <td width="20%">{{gene.status}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <h3>{{items}}</h3>
+        <table class="table table-bordered table-hover no-select">
+            <thead>
+            <tr>
+                <th width="2.5%"><i class="fa fa-minus"></i></th>
+                <th width="20%">Gene</th>
+                <th width="40%">Name</th>
+                <th width="17.5%">Location</th>
+                <th width="20%">Status</th>
+            </tr>
+            </thead>
+            <tbody ng-repeat="gene in savedGenes">
+            <tr>
+                <td width="2.5%" ng-click="removeGene($index)"><i class="fa fa-minus"></i></td>
+                <td width="20%">{{gene.symbol}}</td>
+                <td width="40%">{{gene.name}}</td>
+                <td width="17.5%">{{gene.location}}</td>
+                <td width="20%">{{gene.status}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-success" type="button" ng-click="saveGenes()">Save</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Close</button>
+</div>

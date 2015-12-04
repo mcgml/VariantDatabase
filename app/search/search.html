@@ -206,15 +206,11 @@
                         <th width="75%" ng-click="sortType = 'SymbolId'; sortReverse = !sortReverse">
                             Symbol <i ng-class="sortReverse ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" ng-show="sortType == 'SymbolId'"></i>
                         </th>
-                        <th width="25%" ng-click="sortType = 'GeneId'; sortReverse = !sortReverse">
-                            Ensembl Id <i ng-class="sortReverse ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" ng-show="sortType == 'GeneId'"></i>
-                        </th>
                     </tr>
                     </thead>
                     <tbody ng-repeat="gene in genes | orderBy:sortType:sortReverse | filter:search">
                     <tr>
-                        <td width="75%"><a id="symbol-link" href="http://omim.org/search?search={{gene.SymbolId}}" target="_blank">{{gene.SymbolId}}</a></td>
-                        <td width="25%"><a id="gene-id-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?g={{gene.GeneId}}" target="_blank">{{gene.GeneId}}</a></td>
+                        <td width="75%"><a id="symbol-link" href="http://omim.org/search?search={{gene}}" target="_blank">{{gene}}</a></td>
                     </tr>
                     </tbody>
                 </table>

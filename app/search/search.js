@@ -29,20 +29,25 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
         };
 
         $scope.getVirtualPanelGenes = function() {
-            $http.post('/api/seraph',
+
+            //check panel exists
+            if ($scope.selectedVirtualPanel.PanelNodeId === undefined){
+                $scope.openNewPanelModal($scope.selectedVirtualPanel);
+                return;
+            }
+
+            $http.post('/api/variantdatabase/getvirtualpanelgenes',
                 {
-                    query:
-                    "MATCH (v:VirtualPanel) WHERE id(v) = " + $scope.selectedVirtualPanel.PanelNodeId + " " +
-                    "MATCH (v)-[:CONTAINS_SYMBOL]->(s:Symbol) " +
-                    "RETURN s.SymbolId as SymbolId, s.GeneId as GeneId;",
-                    params: {}
+                    PanelNodeId : $scope.selectedVirtualPanel.PanelNodeId
                 })
                 .then(function(response) {
                     $scope.genes = response.data;
+                    Notification('Operation successful');
                 }, function(response) {
                     Notification.error(response);
                     console.log("ERROR: " + response);
                 });
+
         };
 
         $scope.getFeature = function(){
@@ -183,8 +188,21 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
             });
         };
 
-        $scope.openVariantAnnotationModal = function (variant) {
+        $scope.openNewPanelModal = function (virtualPanelName) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'templates/NewPanelModal.html',
+                controller: 'NewPanelCtrl',
+                windowClass: 'app-modal-window',
+                resolve: {
+                    items: function () {
+                        return virtualPanelName;
+                    }
+                }
+            });
+        };
 
+        $scope.openVariantAnnotationModal = function (variant) {
             $http.post('/api/variantdatabase/functionalannotation',
                 {
                     'VariantNodeId' : variant.VariantNodeId
@@ -209,7 +227,6 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
                     }
                 }
             });
-
         };
 
         function getAnalyses() {

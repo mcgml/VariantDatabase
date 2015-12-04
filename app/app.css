@@ -23,7 +23,7 @@
     padding : 2px !important;
     margin : 1px !important;
 }
-input, #search-button, #clear-button, #export-button, #variant-table, .panel {
+input, #search-button, #clear-button, #export-button, #variant-table, .panel, #geneTable {
     margin-top : 15px;
     margin-bottom : 0;
 }
@@ -62,7 +62,7 @@ input, #search-button, #clear-button, #export-button, #variant-table, .panel {
 
 /*modal*/
 .app-modal-window .modal-dialog {
-    width: 98%;
+    width: 90%;
 }
 
 /*user account page*/
