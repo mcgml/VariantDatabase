@@ -31,6 +31,14 @@ input, #search-button, #clear-button, #export-button, #variant-table, .panel, #g
     margin:10px;
 }
 
+.no-left-padding {
+    padding-left : 0;
+}
+
+.no-right-padding {
+    padding-right : 0;
+}
+
 /*list group*/
 .s-scroll {
     max-height: 250px;
@@ -62,7 +70,7 @@ input, #search-button, #clear-button, #export-button, #variant-table, .panel, #g
 
 /*modal*/
 .app-modal-window .modal-dialog {
-    width: 90%;
+    width: 95%;
 }
 
 /*user account page*/

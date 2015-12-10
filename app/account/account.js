@@ -11,19 +11,19 @@ angular.module('variantdatabase.account', ['ngRoute', 'ui-notification'])
 
     .controller('AccountCtrl', ['$scope', '$http', 'Notification', function ($scope, $http, Notification) {
 
-        //get user account information
-        $http.post('/api/seraph',
-            {
-                query:
-                "MATCH (u:User) where u.UserId = \"ml\" RETURN u;",
-                params: {}
-            })
-            .then(function(response) {
-                $scope.userInformation = response.data[0];
-            },
-            function(response) {
-                Notification.error(response);
-                console.log("ERROR: " + response);
-            });
-
+        function getUserInformation() {
+            $scope.getUserInformation = function(){
+                $http.post('/api/variantdatabase/getuserinformation',
+                    {
+                        'UserNodeId' : 0
+                    })
+                    .then(function(response) {
+                        $scope.userInformation = response.data;
+                    }, function(response) {
+                        Notification.error(response);
+                        console.log("ERROR: " + response);
+                    });
+            };
+        }
+        getUserInformation();
     }]);

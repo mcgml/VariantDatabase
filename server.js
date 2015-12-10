@@ -85,6 +85,19 @@ app.get('/api/variantdatabase/getnewpathogenicitiesforauthorisation', function(r
         }
     )
 });
+app.post('/api/variantdatabase/getuserinformation', function(req, res) {
+    request.post(
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/getuserinformation",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
 app.post('/api/variantdatabase/autosomaldominantworkflowv1', function(req, res) {
     request.post(
         {
