@@ -262,6 +262,41 @@ angular.module('variantdatabase', [ 'ngRoute', 'variantdatabase.login', 'variant
         };
     })
 
+    .controller('VariantSubtractionCtrl', function ($scope, $uibModalInstance, items, Notification) {
+        $scope.analyses = items;
+        $scope.savedExcludedDatasets = [];
+
+        $scope.addExcludedDataset = function(){
+
+            var found = false;
+            for(var i = 0; i < $scope.savedExcludedDatasets.length; i++) {
+                if ($scope.savedExcludedDatasets[i].RunInfoNodeId == $scope.excludedDataset.RunInfoNodeId) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found){
+                Notification.error("Already present in the list");
+                return;
+            }
+
+            $scope.savedExcludedDatasets.push($scope.excludedDataset);
+        };
+
+        $scope.removeExcludedDataset = function(i){
+            $scope.savedExcludedDatasets.splice(i, 1);
+        };
+
+        $scope.returnExcludedDatasets = function(){
+
+        };
+
+        $scope.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
+        };
+    })
+
     .controller('VariantOccurrenceCtrl', function ($scope, $uibModalInstance, items, $window, framework) {
         $scope.items = items;
 

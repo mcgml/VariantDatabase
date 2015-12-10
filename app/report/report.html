@@ -7,23 +7,25 @@
         <nvd3 options="donutChartOptions" data="filteredVariants.Filters"></nvd3>
     </div>
 </div>
-<div class="col-md-3">
-    <input type="text" class="form-control" placeholder="Enter Proband Identifier" ng-model="selectedAnalysis" typeahead-template-url="templates/ProbandTypeahead.html" uib-typeahead="analysis as analysis.SampleId for analysis in analyses | filter:{SampleId:$viewValue} | limitTo:4">
+<div class="col-md-4">
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Index Dataset" ng-model="selectedAnalysis" typeahead-template-url="templates/ProbandTypeahead.html" uib-typeahead="analysis as analysis.SampleId for analysis in analyses | filter:{SampleId:$viewValue} | limitTo:4">
+        <div class="input-group-btn">
+            <button id="exclusionButton" class="btn btn-default" ng-click="openVariantSubtractionModal()">
+                <i class="fa fa-filter"></i>
+            </button>
+        </div>
+    </div>
 </div>
 <div class="col-md-3">
-    <input type="text" class="form-control" placeholder="Enter Panel Name" ng-model="selectedVirtualPanel" typeahead-template-url="templates/VirtualPanelTypeahead.html" uib-typeahead="panel as panel.VirtualPanelName for panel in virtualPanels | filter:{VirtualPanelName:$viewValue} | limitTo:4">
+    <input type="text" class="form-control" placeholder="Virtual Panel" ng-model="selectedVirtualPanel" typeahead-template-url="templates/VirtualPanelTypeahead.html" uib-typeahead="panel as panel.VirtualPanelName for panel in virtualPanels | filter:{VirtualPanelName:$viewValue} | limitTo:4">
 </div>
 <div class="col-md-3">
-    <input type="text" class="form-control" placeholder="Enter Workflow Name" ng-model="selectedWorkflow" typeahead-template-url="templates/WorkflowTypeahead.html" uib-typeahead="workflow as workflow.Name for workflow in workflows | filter:{Name:$viewValue} | limitTo:4">
+    <input type="text" class="form-control" placeholder="Stratification Workflow" ng-model="selectedWorkflow" typeahead-template-url="templates/WorkflowTypeahead.html" uib-typeahead="workflow as workflow.Name for workflow in workflows | filter:{Name:$viewValue} | limitTo:4">
 </div>
 <div class="col-md-1">
     <button id="search-button" type="button" class="btn btn-primary" ng-click="getFilteredVariants()">
-        <i class="fa fa-filter"></i> Filter
-    </button>
-</div>
-<div class="col-md-1">
-    <button id="export-button" type="button" class="btn btn-success" ng-click="exportVariants()">
-        <i class="fa fa-download"></i> Save
+        <i class="fa fa-search"></i> Search
     </button>
 </div>
 <div class="col-md-1">
@@ -99,6 +101,8 @@
         </tbody>
     </table>
 </div>
-<div class="col-md-12">
-    <p></p>
+<div ng-hide="selectedVariantFilter == -1" class="col-md-12">
+    <button id="export-button" type="button" class="btn btn-success" ng-click="exportVariants()">
+        <i class="fa fa-download"></i> Save
+    </button>
 </div>

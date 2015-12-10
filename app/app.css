@@ -23,12 +23,20 @@
     padding : 2px !important;
     margin : 1px !important;
 }
-input, #search-button, #clear-button, #export-button, #variant-table, .panel, #geneTable {
+input, #search-button, #clear-button, #variant-table, .panel, #geneTable {
     margin-top : 15px;
     margin-bottom : 0;
 }
+#export-button {
+    margin-top : 15px;
+    margin-bottom : 15px;
+}
 .panel-title {
     margin:10px;
+}
+
+#exclusionButton{
+    margin-top : 15px;
 }
 
 .no-left-padding {
@@ -42,6 +50,10 @@ input, #search-button, #clear-button, #export-button, #variant-table, .panel, #g
 /*list group*/
 .s-scroll {
     max-height: 250px;
+    overflow-y:scroll;
+}
+.s-scroll-150 {
+    max-height: 150px;
     overflow-y:scroll;
 }
 .list-group-item {

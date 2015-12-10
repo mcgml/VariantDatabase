@@ -153,6 +153,20 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
             });
         };
 
+        $scope.openVariantSubtractionModal = function () {
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'templates/VariantSubtractionModal.html',
+                controller: 'VariantSubtractionCtrl',
+                resolve: {
+                    items: function () {
+                        return $scope.analyses;
+                    }
+                }
+            });
+        };
+
         $scope.exportVariants = function(){
             var saved = [];
 
