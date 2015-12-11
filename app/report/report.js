@@ -19,6 +19,8 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
     .controller('ReportCtrl', ['$scope', '$window', '$http', 'Notification', '$uibModal', 'framework', function ($scope, $window, $http, Notification, $uibModal, framework) {
 
         $scope.selectedVariantFilter = -1;
+        var savedExcludedDatasets = [];
+
         $scope.donutChartOptions = {
             chart: {
                 type: 'pieChart',
@@ -75,19 +77,36 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
         }
 
         $scope.getFilteredVariants = function () {
-
             $scope.selectedVariantFilter = -1; //reset piechart filter
 
-            //check input
-            if (!framework.checkInput("Sample", $scope.selectedAnalysis)) return;
-            if (!framework.checkInput("Panel", $scope.selectedVirtualPanel)) return;
-            if (!framework.checkInput("Workflow", $scope.selectedWorkflow)) return;
+            if ($scope.selectedAnalysis === undefined){
+                Notification.error("Select index dataset");
+                return;
+            }
 
-            $http.post('/api/variantdatabase' + $scope.selectedWorkflow.Path,
-                {
-                    'RunInfoNodeId' : $scope.selectedAnalysis.RunInfoNodeId,
-                    'PanelNodeId' : $scope.selectedVirtualPanel.PanelNodeId
-                })
+            if ($scope.selectedWorkflow === undefined){
+                Notification.error("Select stratification workflow");
+                return;
+            }
+
+            if (savedExcludedDatasets.length === 0 && $scope.selectedVirtualPanel === undefined){
+                Notification.error("No filtered have been applied!");
+                return;
+            }
+
+            //define obj for sending to server
+            var obj = {
+                'RunInfoNodeId' : $scope.selectedAnalysis.RunInfoNodeId
+            };
+
+            if ($scope.selectedVirtualPanel != null){
+                obj['PanelNodeId'] = $scope.selectedVirtualPanel.PanelNodeId;
+            }
+            if ($scope.ExcludedDatasetsRunId != null){
+                obj['ExcludedDatasetsRunId'] = savedExcludedDatasets;
+            }
+
+            $http.post('/api/variantdatabase' + $scope.selectedWorkflow.Path, obj)
                 .then(function(response) {
                     $scope.filteredVariants = response.data;
                     Notification('Operation successful');
@@ -164,7 +183,10 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
                         return $scope.analyses;
                     }
                 }
+            }).result.then(function(result) {
+                savedExcludedDatasets = result;
             });
+
         };
 
         $scope.exportVariants = function(){

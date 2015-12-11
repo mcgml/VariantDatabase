@@ -120,13 +120,6 @@ angular.module('variantdatabase', [ 'ngRoute', 'variantdatabase.login', 'variant
                 var g = percent>50 ? 255 : Math.floor((percent*2)*255/100);
                 return 'rgb('+r+','+g+',0)';
             },
-            checkInput: function(field, value){
-                if (value === '' || value === undefined){
-                    Notification.error('Check ' + field + ' input');
-                    return false;
-                }
-                return true;
-            },
             getEnsemblRangeLink: function(){
                 return 'http://grch37.ensembl.org/Homo_sapiens/Location/View?r=';
             },
@@ -289,12 +282,19 @@ angular.module('variantdatabase', [ 'ngRoute', 'variantdatabase.login', 'variant
         };
 
         $scope.returnExcludedDatasets = function(){
+            var runInfoNodeIds = [];
 
+            for (var i = 0; i < $scope.savedExcludedDatasets.length; i++) {
+                runInfoNodeIds.push($scope.savedExcludedDatasets[i].RunInfoNodeId);
+            }
+
+            $uibModalInstance.close(runInfoNodeIds);
         };
 
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
+
     })
 
     .controller('VariantOccurrenceCtrl', function ($scope, $uibModalInstance, items, $window, framework) {
