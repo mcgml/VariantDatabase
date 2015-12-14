@@ -1,0 +1,75 @@
+<div class="modal-header">
+    <h3 class="modal-title"><i class="fa fa-crosshairs"></i> Target Variants</h3>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Select Virtual Gene Panel</h4>
+            <div class="input-group">
+                <input type="text" class="form-control no-margin" placeholder="Virtual Panel" ng-model="selectedVirtualPanel" typeahead-template-url="templates/VirtualPanelTypeahead.html" uib-typeahead="panel as panel.VirtualPanelName for panel in virtualPanels | filter:{VirtualPanelName:$viewValue} | limitTo:4">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary" ng-click="addVirtualPanel()">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                    <button class="btn btn-warning" ng-click="selectedVirtualPanel = '';">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <ul class="list-group margin-top-15px">
+                <li class="list-group-item" ng-repeat="panel in savedVirtualPanels track by panel.PanelNodeId">
+                    <table class="table borderless no-select no-margin no-padding">
+                        <tbody>
+                        <tr>
+                            <td width="5%">
+                                <button class="btn btn-default" ng-click="removeVirtualPanel($index)">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </td>
+                            <td width="95%">
+                                <h5>{{panel.VirtualPanelName}} {{panel.UserId}} {{panel.Date | date:"dd/MM/yy"}}</h5>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h4>Select Exclusion Dataset</h4>
+            <div class="input-group">
+                <input type="text" class="form-control no-margin" placeholder="Exclude Dataset" ng-model="excludedDataset" typeahead-template-url="templates/ProbandTypeahead.html" uib-typeahead="analysis as analysis.SampleId for analysis in analyses | filter:{SampleId:$viewValue} | limitTo:4">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary" ng-click="addExcludedDataset()">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                    <button class="btn btn-warning" ng-click="excludedDataset = '';">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <ul class="list-group margin-top-15px">
+                <li class="list-group-item" ng-repeat="item in savedExcludedDatasets track by item.RunInfoNodeId">
+                    <table class="table borderless no-select no-margin no-padding">
+                        <tbody>
+                        <tr>
+                            <td width="5%">
+                                <button class="btn btn-default" ng-click="removeExcludedDataset($index)">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </td>
+                            <td width="95%">
+                                <h5>{{item.SampleId}} {{item.WorklistId}} {{item.RunId}}</h5>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-success" type="button" ng-click="returnSelections()">Save</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Close</button>
+</div>

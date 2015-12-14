@@ -255,11 +255,25 @@ angular.module('variantdatabase', [ 'ngRoute', 'variantdatabase.login', 'variant
         };
     })
 
-    .controller('VariantSubtractionCtrl', function ($scope, $uibModalInstance, items, Notification) {
+    .controller('VariantSelectionCtrl', function ($scope, $uibModalInstance, items, Notification, $http) {
         $scope.analyses = items;
         $scope.savedExcludedDatasets = [];
+        $scope.savedVirtualPanels = [];
+
+        $http.get('/api/variantdatabase/panels', {}
+        ).then(function(response) {
+            $scope.virtualPanels = response.data;
+        }, function(response) {
+            Notification.error(response);
+            console.log("ERROR: " + response);
+        });
 
         $scope.addExcludedDataset = function(){
+
+            if ($scope.excludedDataset === undefined || $scope.excludedDataset === ''){
+                Notification.error("Select sample");
+                return;
+            }
 
             var found = false;
             for(var i = 0; i < $scope.savedExcludedDatasets.length; i++) {
@@ -277,18 +291,55 @@ angular.module('variantdatabase', [ 'ngRoute', 'variantdatabase.login', 'variant
             $scope.savedExcludedDatasets.push($scope.excludedDataset);
         };
 
+        $scope.addVirtualPanel = function(){
+
+            if ($scope.selectedVirtualPanel === undefined || $scope.selectedVirtualPanel === ''){
+                Notification.error("Select panel");
+                return;
+            }
+
+            var found = false;
+            for(var i = 0; i < $scope.savedVirtualPanels.length; i++) {
+                if ($scope.savedVirtualPanels[i].PanelNodeId == $scope.selectedVirtualPanel.PanelNodeId) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found){
+                Notification.error("Already present in the list");
+                return;
+            }
+
+            $scope.savedVirtualPanels.push($scope.selectedVirtualPanel);
+        };
+
         $scope.removeExcludedDataset = function(i){
             $scope.savedExcludedDatasets.splice(i, 1);
         };
 
-        $scope.returnExcludedDatasets = function(){
-            var runInfoNodeIds = [];
+        $scope.removeVirtualPanel = function(i){
+            $scope.savedVirtualPanels.splice(i, 1);
+        };
 
-            for (var i = 0; i < $scope.savedExcludedDatasets.length; i++) {
-                runInfoNodeIds.push($scope.savedExcludedDatasets[i].RunInfoNodeId);
+        $scope.returnSelections = function(){
+
+            var i = 0;
+            var retObj = {};
+            retObj.excludedRunIds = [];
+            retObj.panelNodeIds = [];
+
+            //bank exclusion run node Ids
+            for (i = 0; i < $scope.savedExcludedDatasets.length; i++) {
+                retObj.excludedRunIds.push($scope.savedExcludedDatasets[i].RunInfoNodeId);
             }
 
-            $uibModalInstance.close(runInfoNodeIds);
+            //bank gene panel run Ids
+            for (i = 0; i < $scope.savedVirtualPanels.length; i++) {
+                retObj.panelNodeIds.push($scope.savedVirtualPanels[i].PanelNodeId);
+            }
+
+            $uibModalInstance.close(retObj);
         };
 
         $scope.cancel = function () {

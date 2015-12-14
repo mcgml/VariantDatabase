@@ -1,7 +1,7 @@
 <div class="jumbotron">
     <div class="container">
         <div ng-hide="filteredVariants">
-            <h1>Welcome to the AWMGS<br>Variant Database</h1>
+            <h1>Variant Database</h1>
             <h3>Enter the required information below to get started</h3>
         </div>
         <nvd3 options="donutChartOptions" data="filteredVariants.Filters"></nvd3>
@@ -11,27 +11,28 @@
     <div class="input-group">
         <input type="text" class="form-control" placeholder="Index Dataset" ng-model="selectedAnalysis" typeahead-template-url="templates/ProbandTypeahead.html" uib-typeahead="analysis as analysis.SampleId for analysis in analyses | filter:{SampleId:$viewValue} | limitTo:4">
         <div class="input-group-btn">
-            <button id="exclusionButton" class="btn btn-default" ng-click="openVariantSubtractionModal()">
+            <button id="exclusionButton" class="btn btn-primary" ng-click="openVariantSelectionModal()">
                 <i class="fa fa-filter"></i>
             </button>
         </div>
     </div>
 </div>
-<div class="col-md-3">
-    <input type="text" class="form-control" placeholder="Virtual Panel" ng-model="selectedVirtualPanel" typeahead-template-url="templates/VirtualPanelTypeahead.html" uib-typeahead="panel as panel.VirtualPanelName for panel in virtualPanels | filter:{VirtualPanelName:$viewValue} | limitTo:4">
-</div>
-<div class="col-md-3">
+<div class="col-md-4">
     <input type="text" class="form-control" placeholder="Stratification Workflow" ng-model="selectedWorkflow" typeahead-template-url="templates/WorkflowTypeahead.html" uib-typeahead="workflow as workflow.Name for workflow in workflows | filter:{Name:$viewValue} | limitTo:4">
 </div>
-<div class="col-md-1">
-    <button id="search-button" type="button" class="btn btn-primary" ng-click="getFilteredVariants()">
-        <i class="fa fa-search"></i> Search
-    </button>
-</div>
-<div class="col-md-1">
-    <button id="clear-button" type="button" class="btn btn-warning" ng-click="selectedAnalysis = null; selectedVirtualPanel = null; selectedWorkflow = null; filteredVariants = null; selectedVariantFilter = -1; savedExcludedDatasets = null">
-        <i class="fa fa-times"></i> Clear
-    </button>
+<div class="col-md-4">
+    <div class="btn-toolbar" role="toolbar">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-success" ng-click="getFilteredVariants()">
+                <i class="fa fa-search"></i> Search
+            </button>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-warning" ng-click="selectedAnalysis = null; selectedVirtualPanel = null; selectedWorkflow = null; filteredVariants = null; selectedVariantFilter = -1; savedExcludedDatasets = null; savedVariantFilters = null;">
+                <i class="fa fa-times"></i> Clear
+            </button>
+        </div>
+    </div>
 </div>
 <div class="col-md-12">
     <table id="variant-table" ng-hide="selectedVariantFilter == -1" class="table table-bordered table-hover no-select">
@@ -96,7 +97,7 @@
             <td width="7.5%">{{::variant.Inheritance}}</td>
             <td width="7.5%"><a id="occurrence-link" ng-click="openVariantOccurrenceModal(variant)">{{::variant.Occurrence}}</a></td>
             <td width="7.5%">{{::variant.Frequency}}%</td>
-            <td width="7.5%"><a id="dbSNP-link" ng-click="!variant.dbSNPId || framework.openDbSNPIdVariantLink(variant.dbSNPId)">{{::variant.dbSNPId}}</a></td>
+            <td width="7.5%"><a id="dbSNP-link" ng-click="!variant.dbSNPId || openDbSNPIdVariantLink(variant.dbSNPId)">{{::variant.dbSNPId}}</a></td>
         </tr>
         </tbody>
     </table>

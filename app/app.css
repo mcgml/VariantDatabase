@@ -1,20 +1,16 @@
 /*Padding and margins*/
 .no-margin {
-    margin-top : 0;
-    margin-bottom : 0;
-    margin-left : 0;
-    margin-right : 0;
+    margin : 0;
 }
 .no-padding {
-    padding-top : 0;
-    padding-bottom : 0;
-    padding-left : 0;
-    padding-right : 0;
+    padding : 0;
+}
+.margin-top-15px {
+    margin-top : 15px;
 }
 .jumbotron {
-    height:300px;
-    margin :0;
-    padding-bottom:0;
+    height : 300px;
+    margin-bottom : 15px;
     padding-top : 25px;
 }
 .btn-sq-xs {
@@ -23,41 +19,25 @@
     padding : 2px !important;
     margin : 1px !important;
 }
-input, #search-button, #clear-button, #variant-table, .panel, #geneTable {
+#variant-table {
     margin-top : 15px;
-    margin-bottom : 0;
+    margin-bottom : 0 !important;
 }
 #export-button {
-    margin-top : 15px;
-    margin-bottom : 15px;
-}
-.panel-title {
-    margin:10px;
-}
-
-#exclusionButton{
-    margin-top : 15px;
-}
-
-.no-left-padding {
-    padding-left : 0;
-}
-
-.no-right-padding {
-    padding-right : 0;
+    margin-top : 15px !important;
+    margin-bottom : 15px !important;
 }
 
 /*list group*/
 .s-scroll {
-    max-height: 250px;
-    overflow-y:scroll;
-}
-.s-scroll-150 {
-    max-height: 150px;
-    overflow-y:scroll;
+    max-height : 250px;
+    overflow-y : scroll;
 }
 .list-group-item {
-    word-wrap: break-word;
+    word-wrap : break-word;
+}
+.panel-title {
+    margin : 10px;
 }
 
 /* Specify styling for tooltip contents */
@@ -67,14 +47,13 @@ input, #search-button, #clear-button, #variant-table, .panel, #geneTable {
     box-shadow: 0 6px 12px rgba(0,0,0,.175);
 }
 .tooltip.customClass .tooltip-arrow {
-    display: none;
+    display : none;
 }
 
 /*Disable blue highlight on select*/
 .no-select {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
@@ -153,4 +132,7 @@ textarea {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+}
+#input-password{
+    margin-top : 10px;
 }

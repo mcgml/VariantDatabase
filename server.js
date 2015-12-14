@@ -228,6 +228,19 @@ app.post('/api/variantdatabase/getvirtualpanelgenes', function(req, res) {
         }
     )
 });
+app.post('/api/variantdatabase/returninputjson', function(req, res) {
+    request.post(
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/returninputjson",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
 app.post('/api/seraph', function(req, res) {
     db.query(req.body.query, req.body.params, function(err, result) {
         if (err) throw err;

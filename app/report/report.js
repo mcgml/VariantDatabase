@@ -1,6 +1,5 @@
 'use strict';
 
-//todo add new gene panels
 //todo add fields and output for SHIRE import
 //todo center align population frequencies
 //todo check af calculations
@@ -19,7 +18,6 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
     .controller('ReportCtrl', ['$scope', '$window', '$http', 'Notification', '$uibModal', 'framework', function ($scope, $window, $http, Notification, $uibModal, framework) {
 
         $scope.selectedVariantFilter = -1;
-        var savedExcludedDatasets = [];
 
         $scope.donutChartOptions = {
             chart: {
@@ -54,17 +52,6 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
             })
         }
 
-        function getPanels() {
-            $http.get('/api/variantdatabase/panels', {
-
-            }).then(function(response) {
-                $scope.virtualPanels = response.data;
-            }, function(response) {
-                Notification.error(response);
-                console.log("ERROR: " + response);
-            });
-        }
-
         function getWorkflows() {
             $http.get('/api/variantdatabase/workflows', {
 
@@ -89,24 +76,15 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
                 return;
             }
 
-            if (savedExcludedDatasets.length === 0 && $scope.selectedVirtualPanel === undefined){
+            if ($scope.savedVariantFilters === null || $scope.savedVariantFilters.excludedRunIds.length === 0 && $scope.savedVariantFilters.panelNodeIds.length === 0){
                 Notification.error("No filtered have been applied!");
                 return;
             }
 
             //define obj for sending to server
-            var obj = {
-                'RunInfoNodeId' : $scope.selectedAnalysis.RunInfoNodeId
-            };
+            $scope.savedVariantFilters['RunInfoNodeId'] = $scope.selectedAnalysis.RunInfoNodeId;
 
-            if ($scope.selectedVirtualPanel != null){
-                obj['PanelNodeId'] = $scope.selectedVirtualPanel.PanelNodeId;
-            }
-            if ($scope.ExcludedDatasetsRunId != null){
-                obj['ExcludedDatasetsRunId'] = savedExcludedDatasets;
-            }
-
-            $http.post('/api/variantdatabase' + $scope.selectedWorkflow.Path, obj)
+            $http.post('/api/variantdatabase' + $scope.selectedWorkflow.Path, $scope.savedVariantFilters)
                 .then(function(response) {
                     $scope.filteredVariants = response.data;
                     Notification('Operation successful');
@@ -114,7 +92,6 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
                     Notification.error(response);
                     console.log("ERROR: " + response);
                 });
-
         };
 
         $scope.openVariantAnnotationModal = function (variant) {
@@ -172,19 +149,20 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
             });
         };
 
-        $scope.openVariantSubtractionModal = function () {
+        $scope.openVariantSelectionModal = function () {
 
             var modalInstance = $uibModal.open({
                 animation: true,
-                templateUrl: 'templates/VariantSubtractionModal.html',
-                controller: 'VariantSubtractionCtrl',
+                templateUrl: 'templates/VariantSelectionModal.html',
+                controller: 'VariantSelectionCtrl',
+                size: 'lg',
                 resolve: {
                     items: function () {
                         return $scope.analyses;
                     }
                 }
             }).result.then(function(result) {
-                savedExcludedDatasets = result;
+                $scope.savedVariantFilters = result;
             });
 
         };
@@ -233,7 +211,6 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
 
         //populate typeaheads on pageload
         getAnalyses();
-        getPanels();
         getWorkflows();
 
     }]);
