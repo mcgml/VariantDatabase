@@ -6,9 +6,8 @@
         <thead>
         <tr>
             <th width="2.5%"><i class="fa fa-external-link"></i></th>
-            <th width="7.5%">Gene</th>
-            <th width="12.5%">Transcript</th>
-            <th width="5%">Biotype</th>
+            <th width="10%">Gene</th>
+            <th width="15%">Transcript</th>
             <th width="7.5%">CCDS</th>
             <th width="15%">Consequence</th>
             <th width="10%">HGVSc</th>
@@ -43,9 +42,8 @@
                     </div>
                 </div>
             </td>
-            <td width="7.5%"><a id="symbol-link" href="http://omim.org/search?search={{annotation.SymbolId}}" target="_blank">{{annotation.SymbolId}}</a></td>
-            <td width="12.5%"><a id="feature-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{annotation.FeatureId}}" target="_blank">{{annotation.FeatureId}}</a> <i ng-show="annotation.Canonical" class="fa fa-star" style="color:goldenrod"></i></td>
-            <td width="5%">{{annotation.Biotype}}</td>
+            <td width="10%"><a id="symbol-link" href="http://omim.org/search?search={{annotation.SymbolId}}" target="_blank">{{annotation.SymbolId}}</a></td>
+            <td width="15%"><a id="feature-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{annotation.FeatureId}}" target="_blank">{{annotation.FeatureId}}</a> <i ng-show="annotation.Canonical" class="fa fa-star" style="color:goldenrod"></i></td>
             <td width="7.5%"><a id="ccds-link" href="http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&DATA={{annotation.CCDSId}}" target="_blank">{{annotation.CCDSId}}</a></td>
             <td width="15%">{{annotation.Consequence}}</td>
             <td width="10%">{{annotation.HGVSc}}</td>
