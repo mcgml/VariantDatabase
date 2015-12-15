@@ -6,11 +6,11 @@
         <thead>
         <tr>
             <th width="2.5%"><i class="fa fa-eye"></i></th>
-            <th width="15%">SampleId</th>
+            <th width="10%">SampleId</th>
             <th width="10%">Genotype</th>
             <th width="15%">WorklistId</th>
-            <th width="15%">PanelName</th>
-            <th width="20%">RunId</th>
+            <th width="15%">Assay</th>
+            <th width="25%">SeqId</th>
             <th width="15%">PipelineName</th>
             <th width="7.5%">PipelineVersion</th>
         </tr>
@@ -18,11 +18,11 @@
         <tbody ng-repeat="occurrence in items.Occurrences">
         <tr>
             <td width="2.5%" ng-click="openIGVLink(occurrence.RemoteBamFilePath, items.VariantId)"><i class="fa fa-eye"></i></td>
-            <td width="15%">{{occurrence.SampleId}}</td>
+            <td width="10%">{{occurrence.SampleId}}</td>
             <td width="10%">{{occurrence.Inheritance}}</td>
             <td width="15%">{{occurrence.WorklistId}}</td>
-            <td width="15%">{{occurrence.SupplierPanelName}}</td>
-            <td width="20%">{{occurrence.RunId}}</td>
+            <td width="15%">{{occurrence.Assay}}</td>
+            <td width="25%">{{occurrence.SeqId}}</td>
             <td width="15%">{{occurrence.PipelineName}}</td>
             <td width="7.5%">{{occurrence.PipelineVersion}}</td>
         </tr>
