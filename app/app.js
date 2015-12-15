@@ -160,7 +160,7 @@ angular.module('variantdatabase', [ 'ngRoute', 'variantdatabase.login', 'variant
                 return 'http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi?sunid=';
             },
             getIGVLink: function(remoteBamPath, locus){
-                return 'http://localhost:60151/load?file=' + remoteBamPath + '&locus=' + locus + '&genome=37';
+                return 'http://localhost:60151/load?file=' + remoteBamPath + '&locus=' + locus + '&genome=GRCh37.75';
             },
             isArray: function(it) {
                 return Object.prototype.toString.call(it) === '[object Array]';
