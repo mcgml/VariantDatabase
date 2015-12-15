@@ -1,6 +1,6 @@
 {
   "name": "variantdatabase",
-  "version": "0.1",
+  "version": "0.1.1",
   "description": "A database for storing genetic variation",
   "main": "server.js",
   "dependencies": {
