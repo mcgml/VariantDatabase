@@ -6,7 +6,7 @@
 //todo add mutation taster
 //todo splicing
 
-angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notification', 'nvd3', 'ngSanitize', 'ngCsv'])
+angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.bootstrap', 'ui-notification', 'nvd3'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/report', {
@@ -15,7 +15,8 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
         });
     }])
 
-    .controller('ReportCtrl', ['$scope', '$window', '$http', 'Notification', '$uibModal', 'framework', function ($scope, $window, $http, Notification, $uibModal, framework) {
+
+    .controller('ReportCtrl', ['$scope', '$http', 'Notification', '$uibModal', '$window','framework', function ($scope, $http, Notification, $uibModal, $window, framework) {
 
         $scope.selectedVariantFilter = -1;
 
