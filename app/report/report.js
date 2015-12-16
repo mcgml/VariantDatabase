@@ -6,7 +6,7 @@
 //todo add mutation taster
 //todo splicing
 
-angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notification', 'nvd3'])
+angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notification', 'nvd3', 'ngSanitize', 'ngCsv'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/report', {
@@ -167,6 +167,10 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
 
         };
 
+        $scope.getCsvHeaders = function () {
+            return ["SampleId", "SeqId", "WorklistId", "VariantId", "Inheritance"];
+        };
+
         $scope.exportVariants = function(){
             var saved = [];
 
@@ -177,17 +181,21 @@ angular.module('variantdatabase.report', ['ngRoute', 'ui.bootstrap', 'ui-notific
                 if ($scope.filteredVariants.Variants.hasOwnProperty(key)) {
                     if ($scope.filteredVariants.Variants[key].Selected){
 
-                        var tempObj = $scope.filteredVariants.Variants[key];
+                        var tempObj = {};
+
+                        tempObj.SampleId = $scope.selectedAnalysis["SampleId"];
+                        tempObj.SeqId = $scope.selectedAnalysis["SeqId"];
+                        tempObj.WorklistId = $scope.selectedAnalysis["WorklistId"];
+                        tempObj.VariantId = $scope.filteredVariants.Variants[key]["VariantId"];
+                        tempObj.Inheritance = $scope.filteredVariants.Variants[key]["Inheritance"];
+
                         saved.push(tempObj);
 
                     }
                 }
             }
 
-            //write output file
-            var blob = new Blob([JSON.stringify(saved)]);
-            saveAs(blob, "export.json");
-
+            return saved;
         };
 
         $scope.openEnsemblVariantLink = function(variant){

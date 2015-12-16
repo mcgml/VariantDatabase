@@ -9,7 +9,7 @@ angular.module('variantdatabase.admin', ['ngRoute', 'ui-notification'])
         });
     }])
 
-    .controller('AdminCtrl', ['$scope', 'Notification', '$http', 'framework', function ($scope, Notification, $http, framework) {
+    .controller('AdminCtrl', ['$scope', 'Notification', '$http', function ($scope, Notification, $http) {
 
         //new pathogenicities for authorisation
         function getNewPathogenicitiesForAuthorisation() {

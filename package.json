@@ -1,42 +1,39 @@
 {
   "name": "variantdatabase",
-  "version": "0.1.1",
-  "description": "A database for storing genetic variation",
+  "version": "1.0.0",
+  "description": "",
   "main": "server.js",
-  "dependencies": {
-    "angular": "^1.4.7",
-    "angular-animate": "^1.4.7",
-    "angular-route": "^1.4.7",
-    "angular-touch": "^1.4.7",
-    "body-parser": "^1.14.1",
-    "bootstrap": "^3.3.5",
-    "connect-flash": "^0.1.1",
-    "cookie-parser": "^1.4.0",
-    "express": "^4.13.3",
-    "express-session": "^1.12.0",
-    "font-awesome": "^4.4.0",
-    "jquery": "^2.1.4",
-    "method-override": "^2.3.5",
-    "morgan": "^1.6.1",
-    "passport": "^0.3.0",
-    "passport-local": "^1.0.0",
-    "request": "^2.65.0",
-    "seraph": "^0.13.3",
-    "serve-favicon": "^2.3.0"
-  },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mcgml/variantdb.git"
+    "url": "git+https://github.com/mcgml/VariantDatabase.git"
   },
-  "author": "Matthew Lyon (Institute of Medical Genetics, Cardiff UK)",
+  "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mcgml/variantdb/issues"
+    "url": "https://github.com/mcgml/VariantDatabase/issues"
   },
-  "homepage": "https://github.com/mcgml/variantdb#readme"
+  "homepage": "https://github.com/mcgml/VariantDatabase#readme",
+  "dependencies": {
+    "angular": "^1.4.8",
+    "angular-nvd3": "^1.0.5",
+    "angular-route": "^1.4.8",
+    "angular-ui-notification": "^0.1.0",
+    "body-parser": "^1.14.1",
+    "bootstrap": "^3.3.6",
+    "cookie-parser": "^1.4.0",
+    "d3": "^3.5.11",
+    "express": "^4.13.3",
+    "font-awesome": "^4.5.0",
+    "jquery": "^2.1.4",
+    "method-override": "^2.3.5",
+    "morgan": "^1.6.1",
+    "ng-csv": "^0.3.6",
+    "nvd3": "^1.8.1",
+    "request": "^2.67.0",
+    "serve-favicon": "^2.3.0"
+  }
 }
