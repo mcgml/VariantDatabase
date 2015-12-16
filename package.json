@@ -21,6 +21,7 @@
     "angular": "^1.4.8",
     "angular-nvd3": "^1.0.5",
     "angular-route": "^1.4.8",
+    "angular-sanitize": "^1.4.8",
     "angular-ui-notification": "^0.1.0",
     "body-parser": "^1.14.1",
     "bootstrap": "^3.3.6",
