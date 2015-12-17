@@ -15,9 +15,9 @@
             <th width="7.5%">PipelineVersion</th>
         </tr>
         </thead>
-        <tbody ng-repeat="occurrence in items.Occurrences">
+        <tbody data-ng-repeat="occurrence in items.Occurrences">
         <tr>
-            <td width="2.5%" ng-click="openIGVLink(occurrence.RemoteBamFilePath, items.VariantId)"><i class="fa fa-eye"></i></td>
+            <td width="2.5%" data-ng-click="openIGVLink(occurrence.RemoteBamFilePath, items.VariantId)"><i class="fa fa-eye"></i></td>
             <td width="10%">{{occurrence.SampleId}}</td>
             <td width="10%">{{occurrence.Inheritance}}</td>
             <td width="15%">{{occurrence.WorklistId}}</td>
@@ -31,5 +31,5 @@
     </table>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-warning" type="button" ng-click="cancel()">Close</button>
+    <button class="btn btn-warning" type="button" data-ng-click="cancel()">Close</button>
 </div>

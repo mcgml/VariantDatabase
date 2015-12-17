@@ -7,8 +7,8 @@
                 </div>
             </div>
             <ul class="list-group">
-                <li class="list-group-item s-scroll" ng-repeat="item in featuresForAuthorisation">
-                    <h4><a id="symbol-link" href="http://omim.org/search?search={{item.SymbolId}}" target="_blank">{{item.SymbolId}}</a> <a id="feature-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{item.FeatureId}}" target="_blank">{{item.FeatureId}}</a> <i class="fa fa-check" ng-click="acceptFeaturePreference(item.FeaturePreferenceNodeId)"></i> <i class="fa fa-times" ng-click="rejectFeaturePreference(item.FeaturePreferenceNodeId)"></i></h4>
+                <li class="list-group-item s-scroll" data-ng-repeat="item in featuresForAuthorisation">
+                    <h4><a id="symbol-link" href="http://omim.org/search?search={{item.SymbolId}}" target="_blank">{{item.SymbolId}}</a> <a id="feature-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{item.FeatureId}}" target="_blank">{{item.FeatureId}}</a> <i class="fa fa-check" data-ng-click="acceptFeaturePreference(item.FeaturePreferenceNodeId)"></i> <i class="fa fa-times" data-ng-click="rejectFeaturePreference(item.FeaturePreferenceNodeId)"></i></h4>
                     <h5>{{item.Evidence}}</h5>
                     <h6>{{item.UserId}} ({{item.Date | date:"dd/MM/yy"}})</h6>
                 </li>
@@ -23,15 +23,15 @@
                 </div>
             </div>
             <ul class="list-group s-scroll">
-                <li class="list-group-item" ng-repeat="item in pathogenicitiesForAuthorisation | orderBy:'Date':true">
-                    <h4 ng-show="item.AddAction">Class {{item.Classification}} added for {{item.VariantId}}</h4>
-                    <h4 ng-show="!item.AddAction">Class {{item.Classification}} removed for {{item.VariantId}}</h4>
-                    <h5 ng-show="item.Evidence">{{item.Evidence}}</h5>
+                <li class="list-group-item" data-ng-repeat="item in pathogenicitiesForAuthorisation | orderBy:'Date':true">
+                    <h4 data-ng-show="item.AddAction">Class {{item.Classification}} added for {{item.VariantId}}</h4>
+                    <h4 data-ng-show="!item.AddAction">Class {{item.Classification}} removed for {{item.VariantId}}</h4>
+                    <h5 data-ng-show="item.Evidence">{{item.Evidence}}</h5>
                     <h6>{{item.UserId}} ({{item.Date | date:"dd/MM/yy"}})</h6>
-                    <button type="button" class="btn btn-success" ng-click="authoriseVariantPathogenicity(item.PathogenicityNodeId, true)">
+                    <button type="button" class="btn btn-success" data-ng-click="authoriseVariantPathogenicity(item.PathogenicityNodeId, true)">
                         <i class="fa fa-check"></i> Accept
                     </button>
-                    <button type="button" class="btn btn-warning" ng-click="authoriseVariantPathogenicity(item.PathogenicityNodeId, false)">
+                    <button type="button" class="btn btn-warning" data-ng-click="authoriseVariantPathogenicity(item.PathogenicityNodeId, false)">
                         <i class="fa fa-times"></i> Reject
                     </button>
                 </li>

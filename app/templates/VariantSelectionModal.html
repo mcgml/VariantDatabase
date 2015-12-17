@@ -6,23 +6,23 @@
         <div class="col-md-6">
             <h4>Select Virtual Gene Panel</h4>
             <div class="input-group">
-                <input type="text" class="form-control no-margin" placeholder="Virtual Panel" ng-model="selectedVirtualPanel" typeahead-template-url="templates/VirtualPanelTypeahead.html" uib-typeahead="panel as panel.VirtualPanelName for panel in virtualPanels | filter:{VirtualPanelName:$viewValue} | limitTo:4">
+                <input type="text" class="form-control no-margin" placeholder="Virtual Panel" data-ng-model="selectedVirtualPanel" typeahead-template-url="templates/VirtualPanelTypeahead.html" uib-typeahead="panel as panel.VirtualPanelName for panel in virtualPanels | filter:{VirtualPanelName:$viewValue} | limitTo:4">
                 <div class="input-group-btn">
-                    <button class="btn btn-primary" ng-click="addVirtualPanel()">
+                    <button class="btn btn-primary" data-ng-click="addVirtualPanel()">
                         <i class="fa fa-plus"></i>
                     </button>
-                    <button class="btn btn-warning" ng-click="selectedVirtualPanel = '';">
+                    <button class="btn btn-warning" data-ng-click="selectedVirtualPanel = '';">
                         <i class="fa fa-times"></i>
                     </button>
                 </div>
             </div>
             <ul class="list-group margin-top-15px">
-                <li class="list-group-item" ng-repeat="panel in savedVirtualPanels track by panel.PanelNodeId">
+                <li class="list-group-item" data-ng-repeat="panel in savedVirtualPanels track by panel.PanelNodeId">
                     <table class="table borderless no-select no-margin no-padding">
                         <tbody>
                         <tr>
                             <td width="5%">
-                                <button class="btn btn-default" ng-click="removeVirtualPanel($index)">
+                                <button class="btn btn-default" data-ng-click="removeVirtualPanel($index)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </td>
@@ -38,23 +38,23 @@
         <div class="col-md-6">
             <h4>Select Exclusion Dataset</h4>
             <div class="input-group">
-                <input type="text" class="form-control no-margin" placeholder="Exclude Dataset" ng-model="excludedDataset" typeahead-template-url="templates/ProbandTypeahead.html" uib-typeahead="analysis as analysis.SampleId for analysis in analyses | filter:{SampleId:$viewValue} | limitTo:4">
+                <input type="text" class="form-control no-margin" placeholder="Exclude Dataset" data-ng-model="excludedDataset" typeahead-template-url="templates/ProbandTypeahead.html" uib-typeahead="analysis as analysis.SampleId for analysis in analyses | filter:{SampleId:$viewValue} | limitTo:4">
                 <div class="input-group-btn">
-                    <button class="btn btn-primary" ng-click="addExcludedDataset()">
+                    <button class="btn btn-primary" data-ng-click="addExcludedDataset()">
                         <i class="fa fa-plus"></i>
                     </button>
-                    <button class="btn btn-warning" ng-click="excludedDataset = '';">
+                    <button class="btn btn-warning" data-ng-click="excludedDataset = '';">
                         <i class="fa fa-times"></i>
                     </button>
                 </div>
             </div>
             <ul class="list-group margin-top-15px">
-                <li class="list-group-item" ng-repeat="item in savedExcludedDatasets track by item.RunInfoNodeId">
+                <li class="list-group-item" data-ng-repeat="item in savedExcludedDatasets track by item.RunInfoNodeId">
                     <table class="table borderless no-select no-margin no-padding">
                         <tbody>
                         <tr>
                             <td width="5%">
-                                <button class="btn btn-default" ng-click="removeExcludedDataset($index)">
+                                <button class="btn btn-default" data-ng-click="removeExcludedDataset($index)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </td>
@@ -70,6 +70,6 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-success" type="button" ng-click="returnSelections()">Save</button>
-    <button class="btn btn-warning" type="button" ng-click="cancel()">Close</button>
+    <button class="btn btn-success" type="button" data-ng-click="returnSelections()">Save</button>
+    <button class="btn btn-warning" type="button" data-ng-click="cancel()">Close</button>
 </div>

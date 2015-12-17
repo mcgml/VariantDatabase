@@ -1,6 +1,6 @@
 <div class="jumbotron">
     <div class="container">
-        <div ng-hide="filteredVariants">
+        <div data-ng-hide="filteredVariants">
             <h1>Variant Database</h1>
             <h3>Enter the required information below to get started</h3>
         </div>
@@ -9,33 +9,33 @@
 </div>
 <div class="col-md-4">
     <div class="input-group">
-        <input type="text" class="form-control" placeholder="Index Dataset" ng-model="selectedAnalysis" typeahead-template-url="templates/ProbandTypeahead.html" uib-typeahead="analysis as analysis.SampleId for analysis in analyses | filter:{SampleId:$viewValue} | limitTo:4">
+        <input type="text" class="form-control" placeholder="Index Dataset" data-ng-model="selectedAnalysis" typeahead-template-url="templates/ProbandTypeahead.html" uib-typeahead="analysis as analysis.SampleId for analysis in analyses | filter:{SampleId:$viewValue} | limitTo:4">
         <div class="input-group-btn">
-            <button id="exclusionButton" class="btn btn-primary" ng-click="openVariantSelectionModal()">
+            <button id="exclusionButton" class="btn btn-primary" data-ng-click="openVariantSelectionModal()">
                 <i class="fa fa-filter"></i>
             </button>
         </div>
     </div>
 </div>
 <div class="col-md-4">
-    <input type="text" class="form-control" placeholder="Stratification Workflow" ng-model="selectedWorkflow" typeahead-template-url="templates/WorkflowTypeahead.html" uib-typeahead="workflow as workflow.Name for workflow in workflows | filter:{Name:$viewValue} | limitTo:4">
+    <input type="text" class="form-control" placeholder="Stratification Workflow" data-ng-model="selectedWorkflow" typeahead-template-url="templates/WorkflowTypeahead.html" uib-typeahead="workflow as workflow.Name for workflow in workflows | filter:{Name:$viewValue} | limitTo:4">
 </div>
 <div class="col-md-4">
     <div class="btn-toolbar" role="toolbar">
         <div class="btn-group" role="group">
-            <button type="button" class="btn btn-success" ng-click="getFilteredVariants()">
+            <button type="button" class="btn btn-success" data-ng-click="getFilteredVariants()">
                 <i class="fa fa-search"></i> Search
             </button>
         </div>
         <div class="btn-group" role="group">
-            <button type="button" class="btn btn-warning" ng-click="selectedAnalysis = null; selectedVirtualPanel = null; selectedWorkflow = null; filteredVariants = null; selectedVariantFilter = -1; savedExcludedDatasets = null; savedVariantFilters = null;">
+            <button type="button" class="btn btn-warning" data-ng-click="selectedAnalysis = null; selectedVirtualPanel = null; selectedWorkflow = null; filteredVariants = null; selectedVariantFilter = -1; savedExcludedDatasets = null; savedVariantFilters = null;">
                 <i class="fa fa-times"></i> Clear
             </button>
         </div>
     </div>
 </div>
 <div class="col-md-12">
-    <table id="variant-table" ng-hide="selectedVariantFilter == -1" class="table table-bordered table-hover no-select">
+    <table id="variant-table" data-ng-hide="selectedVariantFilter == -1" class="table table-bordered table-hover no-select">
         <thead>
         <tr>
             <th width="2.5%"><i class="fa fa-star"></i></th>
@@ -46,64 +46,64 @@
             <th width="7.5%">Conservation</th>
             <th width="40%">Variant</th>
             <th width="7.5%">Genotype</th>
-            <th width="7.5%" ng-click="sortType = 'Occurrence'; sortReverse = !sortReverse">Observed <i ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" ng-show="sortType == 'Occurrence'"></i></th>
-            <th width="7.5%" ng-click="sortType = 'InternalFrequency'; sortReverse = !sortReverse">Frequency <i ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" ng-show="sortType == 'InternalFrequency'"></i></th>
-            <th width="7.5%" ng-click="sortType = 'dbSNPId'; sortReverse = !sortReverse">dbSNP <i ng-class="sortReverse ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" ng-show="sortType == 'dbSNPId'"></i></th>
+            <th width="7.5%" data-ng-click="sortType = 'Occurrence'; sortReverse = !sortReverse">Observed <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'Occurrence'"></i></th>
+            <th width="7.5%" data-ng-click="sortType = 'InternalFrequency'; sortReverse = !sortReverse">Frequency <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'InternalFrequency'"></i></th>
+            <th width="7.5%" data-ng-click="sortType = 'dbSNPId'; sortReverse = !sortReverse">dbSNP <i data-ng-class="sortReverse ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" data-ng-show="sortType == 'dbSNPId'"></i></th>
         </tr>
         </thead>
-        <tbody ng-repeat="variant in filteredVariants.Variants | orderBy:sortType:sortReverse | filter:{Filter:selectedVariantFilter}:true track by variant.VariantNodeId">
+        <tbody data-ng-repeat="variant in filteredVariants.Variants | orderBy:sortType:sortReverse | filter:{Filter:selectedVariantFilter}:true track by variant.VariantNodeId">
         <tr>
-            <td width="2.5%"><input type="checkbox" ng-model="variant.Selected"></td>
-            <td width="2.5%" ng-click="openVariantAnnotationModal(variant)"><i class="fa fa-info-circle"></i></td>
+            <td width="2.5%"><input type="checkbox" data-ng-model="variant.Selected"></td>
+            <td width="2.5%" data-ng-click="openVariantAnnotationModal(variant)"><i class="fa fa-info-circle"></i></td>
             <td width="2.5%">
                 <div class="dropdown">
                     <i class="fa fa-external-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></i>
                     <ul class="dropdown-menu">
                         <li class="dropdown-header">Browsers</li>
-                        <li><a ng-click="openEnsemblVariantLink(variant.VariantId)">Ensembl</a></li>
-                        <li><a ng-click="openUCSCVariantLink(variant.VariantId)">UCSC</a></li>
+                        <li><a data-ng-click="openEnsemblVariantLink(variant.VariantId)">Ensembl</a></li>
+                        <li><a data-ng-click="openUCSCVariantLink(variant.VariantId)">UCSC</a></li>
                     </ul>
                 </div>
             </td>
-            <td width="2.5%" ng-click="openIGVLink(selectedAnalysis.RemoteBamFilePath, variant.VariantId)"><i class="fa fa-eye"></i></td>
+            <td width="2.5%" data-ng-click="openIGVLink(selectedAnalysis.RemoteBamFilePath, variant.VariantId)"><i class="fa fa-eye"></i></td>
             <td width="12.5%" align="center">
                 <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-sq-xs" ng-click="open1kgVariantLink(variant.VariantId)" tooltip-enable="variant.onekGPhase3_EAS_AF" tooltip-append-to-body="true" uib-tooltip="1KG East Asian {{::variant.onekGPhase3_EAS_AF}}%" ng-style="::{'background-color' : (variant.onekGPhase3_EAS_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" ng-click="open1kgVariantLink(variant.VariantId)" tooltip-enable="variant.onekGPhase3_EUR_AF" tooltip-append-to-body="true" uib-tooltip="1KG European {{::variant.onekGPhase3_EUR_AF}}%" ng-style="::{'background-color' : (variant.onekGPhase3_EUR_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" ng-click="open1kgVariantLink(variant.VariantId)" tooltip-enable="variant.onekGPhase3_AFR_AF" tooltip-append-to-body="true" uib-tooltip="1KG African {{::variant.onekGPhase3_AFR_AF}}%" ng-style="::{'background-color' : (variant.onekGPhase3_AFR_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" ng-click="open1kgVariantLink(variant.VariantId)" tooltip-enable="variant.onekGPhase3_AMR_AF" tooltip-append-to-body="true" uib-tooltip="1KG Mixed American {{::variant.onekGPhase3_AMR_AF}}%" ng-style="::{'background-color' : (variant.onekGPhase3_AMR_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" ng-click="open1kgVariantLink(variant.VariantId)" tooltip-enable="variant.onekGPhase3_SAS_AF" tooltip-append-to-body="true" uib-tooltip="1KG South Asian {{::variant.onekGPhase3_SAS_AF}}%" ng-style="::{'background-color' : (variant.onekGPhase3_SAS_AF | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.VariantId)" tooltip-enable="variant.onekGPhase3_EAS_AF" tooltip-append-to-body="true" uib-tooltip="1KG East Asian {{::variant.onekGPhase3_EAS_AF}}%" data-ng-style="::{'background-color' : (variant.onekGPhase3_EAS_AF | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.VariantId)" tooltip-enable="variant.onekGPhase3_EUR_AF" tooltip-append-to-body="true" uib-tooltip="1KG European {{::variant.onekGPhase3_EUR_AF}}%" data-ng-style="::{'background-color' : (variant.onekGPhase3_EUR_AF | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.VariantId)" tooltip-enable="variant.onekGPhase3_AFR_AF" tooltip-append-to-body="true" uib-tooltip="1KG African {{::variant.onekGPhase3_AFR_AF}}%" data-ng-style="::{'background-color' : (variant.onekGPhase3_AFR_AF | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.VariantId)" tooltip-enable="variant.onekGPhase3_AMR_AF" tooltip-append-to-body="true" uib-tooltip="1KG Mixed American {{::variant.onekGPhase3_AMR_AF}}%" data-ng-style="::{'background-color' : (variant.onekGPhase3_AMR_AF | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.VariantId)" tooltip-enable="variant.onekGPhase3_SAS_AF" tooltip-append-to-body="true" uib-tooltip="1KG South Asian {{::variant.onekGPhase3_SAS_AF}}%" data-ng-style="::{'background-color' : (variant.onekGPhase3_SAS_AF | afpct2colour)}"></button>
                     </div>
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-sq-xs" ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_EAS_AF" tooltip-append-to-body="true" uib-tooltip="ExAC East Asian {{::variant.ExAC_EAS_AF}}%" ng-style="::{'background-color' : (variant.ExAC_EAS_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_NFE_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Non-Finnish European {{::variant.ExAC_NFE_AF}}%" ng-style="::{'background-color' : (variant.ExAC_NFE_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_AFR_AF" tooltip-append-to-body="true" uib-tooltip="ExAC African {{::variant.ExAC_AFR_AF}}%" ng-style="::{'background-color' : (variant.ExAC_AFR_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_AMR_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Latino {{::variant.ExAC_AMR_AF}}%" ng-style="::{'background-color' : (variant.ExAC_AMR_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_SAS_AF" tooltip-append-to-body="true" uib-tooltip="ExAC South Asian {{::variant.ExAC_SAS_AF}}%" ng-style="::{'background-color' : (variant.ExAC_SAS_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_FIN_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Finnish {{::variant.ExAC_FIN_AF}}%" ng-style="::{'background-color' : (variant.ExAC_FIN_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_OTH_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Other {{::variant.ExAC_OTH_AF}}%" ng-style="::{'background-color' : (variant.ExAC_OTH_AF | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_EAS_AF" tooltip-append-to-body="true" uib-tooltip="ExAC East Asian {{::variant.ExAC_EAS_AF}}%" data-ng-style="::{'background-color' : (variant.ExAC_EAS_AF | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_NFE_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Non-Finnish European {{::variant.ExAC_NFE_AF}}%" data-ng-style="::{'background-color' : (variant.ExAC_NFE_AF | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_AFR_AF" tooltip-append-to-body="true" uib-tooltip="ExAC African {{::variant.ExAC_AFR_AF}}%" data-ng-style="::{'background-color' : (variant.ExAC_AFR_AF | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_AMR_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Latino {{::variant.ExAC_AMR_AF}}%" data-ng-style="::{'background-color' : (variant.ExAC_AMR_AF | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_SAS_AF" tooltip-append-to-body="true" uib-tooltip="ExAC South Asian {{::variant.ExAC_SAS_AF}}%" data-ng-style="::{'background-color' : (variant.ExAC_SAS_AF | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_FIN_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Finnish {{::variant.ExAC_FIN_AF}}%" data-ng-style="::{'background-color' : (variant.ExAC_FIN_AF | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_OTH_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Other {{::variant.ExAC_OTH_AF}}%" data-ng-style="::{'background-color' : (variant.ExAC_OTH_AF | afpct2colour)}"></button>
                     </div>
                 </div>
             </td>
             <td width="7.5%" align="center">
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-sq-xs" tooltip-enable="variant.GERP" tooltip-append-to-body="true" uib-tooltip="GERP {{::variant.GERP}}" ng-style="::{'background-color' : (variant.GERP | gerp2colour)}"></button>
-                    <button type="button" class="btn btn-sq-xs" tooltip-enable="variant.phyloP" tooltip-append-to-body="true" uib-tooltip="phyloP {{::variant.phyloP}}" ng-style="::{'background-color' : (variant.phyloP | phylop2colour)}"></button>
-                    <button type="button" class="btn btn-sq-xs" tooltip-enable="variant.phastCons" tooltip-append-to-body="true" uib-tooltip="phastCons {{::variant.phastCons}}" ng-style="::{'background-color' : (variant.phastCons | phastcons2colour)}"></button>
+                    <button type="button" class="btn btn-sq-xs" tooltip-enable="variant.GERP" tooltip-append-to-body="true" uib-tooltip="GERP {{::variant.GERP}}" data-ng-style="::{'background-color' : (variant.GERP | gerp2colour)}"></button>
+                    <button type="button" class="btn btn-sq-xs" tooltip-enable="variant.phyloP" tooltip-append-to-body="true" uib-tooltip="phyloP {{::variant.phyloP}}" data-ng-style="::{'background-color' : (variant.phyloP | phylop2colour)}"></button>
+                    <button type="button" class="btn btn-sq-xs" tooltip-enable="variant.phastCons" tooltip-append-to-body="true" uib-tooltip="phastCons {{::variant.phastCons}}" data-ng-style="::{'background-color' : (variant.phastCons | phastcons2colour)}"></button>
                 </div>
             </td>
             <td width="40%">{{::variant.VariantId}}</td>
             <td width="7.5%">{{::variant.Inheritance}}</td>
-            <td width="7.5%"><a id="occurrence-link" ng-click="openVariantOccurrenceModal(variant)">{{::variant.Occurrence}}</a></td>
+            <td width="7.5%"><a id="occurrence-link" data-ng-click="openVariantOccurrenceModal(variant)">{{::variant.Occurrence}}</a></td>
             <td width="7.5%">{{::variant.Frequency}}%</td>
-            <td width="7.5%"><a id="dbSNP-link" ng-click="!variant.dbSNPId || openDbSNPIdVariantLink(variant.dbSNPId)">{{::variant.dbSNPId}}</a></td>
+            <td width="7.5%"><a id="dbSNP-link" data-ng-click="!variant.dbSNPId || openDbSNPIdVariantLink(variant.dbSNPId)">{{::variant.dbSNPId}}</a></td>
         </tr>
         </tbody>
     </table>
 </div>
-<div ng-hide="selectedVariantFilter == -1" class="col-md-12">
-    <button id="export-button" type="button" class="btn btn-success" ng-csv="exportVariants()" filename="test.csv" csv-header="getCsvHeaders()">
+<div data-ng-hide="selectedVariantFilter == -1" class="col-md-12">
+    <button id="export-button" type="button" class="btn btn-success" data-ng-csv="exportVariants()" filename="test.csv" csv-header="getCsvHeaders()">
         <i class="fa fa-download"></i> Save
     </button>
 </div>

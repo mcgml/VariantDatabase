@@ -18,7 +18,7 @@
             <th width="10%">PolyPhen</th>
         </tr>
         </thead>
-        <tbody ng-repeat="annotation in items.Annotation">
+        <tbody data-ng-repeat="annotation in items.Annotation">
         <tr>
             <td width="2.5%">
                 <div class="dropdown">
@@ -26,24 +26,24 @@
                         <i class="fa fa-external-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></i>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuDivider">
                             <li class="dropdown-header">Web Search</li>
-                            <li><a ng-click="openGoogleScholarLink(annotation)">Scholar</a></li>
-                            <li><a ng-click="openClinVarLink(annotation)">ClinVar</a></li>
+                            <li><a data-ng-click="openGoogleScholarLink(annotation)">Scholar</a></li>
+                            <li><a data-ng-click="openClinVarLink(annotation)">ClinVar</a></li>
                             <li><a href="http://www.hgvs.org/locus-specific-mutation-databases/?field_hgnc_gene_symbol_title={{annotation.SymbolId}}" target="_blank">LSDB</a></li>
                             <li><a href="http://omim.org/search?index=entry&search={{annotation.SymbolId}}" target="_blank">OMIM</a></li>
                             <li class="dropdown-header">Tissue Expression Search</li>
-                            <li ng-class="{disabled: !annotation.GeneId}"><a ng-click="!annotation.GeneId || openEAtlasLink(annotation.GeneId)">Ensembl Expression Atlas</a></li>
-                            <li ng-class="{disabled: !annotation.GeneId}"><a ng-click="!annotation.GeneId || openHPALink(annotation.GeneId)">Human Protein Atlas</a></li>
+                            <li data-ng-class="{disabled: !annotation.GeneId}"><a data-ng-click="!annotation.GeneId || openEAtlasLink(annotation.GeneId)">Ensembl Expression Atlas</a></li>
+                            <li data-ng-class="{disabled: !annotation.GeneId}"><a data-ng-click="!annotation.GeneId || openHPALink(annotation.GeneId)">Human Protein Atlas</a></li>
                             <li class="dropdown-header">Protein Domain Search</li>
-                            <li ng-class="{disabled: !annotation.Pfam_domain}"><a ng-click="!annotation.Pfam_domain || openPfamLink(annotation.Pfam_domain)">Pfam</a></li>
-                            <li ng-class="{disabled: !annotation.hmmpanther}"><a ng-click="!annotation.hmmpanther || openPantherLink(annotation.hmmpanther)">PANTHER</a></li>
-                            <li ng-class="{disabled: !annotation.prosite}"><a ng-click="!annotation.prosite || openPrositeLink(annotation.prosite)">PROSITE</a></li>
-                            <li ng-class="{disabled: !annotation.Superfamily_domains}"><a ng-click="!annotation.Superfamily_domains || openSuperfamilyLink(annotation.Superfamily_domains)">Superfamily</a></li>
+                            <li data-ng-class="{disabled: !annotation.Pfam_domain}"><a data-ng-click="!annotation.Pfam_domain || openPfamLink(annotation.Pfam_domain)">Pfam</a></li>
+                            <li data-ng-class="{disabled: !annotation.hmmpanther}"><a data-ng-click="!annotation.hmmpanther || openPantherLink(annotation.hmmpanther)">PANTHER</a></li>
+                            <li data-ng-class="{disabled: !annotation.prosite}"><a data-ng-click="!annotation.prosite || openPrositeLink(annotation.prosite)">PROSITE</a></li>
+                            <li data-ng-class="{disabled: !annotation.Superfamily_domains}"><a data-ng-click="!annotation.Superfamily_domains || openSuperfamilyLink(annotation.Superfamily_domains)">Superfamily</a></li>
                         </ul>
                     </div>
                 </div>
             </td>
             <td width="10%"><a id="symbol-link" href="http://omim.org/search?search={{annotation.SymbolId}}" target="_blank">{{annotation.SymbolId}}</a></td>
-            <td width="15%"><a id="feature-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{annotation.FeatureId}}" target="_blank">{{annotation.FeatureId}}</a> <i ng-show="annotation.Canonical" class="fa fa-star" style="color:goldenrod" tooltip-append-to-body="true" uib-tooltip="Canonical (Ensembl)"></i></td>
+            <td width="15%"><a id="feature-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{annotation.FeatureId}}" target="_blank">{{annotation.FeatureId}}</a> <i data-ng-show="annotation.Canonical" class="fa fa-star" style="color:goldenrod" tooltip-append-to-body="true" uib-tooltip="Canonical (Ensembl)"></i></td>
             <td width="7.5%"><a id="ccds-link" href="http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&DATA={{annotation.CCDSId}}" target="_blank">{{annotation.CCDSId}}</a></td>
             <td width="15%">{{annotation.Consequence}}</td>
             <td width="10%">{{annotation.HGVSc}}</td>
@@ -57,5 +57,5 @@
     </table>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-warning" type="button" ng-click="cancel()">Close</button>
+    <button class="btn btn-warning" type="button" data-ng-click="cancel()">Close</button>
 </div>
