@@ -1,4 +1,4 @@
-// server.js
+'use strict';
 
 // set up ========================
 var express  = require('express');
