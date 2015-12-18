@@ -59,10 +59,6 @@
     user-select: none;
 }
 
-.selected {
-    background-color: #f5f5f5;
-}
-
 /*modal*/
 .app-modal-window .modal-dialog {
     width: 95%;
@@ -97,6 +93,10 @@
 /*text box styles*/
 textarea {
     resize:none;
+}
+
+.selected {
+    background-color: #f5f5f5;
 }
 
 /*Sigin in page*/

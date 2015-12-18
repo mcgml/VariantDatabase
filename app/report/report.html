@@ -18,7 +18,9 @@
     </div>
 </div>
 <div class="col-md-4">
-    <input type="text" class="form-control" placeholder="Stratification Workflow" data-ng-model="selectedWorkflow" typeahead-template-url="templates/WorkflowTypeahead.html" uib-typeahead="workflow as workflow.Name for workflow in workflows | filter:{Name:$viewValue} | limitTo:4">
+    <select class="form-control" data-ng-model="selectedWorkflow" ng-options="workflow as workflow.Name for workflow in workflows">
+        <option value="">Stratification Workflow</option>
+    </select>
 </div>
 <div class="col-md-4">
     <div class="btn-toolbar" role="toolbar">
@@ -44,14 +46,13 @@
             <th width="2.5%"><i class="fa fa-eye"></i></th>
             <th width="12.5%">Population</th>
             <th width="7.5%">Conservation</th>
-            <th width="40%">Variant</th>
+            <th width="47.5%">Variant</th>
             <th width="7.5%">Genotype</th>
             <th width="7.5%" data-ng-click="sortType = 'Occurrence'; sortReverse = !sortReverse">Observed <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'Occurrence'"></i></th>
             <th width="7.5%" data-ng-click="sortType = 'InternalFrequency'; sortReverse = !sortReverse">Frequency <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'InternalFrequency'"></i></th>
-            <th width="7.5%" data-ng-click="sortType = 'dbSNPId'; sortReverse = !sortReverse">dbSNP <i data-ng-class="sortReverse ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" data-ng-show="sortType == 'dbSNPId'"></i></th>
         </tr>
         </thead>
-        <tbody data-ng-repeat="variant in filteredVariants.Variants | orderBy:sortType:sortReverse | filter:{Filter:selectedVariantFilter}:true track by variant.VariantNodeId" data-ng-click="setSelected(variant.VariantNodeId)" data-ng-class="{selected : variant.VariantNodeId === idSelectedVariant}">
+        <tbody data-ng-repeat="variant in filteredVariants.Variants | orderBy:sortType:sortReverse | filter:{Filter:selectedVariantFilter}:true track by variant.VariantNodeId" data-ng-click="setSelected(variant.VariantNodeId)" data-ng-class="{selected : variant.VariantNodeId === idSelected}">
         <tr>
             <td width="2.5%"><input type="checkbox" data-ng-model="variant.Selected"></td>
             <td width="2.5%" data-ng-click="openVariantAnnotationModal(variant)"><i class="fa fa-info-circle"></i></td>
@@ -62,12 +63,13 @@
                         <li class="dropdown-header">Browsers</li>
                         <li><a data-ng-click="openEnsemblVariantLink(variant.VariantId)">Ensembl</a></li>
                         <li><a data-ng-click="openUCSCVariantLink(variant.VariantId)">UCSC</a></li>
+                        <li data-ng-class="{disabled: !variant.dbSNPId}"><a data-ng-click="!variant.dbSNPId || openDbSNPIdVariantLink(variant.dbSNPId)">dbSNP</a></li>
                     </ul>
                 </div>
             </td>
             <td width="2.5%" data-ng-click="openIGVLink(selectedAnalysis.RemoteBamFilePath, variant.VariantId)"><i class="fa fa-eye"></i></td>
-            <td width="12.5%" align="center">
-                <div class="btn-toolbar" role="toolbar">
+            <td width="12.5%">
+                <div class="text-center" role="toolbar">
                     <div class="btn-group" role="group">
                         <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.VariantId)" tooltip-enable="variant.onekGPhase3_EAS_AF" tooltip-append-to-body="true" uib-tooltip="1KG East Asian {{::variant.onekGPhase3_EAS_AF}}%" data-ng-style="::{'background-color' : (variant.onekGPhase3_EAS_AF | afpct2colour)}"></button>
                         <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.VariantId)" tooltip-enable="variant.onekGPhase3_EUR_AF" tooltip-append-to-body="true" uib-tooltip="1KG European {{::variant.onekGPhase3_EUR_AF}}%" data-ng-style="::{'background-color' : (variant.onekGPhase3_EUR_AF | afpct2colour)}"></button>
@@ -86,18 +88,19 @@
                     </div>
                 </div>
             </td>
-            <td width="7.5%" align="center">
+            <td width="7.5%">
+                <div class="text-center" role="toolbar">
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-sq-xs" tooltip-enable="variant.GERP" tooltip-append-to-body="true" uib-tooltip="GERP {{::variant.GERP}}" data-ng-style="::{'background-color' : (variant.GERP | gerp2colour)}"></button>
                     <button type="button" class="btn btn-sq-xs" tooltip-enable="variant.phyloP" tooltip-append-to-body="true" uib-tooltip="phyloP {{::variant.phyloP}}" data-ng-style="::{'background-color' : (variant.phyloP | phylop2colour)}"></button>
                     <button type="button" class="btn btn-sq-xs" tooltip-enable="variant.phastCons" tooltip-append-to-body="true" uib-tooltip="phastCons {{::variant.phastCons}}" data-ng-style="::{'background-color' : (variant.phastCons | phastcons2colour)}"></button>
                 </div>
+                </div>
             </td>
-            <td width="40%">{{::variant.VariantId}}</td>
+            <td width="47.5%">{{::variant.VariantId}}</td>
             <td width="7.5%">{{::variant.Inheritance}}</td>
-            <td width="7.5%"><a id="occurrence-link" data-ng-click="openVariantOccurrenceModal(variant)">{{::variant.Occurrence}}</a></td>
+            <td width="7.5%" data-ng-click="openVariantOccurrenceModal(variant)"><i class="fa fa-binoculars"></i> {{::variant.Occurrence}}</td>
             <td width="7.5%">{{::variant.Frequency}}%</td>
-            <td width="7.5%"><a id="dbSNP-link" data-ng-click="!variant.dbSNPId || openDbSNPIdVariantLink(variant.dbSNPId)">{{::variant.dbSNPId}}</a></td>
         </tr>
         </tbody>
     </table>

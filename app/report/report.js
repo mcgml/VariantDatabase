@@ -19,10 +19,10 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
     .controller('ReportCtrl', ['$scope', '$http', 'Notification', '$uibModal', '$window','framework', function ($scope, $http, Notification, $uibModal, $window, framework) {
 
         $scope.selectedVariantFilter = -1;
-        $scope.idSelectedVariant = null;
+        $scope.idSelected = null;
 
-        $scope.setSelected = function (idSelectedVariant) {
-            $scope.idSelectedVariant = idSelectedVariant;
+        $scope.setSelected = function (idSelected) {
+            $scope.idSelected = idSelected;
         };
 
         $scope.donutChartOptions = {
@@ -77,7 +77,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
                 return;
             }
 
-            if ($scope.selectedWorkflow === undefined){
+            if ($scope.selectedWorkflow === undefined || $scope.selectedWorkflow === ''){
                 Notification.error("Select stratification workflow");
                 return;
             }
@@ -153,6 +153,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
                     }
                 }
             });
+
         };
 
         $scope.openVariantSelectionModal = function () {

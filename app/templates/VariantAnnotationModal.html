@@ -2,7 +2,7 @@
     <h3 class="modal-title">{{items.VariantId}}</h3>
 </div>
 <div class="modal-body">
-    <table class="table table-condensed no-margin no-padding no-select">
+    <table class="table table-condensed no-margin no-padding">
         <thead>
         <tr>
             <th width="2.5%"><i class="fa fa-external-link"></i></th>
@@ -18,7 +18,7 @@
             <th width="10%">PolyPhen</th>
         </tr>
         </thead>
-        <tbody data-ng-repeat="annotation in items.Annotation">
+        <tbody data-ng-repeat="annotation in items.Annotation track by annotation.AnnotationNodeId" data-ng-click="setSelected(annotation.AnnotationNodeId)" data-ng-class="{selected : annotation.AnnotationNodeId === idSelected}">
         <tr>
             <td width="2.5%">
                 <div class="dropdown">

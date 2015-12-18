@@ -68,15 +68,21 @@ angular.module('variantdatabase', [ 'ngRoute', 'variantdatabase.login', 'variant
 
     .filter('phastcons2colour', function() {
         return function (input) {
+
             if (input == '' || input == undefined) {
                 return '#DCDCDC';
-            } else if (input <= 0.01) {
+            }
+
+            //reverse prob score
+            var probConserved = 1 - input;
+            if (probConserved <= 0.01) {
                 return '#d62728';
-            } else if (input > 0.01 && input <= 0.05) {
+            } else if (probConserved > 0.01 && probConserved <= 0.05) {
                 return '#e99002';
-            } else if (input > 0.05) {
+            } else if (probConserved > 0.05) {
                 return '#43ac6a';
             }
+
         };
     })
 
@@ -357,10 +363,17 @@ angular.module('variantdatabase', [ 'ngRoute', 'variantdatabase.login', 'variant
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
+
     })
 
     .controller('VariantAnnotationCtrl', function ($scope, $uibModalInstance, items, $window, framework) {
         $scope.items = items;
+        $scope.idSelected = null;
+
+        $scope.setSelected = function (idSelected) {
+            $scope.idSelected = idSelected;
+        };
+
 
         $scope.openGoogleScholarLink = function(annotation){
             var search = framework.keywordSearchFromAnnotationObject(annotation);
