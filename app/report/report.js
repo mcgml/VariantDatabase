@@ -19,6 +19,11 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
     .controller('ReportCtrl', ['$scope', '$http', 'Notification', '$uibModal', '$window','framework', function ($scope, $http, Notification, $uibModal, $window, framework) {
 
         $scope.selectedVariantFilter = -1;
+        $scope.idSelectedVariant = null;
+
+        $scope.setSelected = function (idSelectedVariant) {
+            $scope.idSelectedVariant = idSelectedVariant;
+        };
 
         $scope.donutChartOptions = {
             chart: {

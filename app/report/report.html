@@ -35,7 +35,7 @@
     </div>
 </div>
 <div class="col-md-12">
-    <table id="variant-table" data-ng-hide="selectedVariantFilter == -1" class="table table-bordered table-hover no-select">
+    <table id="variant-table" data-ng-hide="selectedVariantFilter == -1" class="table table-bordered">
         <thead>
         <tr>
             <th width="2.5%"><i class="fa fa-star"></i></th>
@@ -51,7 +51,7 @@
             <th width="7.5%" data-ng-click="sortType = 'dbSNPId'; sortReverse = !sortReverse">dbSNP <i data-ng-class="sortReverse ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" data-ng-show="sortType == 'dbSNPId'"></i></th>
         </tr>
         </thead>
-        <tbody data-ng-repeat="variant in filteredVariants.Variants | orderBy:sortType:sortReverse | filter:{Filter:selectedVariantFilter}:true track by variant.VariantNodeId">
+        <tbody data-ng-repeat="variant in filteredVariants.Variants | orderBy:sortType:sortReverse | filter:{Filter:selectedVariantFilter}:true track by variant.VariantNodeId" data-ng-click="setSelected(variant.VariantNodeId)" data-ng-class="{selected : variant.VariantNodeId === idSelectedVariant}">
         <tr>
             <td width="2.5%"><input type="checkbox" data-ng-model="variant.Selected"></td>
             <td width="2.5%" data-ng-click="openVariantAnnotationModal(variant)"><i class="fa fa-info-circle"></i></td>
