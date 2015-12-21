@@ -4,7 +4,7 @@
 <div class="modal-body">
     <div class="row">
         <div class="col-md-6">
-            <h4>Select Virtual Gene Panel</h4>
+            <h4 tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Restrict calls to these gene sets">Add Virtual Gene Panel</h4>
             <div class="input-group">
                 <input type="text" class="form-control no-margin" placeholder="Virtual Panel" data-ng-model="selectedVirtualPanel" typeahead-template-url="templates/VirtualPanelTypeahead.html" uib-typeahead="panel as panel.VirtualPanelName for panel in virtualPanels | filter:{VirtualPanelName:$viewValue} | limitTo:4">
                 <div class="input-group-btn">
@@ -23,7 +23,7 @@
                         <tr>
                             <td width="5%">
                                 <button class="btn btn-default" data-ng-click="removeVirtualPanel($index)">
-                                    <i class="fa fa-trash"></i>
+                                    <i class="fa fa-times"></i>
                                 </button>
                             </td>
                             <td width="95%">
@@ -36,7 +36,7 @@
             </ul>
         </div>
         <div class="col-md-6">
-            <h4>Select Exclusion Dataset</h4>
+            <h4 tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Exclude calls from these data">Add Exclusion Dataset</h4>
             <div class="input-group">
                 <input type="text" class="form-control no-margin" placeholder="Exclude Dataset" data-ng-model="excludedDataset" typeahead-template-url="templates/ProbandTypeahead.html" uib-typeahead="analysis as analysis.SampleId for analysis in analyses | filter:{SampleId:$viewValue} | limitTo:4">
                 <div class="input-group-btn">
@@ -55,7 +55,7 @@
                         <tr>
                             <td width="5%">
                                 <button class="btn btn-default" data-ng-click="removeExcludedDataset($index)">
-                                    <i class="fa fa-trash"></i>
+                                    <i class="fa fa-times"></i>
                                 </button>
                             </td>
                             <td width="95%">

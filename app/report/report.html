@@ -40,16 +40,16 @@
     <table id="variant-table" data-ng-hide="selectedVariantFilter == -1" class="table table-bordered">
         <thead>
         <tr>
-            <th width="2.5%"><i class="fa fa-star"></i></th>
-            <th width="2.5%"><i class="fa fa-info-circle"></i></th>
-            <th width="2.5%"><i class="fa fa-external-link"></i></th>
-            <th width="2.5%"><i class="fa fa-eye"></i></th>
-            <th width="12.5%">Population</th>
-            <th width="7.5%">Conservation</th>
-            <th width="47.5%">Variant</th>
-            <th width="7.5%">Genotype</th>
-            <th width="7.5%" data-ng-click="sortType = 'Occurrence'; sortReverse = !sortReverse">Observed <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'Occurrence'"></i></th>
-            <th width="7.5%" data-ng-click="sortType = 'InternalFrequency'; sortReverse = !sortReverse">Frequency <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'InternalFrequency'"></i></th>
+            <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Export"><a></a><i class="fa fa-star"></i></th>
+            <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Annotations"><i class="fa fa-info-circle"></i></th>
+            <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Link to other resources"><i class="fa fa-external-link"></i></th>
+            <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="View call in IGV"><i class="fa fa-eye"></i></th>
+            <th width="12.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Allele frequencies from other studies. Hover over data points for more information">Population</th>
+            <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Nucleotide conservation. Hover over data points for more information">Conservation</th>
+            <th width="47.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Variant call (hg19/GRCh37)">Variant</th>
+            <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Inheritance">Genotype</th>
+            <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Allele occurrence in this database" data-ng-click="sortType = 'Occurrence'; sortReverse = !sortReverse">Observed <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'Occurrence'"></i></th>
+            <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Variant frequency in this database (limited by index dataset assay)" data-ng-click="sortType = 'InternalFrequency'; sortReverse = !sortReverse">Frequency <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'InternalFrequency'"></i></th>
         </tr>
         </thead>
         <tbody data-ng-repeat="variant in filteredVariants.Variants | orderBy:sortType:sortReverse | filter:{Filter:selectedVariantFilter}:true track by variant.VariantNodeId" data-ng-click="setSelected(variant.VariantNodeId)" data-ng-class="{selected : variant.VariantNodeId === idSelected}">
