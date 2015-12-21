@@ -2,13 +2,6 @@
 
 angular.module('variantdatabase.account', ['ngRoute', 'ui-notification'])
 
-    .config(['$routeProvider', function($routeProvider) {
-        $routeProvider.when('/account', {
-            templateUrl: 'account/account.html',
-            controller: 'AccountCtrl'
-        });
-    }])
-
     .controller('AccountCtrl', ['$scope', '$http', 'Notification', function ($scope, $http, Notification) {
 
         function getUserInformation() {

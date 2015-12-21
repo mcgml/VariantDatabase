@@ -2,13 +2,6 @@
 
 angular.module('variantdatabase.admin', ['ngRoute', 'ui-notification'])
 
-    .config(['$routeProvider', function($routeProvider) {
-        $routeProvider.when('/admin', {
-            templateUrl: 'admin/admin.html',
-            controller: 'AdminCtrl'
-        });
-    }])
-
     .controller('AdminCtrl', ['$scope', 'Notification', '$http', function ($scope, Notification, $http) {
 
         //new pathogenicities for authorisation

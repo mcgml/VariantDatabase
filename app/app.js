@@ -1,14 +1,7 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-angular.module('variantdatabase', [ 'ngRoute', 'variantdatabase.login', 'variantdatabase.report', 'variantdatabase.search', 'variantdatabase.account', 'variantdatabase.admin', 'variantdatabase.about'])
-
-    .config(['$routeProvider', function($routeProvider) {
-        $routeProvider.otherwise(
-            {
-                redirectTo: '/login'
-            });
-    }])
+angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.login', 'variantdatabase.report', 'variantdatabase.search', 'variantdatabase.account', 'variantdatabase.admin', 'variantdatabase.about'])
 
     .config(function(NotificationProvider) {
         NotificationProvider.setOptions(
@@ -22,6 +15,109 @@ angular.module('variantdatabase', [ 'ngRoute', 'variantdatabase.login', 'variant
                 positionY: 'bottom'
             }
         )
+    })
+
+    .config(function($routeProvider, $locationProvider, $httpProvider) {
+        //================================================
+        // Check if the user is connected
+        //================================================
+        var checkLoggedin = function($q, $timeout, $http, $location){
+            // Initialize a new promise
+            var deferred = $q.defer();
+
+            // Make an AJAX call to check if the user is logged in
+            $http.get('/loggedin').success(function(user){
+
+                // Authenticated
+                if (user !== '0'){
+                    deferred.resolve();
+                } else {
+                    // Not Authenticated
+                    deferred.reject();
+                    $location.url('/login');
+                }
+
+            });
+
+            return deferred.promise;
+        };
+        //================================================
+
+        //================================================
+        // Add an interceptor for AJAX errors
+        //================================================
+        $httpProvider.interceptors.push(function($q, $location) {
+            return {
+                response: function(response) {
+                    // do something on success
+                    return response;
+                },
+                responseError: function(response) {
+                    if (response.status === 401)
+                        $location.url('/login');
+                    return $q.reject(response);
+                }
+            };
+        });
+        //================================================
+
+        //================================================
+        // Define all the routes
+        //================================================
+        $routeProvider
+            .when('/login', {
+                templateUrl: 'login/login.html',
+                controller: 'LoginCtrl'
+            })
+            .when('/about', {
+                templateUrl: 'about/about.html',
+                controller: 'AboutCtrl',
+                resolve: {
+                    loggedin: checkLoggedin
+                }
+            })
+            .when('/account', {
+                templateUrl: 'account/account.html',
+                controller: 'AccountCtrl',
+                resolve: {
+                    loggedin: checkLoggedin
+                }
+            })
+            .when('/admin', {
+                templateUrl: 'admin/admin.html',
+                controller: 'AdminCtrl',
+                resolve: {
+                    loggedin: checkLoggedin
+                }
+            })
+            .when('/report', {
+                templateUrl: 'report/report.html',
+                controller: 'ReportCtrl',
+                resolve: {
+                    loggedin: checkLoggedin
+                }
+            })
+            .when('/search', {
+                templateUrl: 'search/search.html',
+                controller: 'SearchCtrl',
+                resolve: {
+                    loggedin: checkLoggedin
+                }
+            })
+            .otherwise({
+                templateUrl: 'login/login.html',
+                controller: 'LoginCtrl'
+            });
+        //================================================
+
+    }) // end of config()
+    .run(function($rootScope, $http){
+
+        // Logout function is available in any pages
+        $rootScope.logout = function(){
+            $http.post('/logout');
+        };
+
     })
 
     .filter('afpct2colour', function() {

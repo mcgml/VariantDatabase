@@ -2,15 +2,49 @@
 
 // set up ========================
 var express  = require('express');
-var app      = express(); // create our app w/ express
+var app = express(); // create our app w/ express
 var request = require('request');
-//var db = require("seraph")("http://127.0.0.1:7474");
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
 var morgan = require('morgan'); // log requests to the console (express4)
-var bodyParser = require('body-parser'); // pull information from HTML POST (express4)
-var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
 var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser'); // pull information from HTML POST (express4)
+var session  = require('express-session');
+var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
 var favicon = require('serve-favicon');
 var path = require('path');
+
+//==================================================================
+// Define the strategy to be used by PassportJS
+passport.use(new LocalStrategy(
+    function(username, password, done) {
+
+        if (username === "admin@test.com" && password === "admin") {
+            return done(null, {name: "admin"});
+        }
+
+        return done(null, false, { message: 'Incorrect username.' });
+    }
+));
+
+// Serialized and deserialized methods when got from session
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+    done(null, user);
+});
+
+// Define a middleware function to be used for every secured routes
+var auth = function(req, res, next){
+    if (!req.isAuthenticated())
+        res.sendStatus(401);
+    else
+        next();
+};
+//==================================================================
 
 // configuration ================
 app.use(express.static(path.join(__dirname, 'app'))); // set the static files location /app
@@ -25,12 +59,13 @@ app.use(bodyParser.urlencoded({'extended':'true'})); // parse application/x-www-
 app.use(bodyParser.json()); // parse application/json
 app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
 app.use(methodOverride());
-
-// auth ========================================================================
+app.use(session({ secret: 'secret', cookie: { maxAge: 60000 }, resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
 
 // routes ======================================================================
 // api ---------------------------------------------------------------------
-app.get('/api/variantdatabase/workflows', function(req, res) {
+app.get('/api/variantdatabase/workflows', auth, function(req, res) {
     request.get (
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/workflows",
@@ -43,7 +78,7 @@ app.get('/api/variantdatabase/workflows', function(req, res) {
         }
     )
 });
-app.get('/api/variantdatabase/analyses', function(req, res) {
+app.get('/api/variantdatabase/analyses', auth, function(req, res) {
     request.get (
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/analyses",
@@ -56,7 +91,7 @@ app.get('/api/variantdatabase/analyses', function(req, res) {
         }
     )
 });
-app.get('/api/variantdatabase/panels', function(req, res) {
+app.get('/api/variantdatabase/panels', auth, function(req, res) {
     request.get (
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/panels",
@@ -69,7 +104,7 @@ app.get('/api/variantdatabase/panels', function(req, res) {
         }
     )
 });
-app.get('/api/variantdatabase/getnewpathogenicitiesforauthorisation', function(req, res) {
+app.get('/api/variantdatabase/getnewpathogenicitiesforauthorisation', auth, function(req, res) {
     request.get (
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/getnewpathogenicitiesforauthorisation",
@@ -82,7 +117,7 @@ app.get('/api/variantdatabase/getnewpathogenicitiesforauthorisation', function(r
         }
     )
 });
-app.post('/api/variantdatabase/getuserinformation', function(req, res) {
+app.post('/api/variantdatabase/getuserinformation', auth, function(req, res) {
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/getuserinformation",
@@ -95,7 +130,7 @@ app.post('/api/variantdatabase/getuserinformation', function(req, res) {
         }
     )
 });
-app.post('/api/variantdatabase/autosomaldominantworkflowv1', function(req, res) {
+app.post('/api/variantdatabase/autosomaldominantworkflowv1', auth, function(req, res) {
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/autosomaldominantworkflowv1",
@@ -108,7 +143,7 @@ app.post('/api/variantdatabase/autosomaldominantworkflowv1', function(req, res) 
         }
     )
 });
-app.post('/api/variantdatabase/variantinformation', function(req, res) {
+app.post('/api/variantdatabase/variantinformation', auth, function(req, res) {
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/variantinformation",
@@ -121,7 +156,7 @@ app.post('/api/variantdatabase/variantinformation', function(req, res) {
         }
     )
 });
-app.post('/api/variantdatabase/featureinformation', function(req, res) {
+app.post('/api/variantdatabase/featureinformation', auth, function(req, res) {
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/featureinformation",
@@ -134,7 +169,7 @@ app.post('/api/variantdatabase/featureinformation', function(req, res) {
         }
     )
 });
-app.post('/api/variantdatabase/functionalannotation', function(req, res) {
+app.post('/api/variantdatabase/functionalannotation', auth, function(req, res) {
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/functionalannotation",
@@ -147,7 +182,7 @@ app.post('/api/variantdatabase/functionalannotation', function(req, res) {
         }
     )
 });
-app.post('/api/variantdatabase/variantobservations', function(req, res) {
+app.post('/api/variantdatabase/variantobservations', auth, function(req, res) {
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/variantobservations",
@@ -160,7 +195,7 @@ app.post('/api/variantdatabase/variantobservations', function(req, res) {
         }
     )
 });
-app.post('/api/variantdatabase/authorisevariantpathogenicity', function(req, res) {
+app.post('/api/variantdatabase/authorisevariantpathogenicity', auth, function(req, res) {
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/authorisevariantpathogenicity",
@@ -173,7 +208,7 @@ app.post('/api/variantdatabase/authorisevariantpathogenicity', function(req, res
         }
     )
 });
-app.post('/api/variantdatabase/addvariantpathogenicity', function(req, res) {
+app.post('/api/variantdatabase/addvariantpathogenicity', auth, function(req, res) {
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/addvariantpathogenicity",
@@ -186,7 +221,7 @@ app.post('/api/variantdatabase/addvariantpathogenicity', function(req, res) {
         }
     )
 });
-app.post('/api/variantdatabase/removevariantpathogenicity', function(req, res) {
+app.post('/api/variantdatabase/removevariantpathogenicity', auth, function(req, res) {
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/removevariantpathogenicity",
@@ -199,7 +234,7 @@ app.post('/api/variantdatabase/removevariantpathogenicity', function(req, res) {
         }
     )
 });
-app.post('/api/variantdatabase/addvirtualpanel', function(req, res) {
+app.post('/api/variantdatabase/addvirtualpanel', auth, function(req, res) {
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/addvirtualpanel",
@@ -212,7 +247,7 @@ app.post('/api/variantdatabase/addvirtualpanel', function(req, res) {
         }
     )
 });
-app.post('/api/variantdatabase/getvirtualpanelgenes', function(req, res) {
+app.post('/api/variantdatabase/getvirtualpanelgenes', auth, function(req, res) {
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/getvirtualpanelgenes",
@@ -225,7 +260,7 @@ app.post('/api/variantdatabase/getvirtualpanelgenes', function(req, res) {
         }
     )
 });
-app.post('/api/variantdatabase/returninputjson', function(req, res) {
+app.post('/api/variantdatabase/returninputjson', auth, function(req, res) {
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/returninputjson",
@@ -238,33 +273,24 @@ app.post('/api/variantdatabase/returninputjson', function(req, res) {
         }
     )
 });
-/*app.post('/api/seraph', function(req, res) {
-    db.query(req.body.query, req.body.params, function(err, result) {
-        if (err) throw err;
-        res.send(result);
-    });
+
+//==================================================================
+// route to test if the user is logged in or not
+app.get('/loggedin', function(req, res) {
+    res.send(req.isAuthenticated() ? req.user : '0');
 });
-app.post('/api/cypher', function(req, res) {
-    request.post(
-        {
-            uri:"http://127.0.0.1:7474/db/data/transaction/commit",
-            json:
-            {
-                statements:
-                    [
-                        {
-                            statement:req.body.query,parameters:req.body.params
-                        }
-                    ]
-            }
-        },
-        function(error, result)
-        {
-            if (error) throw err;
-            res.send(result.body);
-        }
-    )
-});*/
+
+// route to log in
+app.post('/login', passport.authenticate('local'), function(req, res) {
+    res.send(req.user);
+});
+
+// route to log out
+app.post('/logout', function(req, res){
+    req.logOut();
+    res.sendStatus(200);
+});
+//==================================================================
 
 // application -------------------------------------------------------------
 app.get('*', function(req, res) {

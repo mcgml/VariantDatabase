@@ -6,13 +6,6 @@
 
 angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notification', 'nvd3'])
 
-    .config(['$routeProvider', function($routeProvider) {
-        $routeProvider.when('/search', {
-            templateUrl: 'search/search.html',
-            controller: 'SearchCtrl'
-        });
-    }])
-
     .controller('SearchCtrl', ['$scope', '$http', 'Notification', '$uibModal', '$window','framework', function ($scope, $http, Notification, $uibModal, $window, framework) {
 
         $scope.openEnsemblVariantLink = function(variant){

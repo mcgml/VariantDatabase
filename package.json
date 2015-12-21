@@ -20,6 +20,7 @@
   "dependencies": {
     "angular": "^1.4.8",
     "angular-nvd3": "^1.0.5",
+    "angular-resource": "^1.4.8",
     "angular-route": "^1.4.8",
     "angular-sanitize": "^1.4.8",
     "angular-ui-notification": "^0.1.0",
@@ -28,12 +29,16 @@
     "cookie-parser": "^1.4.0",
     "d3": "^3.5.11",
     "express": "^4.13.3",
+    "express-session": "^1.12.1",
     "font-awesome": "^4.5.0",
+    "install": "^0.4.1",
     "jquery": "^2.1.4",
     "method-override": "^2.3.5",
     "morgan": "^1.6.1",
     "ng-csv": "^0.3.6",
     "nvd3": "^1.8.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "request": "^2.67.0",
     "serve-favicon": "^2.3.0"
   }

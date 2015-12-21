@@ -8,14 +8,6 @@
 
 angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.bootstrap', 'ui-notification', 'nvd3'])
 
-    .config(['$routeProvider', function($routeProvider) {
-        $routeProvider.when('/report', {
-            templateUrl: 'report/report.html',
-            controller: 'ReportCtrl'
-        });
-    }])
-
-
     .controller('ReportCtrl', ['$scope', '$http', 'Notification', '$uibModal', '$window','framework', function ($scope, $http, Notification, $uibModal, $window, framework) {
 
         $scope.selectedVariantFilter = -1;
