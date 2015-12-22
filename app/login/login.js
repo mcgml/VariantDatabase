@@ -2,7 +2,7 @@
 
 angular.module('variantdatabase.login', ['ngResource', 'ngRoute', 'ui-notification'])
 
-    .controller('LoginCtrl', function($scope, $http, $location, Notification) {
+    .controller('LoginCtrl', function($rootScope, $scope, $http, $location, Notification) {
 
         // Register the login() function
         $scope.login = function(){
@@ -12,7 +12,8 @@ angular.module('variantdatabase.login', ['ngResource', 'ngRoute', 'ui-notificati
                     password: $scope.password
                 })
                 .success(function(user){
-                    Notification('Welcome ' + user.name);
+                    $rootScope.user = user;
+                    Notification('Welcome ' + $rootScope.user.FullName);
                     $location.url('/report');
                 })
                 .error(function(){

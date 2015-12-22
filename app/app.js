@@ -339,9 +339,9 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
 
             $http.post('/api/variantdatabase/addvirtualpanel',
                 {
-                    'UserNodeId' : 0,
-                    'VirtualPanelName' : $scope.items,
-                    'VirtualPanelList' : upload
+                    UserNodeId : $rootScope.user.UserNodeId,
+                    VirtualPanelName : $scope.items,
+                    VirtualPanelList : upload
                 })
                 .then(function(response) {
                     Notification('Operation successful');

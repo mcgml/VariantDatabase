@@ -6,7 +6,6 @@ var app = express(); // create our app w/ express
 var request = require('request');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-
 var morgan = require('morgan'); // log requests to the console (express4)
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser'); // pull information from HTML POST (express4)
@@ -14,19 +13,23 @@ var session  = require('express-session');
 var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
 var favicon = require('serve-favicon');
 var path = require('path');
+var bcrypt = require('bcrypt-nodejs');
 
 //==================================================================
 // Define the strategy to be used by PassportJS
-passport.use(new LocalStrategy(
-    function(username, password, done) {
-
-        if (username === "admin@test.com" && password === "admin") {
-            return done(null, {name: "admin"});
-        }
-
-        return done(null, false, { message: 'Incorrect username.' });
-    }
-));
+passport.use(new LocalStrategy(function(username, password, done) {
+    getUserInformation({ username: username }, function(err, user) {
+        if (err) return done(err);
+        if (!user) return done(null, false, { message: 'Incorrect username.' });
+        comparePassword(password, user, function(err, isMatch) {
+            if (isMatch) {
+                return done(null, user);
+            } else {
+                return done(null, false, { message: 'Incorrect password.' });
+            }
+        });
+    });
+}));
 
 // Serialized and deserialized methods when got from session
 passport.serializeUser(function(user, done) {
@@ -44,6 +47,37 @@ var auth = function(req, res, next){
     else
         next();
 };
+
+var comparePassword = function(candidatePassword, user, cb) {
+    bcrypt.compare(candidatePassword, user.Password, function(err, isMatch) {
+        if (err) return cb(err);
+        cb(null, isMatch);
+    });
+    return cb;
+};
+
+var hashPassword = function(password, cb) {
+    bcrypt.hash(password, null, null, function(err, hash) {
+        if (err) return cb(err);
+        cb(null, hash);
+    });
+    return cb;
+};
+
+var getUserInformation = function(username, cb){
+    request.post(
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/getuserinformation",
+            json: { UserId : username.username }
+        },
+        function(error, result)
+        {
+            if (error) return cb(error);
+            cb(null, result.body);
+        }
+    );
+};
+
 //==================================================================
 
 // configuration ================
@@ -108,19 +142,6 @@ app.get('/api/variantdatabase/getnewpathogenicitiesforauthorisation', auth, func
     request.get (
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/getnewpathogenicitiesforauthorisation",
-            json: req.body
-        },
-        function(error, result)
-        {
-            if (error) throw err;
-            res.send(result.body);
-        }
-    )
-});
-app.post('/api/variantdatabase/getuserinformation', auth, function(req, res) {
-    request.post(
-        {
-            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/getuserinformation",
             json: req.body
         },
         function(error, result)
@@ -260,7 +281,25 @@ app.post('/api/variantdatabase/getvirtualpanelgenes', auth, function(req, res) {
         }
     )
 });
-app.post('/api/variantdatabase/returninputjson', auth, function(req, res) {
+app.post('/api/variantdatabase/updateuserpassword', auth, function(req, res) {
+    bcrypt.hash(req.body.Password, null, null, function(error, hash) {
+        if (error) throw err;
+
+        request.post(
+            {
+                uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/updateuserpassword",
+                json: { UserNodeId : req.body.UserNodeId, Password : hash }
+            },
+            function(error, result)
+            {
+                if (error) throw err;
+                res.send(result.body);
+            }
+        );
+
+    });
+});
+app.post('/api/variantdatabase/returninputjson', function(req, res) {
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/returninputjson",

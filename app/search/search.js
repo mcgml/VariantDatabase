@@ -40,8 +40,21 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
                     Notification.error(response);
                     console.log("ERROR: " + response);
                 });
-
         };
+
+        function openNewPanelModal(virtualPanelName) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'templates/NewPanelModal.html',
+                controller: 'NewPanelCtrl',
+                windowClass: 'app-modal-window',
+                resolve: {
+                    items: function () {
+                        return virtualPanelName;
+                    }
+                }
+            });
+        }
 
         $scope.getFeature = function(){
             $http.post('/api/variantdatabase/featureinformation',
@@ -61,7 +74,7 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
             $http.post('/api/variantdatabase/addvariantpathogenicity',
                 {
                     VariantNodeId : $scope.variantInformation.VariantNodeId,
-                    UserNodeId : 0,
+                    UserNodeId : $rootScope.user.UserNodeId,
                     Classification : $scope.selectedPathogenicity,
                     Evidence : $scope.pathogenicityEvidenceText
 
@@ -79,7 +92,7 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
             $http.post('/api/variantdatabase/removevariantpathogenicity',
                 {
                     PathogenicityNodeId : $scope.variantInformation.PathogenicityNodeId,
-                    UserNodeId : 0,
+                    UserNodeId : $rootScope.user.UserNodeId,
                     Evidence : $scope.pathogenicityEvidenceText
 
                 })
@@ -98,55 +111,8 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
                     VariantId : $scope.selectedVariant
                 })
                 .then(function(response) {
-
                     $scope.variantInformation = response.data;
-                    getVariantAnnotation($scope.variantInformation.VariantNodeId);
-
                 }, function(response) {
-                    Notification.error(response);
-                    console.log("ERROR: " + response);
-                });
-        };
-
-        function getVariantAnnotation(nodeId) {
-            $http.post('/api/variantdatabase/functionalannotation',
-                {
-                    'VariantNodeId': nodeId
-                })
-                .then(function (response) {
-                    $scope.Annotations = response.data;
-                }, function (response) {
-                    Notification.error(response);
-                    console.log("ERROR: " + response);
-                });
-        }
-
-        $scope.changeFeaturePreference = function(featureInformation){
-            var query;
-
-            if(featureInformation.Preferred){
-                query = "MATCH (u:User {UserId:\"ml\"}) " +
-                    "MATCH (f:Feature) where id(f) = " + $scope.featureInformation.FeatureNodeId + " " +
-                    "MATCH (f)-[:HAS_FEATURE_PREFERENCE]->(fp:FeaturePreference) " +
-                    "CREATE (fp)-[rel:REMOVED_BY {Date:" + new Date().getTime() + "}]->(u)";
-                if ($scope.preferredFeatureEvidenceText != null && $scope.preferredFeatureEvidenceText != '') query += "SET rel.Evidence = \"" + $scope.preferredFeatureEvidenceText + "\"";
-
-            } else {
-                query = "MATCH (u:User {UserId:\"ml\"}) " +
-                    "MATCH (f:Feature) where id(f) = " + $scope.featureInformation.FeatureNodeId + " " +
-                    "CREATE (f)-[:HAS_FEATURE_PREFERENCE]->(fp:FeaturePreference)-[rel:ADDED_BY {Date:" + new Date().getTime() + "}]->(u) ";
-                if ($scope.preferredFeatureEvidenceText != null && $scope.preferredFeatureEvidenceText != '') query += "SET rel.Evidence = \"" + $scope.preferredFeatureEvidenceText + "\"";
-            }
-
-            $http.post('/api/seraph',
-                {
-                    query: query,
-                    params: {}
-                })
-                .then(function(response) {
-                    $scope.getFeature();
-                },
-                function(response) {
                     Notification.error(response);
                     console.log("ERROR: " + response);
                 });
@@ -176,20 +142,6 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
                 resolve: {
                     items: function () {
                         return seen;
-                    }
-                }
-            });
-        };
-
-        $scope.openNewPanelModal = function (virtualPanelName) {
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'templates/NewPanelModal.html',
-                controller: 'NewPanelCtrl',
-                windowClass: 'app-modal-window',
-                resolve: {
-                    items: function () {
-                        return virtualPanelName;
                     }
                 }
             });
@@ -244,20 +196,8 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
             });
         }
 
-        function getWorkflows() {
-            $http.get('/api/variantdatabase/workflows', {
-
-            }).then(function (response) {
-                $scope.workflows = response.data;
-            }, function (response) {
-                Notification.error(response);
-                console.log("ERROR: " + response);
-            });
-        }
-
         //populate typeaheads on pageload
         getAnalyses();
         getPanels();
-        getWorkflows();
 
     }]);

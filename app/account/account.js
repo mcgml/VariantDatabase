@@ -2,20 +2,22 @@
 
 angular.module('variantdatabase.account', ['ngRoute', 'ui-notification'])
 
-    .controller('AccountCtrl', ['$scope', '$http', 'Notification', function ($scope, $http, Notification) {
+    .controller('AccountCtrl', ['$rootScope', '$scope', '$http', 'Notification', function ($rootScope, $scope, $http, Notification) {
+        $scope.userInformation = $rootScope.user;
 
-        function getUserInformation() {
-            $http.post('/api/variantdatabase/getuserinformation',
+        $scope.updatePassword = function(){
+            $http.post('/api/variantdatabase/updateuserpassword',
                 {
-                    'UserNodeId' : 0
+                    UserNodeId : $rootScope.user.UserNodeId,
+                    Password : $scope.newPassword
                 })
                 .then(function(response) {
-                    $scope.userInformation = response.data;
+                    Notification('Operation successful');
                 }, function(response) {
                     Notification.error(response);
                     console.log("ERROR: " + response);
                 });
-        }
+            $scope.newPassword = '';
+        };
 
-        getUserInformation();
     }]);
