@@ -28,7 +28,7 @@
                     <tr><th>Variant</th><td>{{variantInformation.VariantId}}</td></tr>
                     <tr><th>Functional Annotation</th><td><i class="fa fa-info-circle" data-ng-click="openVariantAnnotationModal(variantInformation)"></i></td></tr>
                     <tr><th>dbSNP</th><td><a data-ng-show="variantInformation.dbSNPId" href="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs={{variantInformation.dbSNPId}}" target="_blank">{{variantInformation.dbSNPId}}</a></td></tr>
-                    <tr><th>Occurrence</th><td><a id="occurrence-link" data-ng-click="openVariantOccurrenceModal(variantInformation)">{{variantInformation.Occurrence}}</a></td></tr>
+                    <tr><th>Occurrence</th><td><i data-ng-click="openVariantOccurrenceModal(variantInformation)" class="fa fa-binoculars"></i> {{variantInformation.Occurrence}}</td></tr>
                     <tr><th>Population</th><td>
                         <div class="btn-toolbar" role="toolbar">
                             <div class="btn-group" role="group">
@@ -173,10 +173,10 @@
                     <div class="input-group">
                         <input type="text" class="form-control no-margin" placeholder="Enter Panel" data-ng-model="selectedVirtualPanel" typeahead-template-url="templates/VirtualPanelTypeahead.html" uib-typeahead="virtualPanel as virtualPanel.VirtualPanelName for virtualPanel in virtualPanels | filter:$viewValue | limitTo:5">
                         <div class="input-group-btn">
-                            <button class="btn btn-primary no-margin" data-ng-click="getVirtualPanelGenes();">
+                            <button class="btn btn-primary no-margin" data-ng-click="getVirtualPanel();">
                                 <i class="fa fa-search"></i>
                             </button>
-                            <button class="btn btn-warning no-margin" data-ng-click="selectedVirtualPanel = ''; genes = ''; search = '';">
+                            <button class="btn btn-warning no-margin" data-ng-click="selectedVirtualPanel = ''; virtualPanel = ''; search = '';">
                                 <i class="fa fa-times"></i>
                             </button>
                         </div>
@@ -184,13 +184,13 @@
                 </div>
             </div>
         </div>
-        <div data-ng-show="genes" class="panel-body">
+        <div data-ng-show="virtualPanel" class="panel-body">
             <div class="col-md-6">
                 <h3>Details</h3>
                 <table id="gene-table" class="table borderless no-select">
                     <tbody>
-                    <tr><th>Panel Name</th><td>{{selectedVirtualPanel.VirtualPanelName}}</td></tr>
-                    <tr><th>Created</th><td>{{selectedVirtualPanel.UserId}} {{selectedVirtualPanel.Date | date:"dd/MM/yy"}}</td></tr>
+                    <tr><th>Panel Name</th><td>{{virtualPanel.VirtualPanelName}}</td></tr>
+                    <tr><th>Created</th><td>{{virtualPanel.FullName}} {{virtualPanel.Date | date:"dd/MM/yy"}}</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -209,9 +209,9 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody data-ng-repeat="gene in genes | orderBy:sortType:sortReverse | filter:search">
+                    <tbody data-ng-repeat="symbol in virtualPanel.Symbols | orderBy:sortType:sortReverse | filter:search">
                     <tr>
-                        <td width="75%"><a id="symbol-link" href="http://omim.org/search?search={{gene}}" target="_blank">{{gene}}</a></td>
+                        <td width="75%"><a id="symbol-link" href="http://omim.org/search?search={{symbol.SymbolId}}" target="_blank">{{symbol.SymbolId}}</a></td>
                     </tr>
                     </tbody>
                 </table>

@@ -6,7 +6,7 @@
 
 angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notification', 'nvd3'])
 
-    .controller('SearchCtrl', ['$scope', '$http', 'Notification', '$uibModal', '$window','framework', function ($scope, $http, Notification, $uibModal, $window, framework) {
+    .controller('SearchCtrl', ['$rootScope', '$scope', '$http', 'Notification', '$uibModal', '$window','framework', function ($rootScope, $scope, $http, Notification, $uibModal, $window, framework) {
 
         $scope.openEnsemblVariantLink = function(variant){
             $window.open(framework.getEnsemblRangeLink() + framework.convertVariantToRange(variant), '_blank');
@@ -21,20 +21,20 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
             $window.open(framework.get1kgRangeLink() + framework.convertVariantToRange(variant), '_blank');
         };
 
-        $scope.getVirtualPanelGenes = function() {
+        $scope.getVirtualPanel = function() {
 
             //check panel exists
             if ($scope.selectedVirtualPanel.PanelNodeId === undefined){
-                $scope.openNewPanelModal($scope.selectedVirtualPanel);
+                openNewPanelModal($scope.selectedVirtualPanel);
                 return;
             }
 
-            $http.post('/api/variantdatabase/getvirtualpanelgenes',
+            $http.post('/api/variantdatabase/getvirtualpanel',
                 {
                     PanelNodeId : $scope.selectedVirtualPanel.PanelNodeId
                 })
                 .then(function(response) {
-                    $scope.genes = response.data;
+                    $scope.virtualPanel = response.data;
                     Notification('Operation successful');
                 }, function(response) {
                     Notification.error(response);
@@ -94,7 +94,6 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
                     PathogenicityNodeId : $scope.variantInformation.PathogenicityNodeId,
                     UserNodeId : $rootScope.user.UserNodeId,
                     Evidence : $scope.pathogenicityEvidenceText
-
                 })
                 .then(function(response) {
                     Notification('Operation successful');
@@ -127,6 +126,7 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
                 })
                 .then(function(response) {
                     seen.Occurrences = response.data;
+                    Notification('Operation successful');
                 }, function(response) {
                     Notification.error(response);
                     console.log("ERROR: " + response);

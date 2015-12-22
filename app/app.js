@@ -296,7 +296,7 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
 
     })
 
-    .controller('NewPanelCtrl', function ($scope, $uibModalInstance, items, framework, $http, Notification) {
+    .controller('NewPanelCtrl', function ($rootScope, $scope, $uibModalInstance, items, framework, $http, Notification) {
         $scope.items = items;
         $scope.savedGenes = [];
 
@@ -349,7 +349,6 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
                     Notification.error(response);
                     console.log("ERROR: " + response);
                 });
-
         };
 
         $scope.cancel = function () {
@@ -372,7 +371,7 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
 
         $scope.addExcludedDataset = function(){
 
-            if ($scope.excludedDataset === undefined || $scope.excludedDataset === ''){
+            if ($scope.excludedDataset === undefined || $scope.excludedDataset === '' || !$scope.excludedDataset.hasOwnProperty("RunInfoNodeId")){
                 Notification.error("Select sample");
                 return;
             }
@@ -395,7 +394,7 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
 
         $scope.addVirtualPanel = function(){
 
-            if ($scope.selectedVirtualPanel === undefined || $scope.selectedVirtualPanel === ''){
+            if ($scope.selectedVirtualPanel === undefined || $scope.selectedVirtualPanel === '' || !$scope.selectedVirtualPanel.hasOwnProperty("PanelNodeId")){
                 Notification.error("Select panel");
                 return;
             }
@@ -469,8 +468,6 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
         $scope.setSelected = function (idSelected) {
             $scope.idSelected = idSelected;
         };
-
-
         $scope.openGoogleScholarLink = function(annotation){
             var search = framework.keywordSearchFromAnnotationObject(annotation);
             if(search === undefined || search === ''){

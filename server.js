@@ -93,7 +93,7 @@ app.use(bodyParser.urlencoded({'extended':'true'})); // parse application/x-www-
 app.use(bodyParser.json()); // parse application/json
 app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
 app.use(methodOverride());
-app.use(session({ secret: 'secret', cookie: { maxAge: 60000 }, resave: true, saveUninitialized: true }));
+app.use(session({ secret: 'secret', cookie: { maxAge: 3600000 }, resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
@@ -268,10 +268,10 @@ app.post('/api/variantdatabase/addvirtualpanel', auth, function(req, res) {
         }
     )
 });
-app.post('/api/variantdatabase/getvirtualpanelgenes', auth, function(req, res) {
+app.post('/api/variantdatabase/getvirtualpanel', auth, function(req, res) {
     request.post(
         {
-            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/getvirtualpanelgenes",
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/getvirtualpanel",
             json: req.body
         },
         function(error, result)
