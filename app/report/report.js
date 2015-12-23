@@ -69,7 +69,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
                 return;
             }
 
-            if ($scope.selectedWorkflow === undefined || $scope.selectedWorkflow === ''){
+            if ($scope.selectedWorkflow === undefined || $scope.selectedWorkflow === '' || $scope.selectedWorkflow === null){
                 Notification.error("Select stratification workflow");
                 return;
             }
