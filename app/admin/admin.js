@@ -2,7 +2,7 @@
 
 angular.module('variantdatabase.admin', ['ngRoute', 'ui-notification'])
 
-    .controller('AdminCtrl', ['$scope', 'Notification', '$http', function ($scope, Notification, $http) {
+    .controller('AdminCtrl', ['$rootScope', '$scope', 'Notification', '$http', function ($rootScope, $scope, Notification, $http) {
 
         //new pathogenicities for authorisation
         function getNewPathogenicitiesForAuthorisation() {
@@ -20,7 +20,7 @@ angular.module('variantdatabase.admin', ['ngRoute', 'ui-notification'])
             $http.post('/api/variantdatabase/authorisevariantpathogenicity',
                 {
                     'PathogenicityNodeId' : pathogenicityNodeId,
-                    'UserNodeId' : 0,
+                    'UserNodeId' : $rootScope.user.UserNodeId,
                     'AddorRemove' : addOrRemove
                 })
                 .then(function(response) {

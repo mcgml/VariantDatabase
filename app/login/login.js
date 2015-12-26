@@ -2,11 +2,10 @@
 
 angular.module('variantdatabase.login', ['ngResource', 'ngRoute', 'ui-notification'])
 
-    .controller('LoginCtrl', function($rootScope, $scope, $http, $location, Notification) {
+    .controller('LoginCtrl', ['$rootScope', '$scope', '$http', '$location', 'Notification', function($rootScope, $scope, $http, $location, Notification) {
 
         // Register the login() function
         $scope.login = function(){
-
             $http.post('/login', {
                     username: $scope.username.toLowerCase(),
                     password: $scope.password
@@ -20,7 +19,6 @@ angular.module('variantdatabase.login', ['ngResource', 'ngRoute', 'ui-notificati
                     Notification.error('Username or password incorrect');
                     $location.url('/login');
                 });
-
         };
 
-    });
+    }]);

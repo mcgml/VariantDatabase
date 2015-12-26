@@ -3,7 +3,6 @@
 angular.module('variantdatabase.account', ['ngRoute', 'ui-notification'])
 
     .controller('AccountCtrl', ['$rootScope', '$scope', '$http', 'Notification', function ($rootScope, $scope, $http, Notification) {
-        $scope.userInformation = $rootScope.user;
 
         $scope.updatePassword = function(){
             $http.post('/api/variantdatabase/updateuserpassword',

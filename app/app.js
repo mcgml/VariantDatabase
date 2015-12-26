@@ -296,7 +296,7 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
 
     })
 
-    .controller('NewPanelCtrl', function ($rootScope, $scope, $uibModalInstance, items, framework, $http, Notification) {
+    .controller('NewPanelCtrl', ['$rootScope', '$scope', '$uibModalInstance', 'items', 'framework', '$http', 'Notification', function ($rootScope, $scope, $uibModalInstance, items, framework, $http, Notification) {
         $scope.items = items;
         $scope.savedGenes = [];
 
@@ -354,9 +354,10 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
-    })
 
-    .controller('VariantSelectionCtrl', function ($scope, $uibModalInstance, items, Notification, $http) {
+    }])
+
+    .controller('VariantSelectionCtrl', ['$scope', '$uibModalInstance', 'items', 'Notification', '$http', function ($scope, $uibModalInstance, items, Notification, $http) {
         $scope.analyses = items;
         $scope.savedExcludedDatasets = [];
         $scope.savedVirtualPanels = [];
@@ -447,9 +448,9 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
             $uibModalInstance.dismiss('cancel');
         };
 
-    })
+    }])
 
-    .controller('VariantOccurrenceCtrl', function ($scope, $uibModalInstance, items, $window, framework) {
+    .controller('VariantOccurrenceCtrl', ['$scope', '$uibModalInstance', 'items', '$window', 'framework', function ($scope, $uibModalInstance, items, $window, framework) {
         $scope.items = items;
 
         $scope.openIGVLink = function(remoteBamPath, variant){
@@ -459,9 +460,9 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
             $uibModalInstance.dismiss('cancel');
         };
 
-    })
+    }])
 
-    .controller('VariantAnnotationCtrl', function ($scope, $uibModalInstance, items, $window, framework) {
+    .controller('VariantAnnotationCtrl', ['$scope', '$uibModalInstance', 'items', '$window', 'framework', function ($scope, $uibModalInstance, items, $window, framework) {
         $scope.items = items;
         $scope.idSelected = null;
 
@@ -516,4 +517,4 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
             $uibModalInstance.dismiss('cancel');
         };
 
-    });
+    }]);

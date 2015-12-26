@@ -56,14 +56,6 @@ var comparePassword = function(candidatePassword, user, cb) {
     return cb;
 };
 
-var hashPassword = function(password, cb) {
-    bcrypt.hash(password, null, null, function(err, hash) {
-        if (err) return cb(err);
-        cb(null, hash);
-    });
-    return cb;
-};
-
 var getUserInformation = function(username, cb){
     request.post(
         {
@@ -283,6 +275,7 @@ app.post('/api/variantdatabase/getvirtualpanel', auth, function(req, res) {
 });
 app.post('/api/variantdatabase/updateuserpassword', auth, function(req, res) {
     bcrypt.hash(req.body.Password, null, null, function(error, hash) {
+
         if (error) throw err;
 
         request.post(

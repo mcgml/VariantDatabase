@@ -45,7 +45,7 @@
             <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Variant frequency in this database (limited by index dataset assay)" data-ng-click="sortType = 'InternalFrequency'; sortReverse = !sortReverse">Frequency <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'InternalFrequency'"></i></th>
         </tr>
         </thead>
-        <tbody data-ng-repeat="variant in filteredVariants.Variants | orderBy:sortType:sortReverse | filter:{Filter:selectedVariantFilter}:true track by variant.VariantNodeId" data-ng-click="setSelected(variant.VariantNodeId)" data-ng-class="{selected : variant.VariantNodeId === idSelected}">
+        <tbody data-ng-repeat="variant in filteredVariants.Variants | filter:{Filter:selectedVariantFilter}:true | orderBy:sortType:sortReverse track by variant.VariantNodeId" data-ng-click="setSelected(variant.VariantNodeId)" data-ng-class="{selected : variant.VariantNodeId === idSelected}">
         <tr>
             <td width="2.5%"><input type="checkbox" data-ng-model="variant.Selected"></td>
             <td width="2.5%" data-ng-click="openVariantAnnotationModal(variant)"><i class="fa fa-info-circle"></i></td>

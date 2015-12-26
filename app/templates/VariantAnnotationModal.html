@@ -29,10 +29,9 @@
                             <li><a data-ng-click="openGoogleScholarLink(annotation)">Scholar</a></li>
                             <li><a data-ng-click="openClinVarLink(annotation)">ClinVar</a></li>
                             <li><a href="http://www.hgvs.org/locus-specific-mutation-databases/?field_hgnc_gene_symbol_title={{annotation.SymbolId}}" target="_blank">LSDB</a></li>
-                            <li><a href="http://omim.org/search?index=entry&search={{annotation.SymbolId}}" target="_blank">OMIM</a></li>
                             <li class="dropdown-header">Tissue Expression Search</li>
-                            <li data-ng-class="{disabled: !annotation.GeneId}"><a data-ng-click="!annotation.GeneId || openEAtlasLink(annotation.GeneId)">Ensembl Expression Atlas</a></li>
-                            <li data-ng-class="{disabled: !annotation.GeneId}"><a data-ng-click="!annotation.GeneId || openHPALink(annotation.GeneId)">Human Protein Atlas</a></li>
+                            <li data-ng-class="{disabled: !annotation.SymbolId}"><a data-ng-click="!annotation.SymbolId || openEAtlasLink(annotation.SymbolId)">Ensembl Expression Atlas</a></li>
+                            <li data-ng-class="{disabled: !annotation.SymbolId}"><a data-ng-click="!annotation.SymbolId || openHPALink(annotation.SymbolId)">Human Protein Atlas</a></li>
                             <li class="dropdown-header">Protein Domain Search</li>
                             <li data-ng-class="{disabled: !annotation.Pfam_domain}"><a data-ng-click="!annotation.Pfam_domain || openPfamLink(annotation.Pfam_domain)">Pfam</a></li>
                             <li data-ng-class="{disabled: !annotation.hmmpanther}"><a data-ng-click="!annotation.hmmpanther || openPantherLink(annotation.hmmpanther)">PANTHER</a></li>

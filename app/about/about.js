@@ -2,6 +2,6 @@
 
 angular.module('variantdatabase.about', ['ngRoute'])
 
-    .controller('AboutCtrl', ['$scope', function ($scope) {
+    .controller('AboutCtrl', [ function () {
 
     }]);
