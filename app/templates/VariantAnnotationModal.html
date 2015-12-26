@@ -18,7 +18,7 @@
             <th width="10%">PolyPhen</th>
         </tr>
         </thead>
-        <tbody data-ng-repeat="annotation in items.Annotation track by annotation.AnnotationNodeId" data-ng-click="setSelected(annotation.AnnotationNodeId)" data-ng-class="{selected : annotation.AnnotationNodeId === idSelected}">
+        <tbody data-ng-repeat="annotation in items.Annotation" data-ng-click="setSelected(annotation.AnnotationNodeId)" data-ng-class="{selected : annotation.AnnotationNodeId === idSelected}">
         <tr>
             <td width="2.5%">
                 <div class="dropdown">
