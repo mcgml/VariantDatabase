@@ -143,10 +143,10 @@ app.get('/api/variantdatabase/getnewpathogenicitiesforauthorisation', auth, func
         }
     )
 });
-app.post('/api/variantdatabase/autosomaldominantworkflowv1', auth, function(req, res) {
+app.post('/api/variantdatabase/getfilteredvariants', auth, function(req, res) {
     request.post(
         {
-            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/autosomaldominantworkflowv1",
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/getfilteredvariants",
             json: req.body
         },
         function(error, result)

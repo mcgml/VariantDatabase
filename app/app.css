@@ -13,6 +13,9 @@
     margin-bottom : 15px;
     padding-top : 25px;
 }
+#welcomeMsg{
+    margin-left : 15px;
+}
 .btn-sq-xs {
     width: 8px !important;
     height: 8px !important;
@@ -24,7 +27,6 @@
     margin-bottom : 0 !important;
 }
 #export-button {
-    margin-top : 15px !important;
     margin-bottom : 15px !important;
 }
 

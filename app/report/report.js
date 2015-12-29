@@ -8,34 +8,81 @@
 
 angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.bootstrap', 'ui-notification', 'nvd3'])
 
-    .controller('ReportCtrl', ['$scope', '$http', 'Notification', '$uibModal', '$window','framework', function ($scope, $http, Notification, $uibModal, $window, framework) {
+    .controller('ReportCtrl', ['$scope', '$http', 'Notification', '$uibModal', '$window','framework', '$anchorScroll', function ($scope, $http, Notification, $uibModal, $window, framework, $anchorScroll) {
 
         $scope.selectedVariantFilter = -1;
         $scope.idSelected = null;
+        $scope.itemsPerPage = 25;
+        $scope.currentPage = 0;
+        var savedVariantFilters = {};
+
+        $scope.range = function() {
+            var rangeSize = 10;
+            var ret = [];
+            var start;
+
+            start = $scope.currentPage;
+            if ( start > $scope.pageCount-rangeSize ) {
+                start = $scope.pageCount-rangeSize+1;
+            }
+
+            for (var i=start; i<start+rangeSize; i++) {
+                if (i >=0)
+                    ret.push(i);
+            }
+            return ret;
+        };
 
         $scope.setSelected = function (idSelected) {
             $scope.idSelected = idSelected;
         };
 
+        $scope.setPage = function(n) {
+            $scope.currentPage = n;
+            $anchorScroll('donutChart');
+        };
+
+        $scope.prevPage = function() {
+            if ($scope.currentPage > 0) {
+                $scope.currentPage--;
+                $anchorScroll('donutChart');
+            }
+        };
+
+        $scope.prevPageDisabled = function() {
+            return $scope.currentPage === 0 ? "disabled" : "";
+        };
+
+        $scope.nextPage = function() {
+            if ($scope.currentPage < $scope.pageCount) {
+                $scope.currentPage++;
+                $anchorScroll('donutChart');
+            }
+        };
+
+        $scope.nextPageDisabled = function() {
+            return $scope.currentPage === $scope.pageCount ? "disabled" : "";
+        };
+
         $scope.donutChartOptions = {
             chart: {
                 type: 'pieChart',
-                height: 250,
-                noData: "",
                 donut: true,
+                height : 250,
+                showLabels: false,
                 color : function (d, i) { var key = i === undefined ? d : i; return d.color || framework.getScaledCat20(key); },
                 x: function(d){return d.key;},
                 y: function(d){return d.y;},
-                showLabels: false,
                 pie: {
                     dispatch: {
                         elementClick: function(e) {
                             $scope.selectedVariantFilter = e.index;
+                            $scope.currentPage = 0;
+                            $scope.pageCount = Math.ceil($scope.filteredVariants.Filters[$scope.selectedVariantFilter]["y"] / $scope.itemsPerPage) - 1;
                             $scope.$apply();
                         }
                     }
-                },
-                transitionDuration: 500
+                }
             }
         };
 
@@ -74,17 +121,21 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
                 return;
             }
 
-            if ($scope.savedVariantFilters === null || $scope.savedVariantFilters.excludedRunIds.length === 0 && $scope.savedVariantFilters.panelNodeIds.length === 0){
-                Notification.error("No filtered have been applied!");
-                return;
+            //define obj for sending to server
+            savedVariantFilters.RunInfoNodeId = $scope.selectedAnalysis.RunInfoNodeId;
+            savedVariantFilters.workflowName = $scope.selectedWorkflow.Name;
+
+            if (!savedVariantFilters.hasOwnProperty('excludeRunInfoNodes')){
+                savedVariantFilters.excludeRunInfoNodes = [];
+            }
+            if (!savedVariantFilters.hasOwnProperty('includePanelNodes')){
+                savedVariantFilters.includePanelNodes = [];
             }
 
-            //define obj for sending to server
-            $scope.savedVariantFilters['RunInfoNodeId'] = $scope.selectedAnalysis.RunInfoNodeId;
-
-            $http.post('/api/variantdatabase' + $scope.selectedWorkflow.Path, $scope.savedVariantFilters)
+            $http.post('/api/variantdatabase/getfilteredvariants', savedVariantFilters)
                 .then(function(response) {
                     $scope.filteredVariants = response.data;
+                    $scope.donutChartOptions.chart.title = response.data.Total;
                     Notification('Operation successful');
                 }, function(response) {
                     Notification.error(response);
@@ -161,7 +212,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
                     }
                 }
             }).result.then(function(result) {
-                $scope.savedVariantFilters = result;
+                savedVariantFilters = result;
             });
 
         };

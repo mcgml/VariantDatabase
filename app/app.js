@@ -21,7 +21,7 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
         //================================================
         // Check if the user is connected
         //================================================
-        var checkLoggedin = function($q, $timeout, $http, $location){
+        var checkLoggedin = function($q, $timeout, $http, $location, $rootScope){
             // Initialize a new promise
             var deferred = $q.defer();
 
@@ -30,9 +30,11 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
 
                 // Authenticated
                 if (user !== '0'){
+                    $rootScope.user = user;
                     deferred.resolve();
                 } else {
                     // Not Authenticated
+                    $rootScope.message = 'You need to log in.';
                     deferred.reject();
                     $location.url('/login');
                 }
@@ -65,10 +67,6 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
         // Define all the routes
         //================================================
         $routeProvider
-            .when('/login', {
-                templateUrl: 'login/login.html',
-                controller: 'LoginCtrl'
-            })
             .when('/about', {
                 templateUrl: 'about/about.html',
                 controller: 'AboutCtrl',
@@ -89,6 +87,10 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
                 resolve: {
                     loggedin: checkLoggedin
                 }
+            })
+            .when('/login', {
+                templateUrl: 'login/login.html',
+                controller: 'LoginCtrl'
             })
             .when('/report', {
                 templateUrl: 'report/report.html',
@@ -115,9 +117,18 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
 
         // Logout function is available in any pages
         $rootScope.logout = function(){
+            $rootScope.message = 'Logged out.';
             $http.post('/logout');
         };
 
+    })
+
+    .filter('offset', function() {
+        return function(input, start) {
+            if (input === undefined) return; //todo check
+            start = parseInt(start, 10);
+            return input.slice(start);
+        };
     })
 
     .filter('afpct2colour', function() {
@@ -428,17 +439,17 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
 
             var i = 0;
             var retObj = {};
-            retObj.excludedRunIds = [];
-            retObj.panelNodeIds = [];
+            retObj.excludeRunInfoNodes = [];
+            retObj.includePanelNodes = [];
 
             //bank exclusion run node Ids
             for (i = 0; i < $scope.savedExcludedDatasets.length; i++) {
-                retObj.excludedRunIds.push($scope.savedExcludedDatasets[i].RunInfoNodeId);
+                retObj.excludeRunInfoNodes.push($scope.savedExcludedDatasets[i].RunInfoNodeId);
             }
 
             //bank gene panel run Ids
             for (i = 0; i < $scope.savedVirtualPanels.length; i++) {
-                retObj.panelNodeIds.push($scope.savedVirtualPanels[i].PanelNodeId);
+                retObj.includePanelNodes.push($scope.savedVirtualPanels[i].PanelNodeId);
             }
 
             $uibModalInstance.close(retObj);

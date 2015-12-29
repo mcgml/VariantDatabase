@@ -1,11 +1,9 @@
 <div class="jumbotron">
-    <div class="container">
-        <div data-ng-hide="filteredVariants">
-            <h1>Variant Database</h1>
-            <h3>Enter the required information below to get started</h3>
-        </div>
-        <nvd3 options="donutChartOptions" data="filteredVariants.Filters"></nvd3>
+    <div id="welcomeMsg" data-ng-hide="filteredVariants">
+        <h1>Variant Database</h1>
+        <h3>Enter the required information below to get started</h3>
     </div>
+    <nvd3 id="donutChart" options="donutChartOptions" data="filteredVariants.Filters"></nvd3>
 </div>
 <div class="col-md-4">
     <div class="input-group">
@@ -29,8 +27,8 @@
         </button>
     </div>
 </div>
-<div class="col-md-12">
-    <table id="variant-table" data-ng-hide="selectedVariantFilter == -1" class="table table-bordered">
+<div class="col-md-12" data-ng-hide="selectedVariantFilter === -1">
+    <table id="variant-table" class="table table-bordered">
         <thead>
         <tr>
             <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Export"><a></a><i class="fa fa-star"></i></th>
@@ -39,13 +37,12 @@
             <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="View call in IGV"><i class="fa fa-eye"></i></th>
             <th width="12.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Allele frequencies from other studies. Hover over data points for more information">Population</th>
             <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Nucleotide conservation. Hover over data points for more information">Conservation</th>
-            <th width="47.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Variant call (hg19/GRCh37)">Variant</th>
-            <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Inheritance">Genotype</th>
-            <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Allele occurrence in this database" data-ng-click="sortType = 'Occurrence'; sortReverse = !sortReverse">Observed <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'Occurrence'"></i></th>
-            <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Variant frequency in this database (limited by index dataset assay)" data-ng-click="sortType = 'InternalFrequency'; sortReverse = !sortReverse">Frequency <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'InternalFrequency'"></i></th>
+            <th width="50%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Variant call (hg19/GRCh37)">Variant</th>
+            <th width="10%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Inheritance" data-ng-click="sortType = 'Inheritance'; sortReverse = !sortReverse; currentPage = 0">Inheritance <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'Inheritance'"></i></th>
+            <th width="10%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Allele occurrence in this database" data-ng-click="sortType = 'Occurrence'; sortReverse = !sortReverse; currentPage = 0">Observed <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'Occurrence'"></i></th>
         </tr>
         </thead>
-        <tbody data-ng-repeat="variant in filteredVariants.Variants | filter:{Filter:selectedVariantFilter}:true | orderBy:sortType:sortReverse track by variant.VariantNodeId" data-ng-click="setSelected(variant.VariantNodeId)" data-ng-class="{selected : variant.VariantNodeId === idSelected}">
+        <tbody data-ng-repeat="variant in filteredVariants.Variants | filter:{Filter:selectedVariantFilter}:true | orderBy:sortType:sortReverse | offset: currentPage * itemsPerPage | limitTo: itemsPerPage track by variant.VariantNodeId" data-ng-click="setSelected(variant.VariantNodeId)" data-ng-class="{selected : variant.VariantNodeId === idSelected}">
         <tr>
             <td width="2.5%"><input type="checkbox" data-ng-model="variant.Selected"></td>
             <td width="2.5%" data-ng-click="openVariantAnnotationModal(variant)"><i class="fa fa-info-circle"></i></td>
@@ -90,16 +87,26 @@
                 </div>
                 </div>
             </td>
-            <td width="47.5%">{{::variant.VariantId}}</td>
-            <td width="7.5%">{{::variant.Inheritance}}</td>
-            <td width="7.5%" data-ng-click="openVariantOccurrenceModal(variant)"><i class="fa fa-binoculars"></i> {{::variant.Occurrence}}</td>
-            <td width="7.5%">{{::variant.Frequency}}%</td>
+            <td width="50%">{{::variant.VariantId}}</td>
+            <td width="10%">{{::variant.Inheritance}}</td>
+            <td width="10%" data-ng-click="openVariantOccurrenceModal(variant)"><i class="fa fa-binoculars"></i> {{::variant.Occurrence}}</td>
         </tr>
         </tbody>
     </table>
-</div>
-<div data-ng-hide="selectedVariantFilter == -1" class="col-md-12">
-    <button id="export-button" type="button" class="btn btn-success" data-ng-csv="exportVariants()" filename="test.csv" csv-header="getCsvHeaders()">
-        <i class="fa fa-download"></i> Save
+    <nav>
+        <ul class="pagination no-select">
+            <li data-ng-class="prevPageDisabled()">
+                <a data-ng-click="prevPage()" class="fa fa-chevron-left"> Prev</a>
+            </li>
+            <li data-ng-repeat="n in range()" data-ng-class="{active: n == currentPage}" data-ng-click="setPage(n)">
+                <a>{{n+1}}</a>
+            </li>
+            <li data-ng-class="nextPageDisabled()">
+                <a data-ng-click="nextPage()" class="fa fa-chevron-right"> Next</a>
+            </li>
+        </ul>
+    </nav>
+    <button id="export-button" type="button" class="btn btn-success" data-ng-csv="exportVariants()" filename="export.csv" csv-header="getCsvHeaders()">
+        <i class="fa fa-download"></i> Export
     </button>
 </div>
