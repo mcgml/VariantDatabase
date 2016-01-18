@@ -7,8 +7,8 @@ angular.module('variantdatabase.account', ['ngRoute', 'ui-notification'])
         $scope.updatePassword = function(){
             $http.post('/api/variantdatabase/updateuserpassword',
                 {
-                    UserNodeId : $rootScope.user.UserNodeId,
-                    Password : $scope.newPassword
+                    userNodeId : $rootScope.user.userNodeId,
+                    password : $scope.newPassword
                 })
                 .then(function(response) {
                     Notification('Operation successful');

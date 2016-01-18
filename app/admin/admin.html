@@ -1,21 +1,5 @@
 <div class="col-md-12">
-    <div class="col-md-6">
-        <div class="panel panel-default margin-top-15px">
-            <div class="panel-heading">
-                <div class="row">
-                    <h3 class="panel-title">Preferred Transcripts <span class="badge">{{featuresForAuthorisation.length}}</span></h3>
-                </div>
-            </div>
-            <ul class="list-group">
-                <li class="list-group-item s-scroll" data-ng-repeat="item in featuresForAuthorisation">
-                    <h4><a id="symbol-link" href="http://omim.org/search?search={{item.SymbolId}}" target="_blank">{{item.SymbolId}}</a> <a id="feature-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{item.FeatureId}}" target="_blank">{{item.FeatureId}}</a> <i class="fa fa-check" data-ng-click="acceptFeaturePreference(item.FeaturePreferenceNodeId)"></i> <i class="fa fa-times" data-ng-click="rejectFeaturePreference(item.FeaturePreferenceNodeId)"></i></h4>
-                    <h5>{{item.Evidence}}</h5>
-                    <h6>{{item.UserId}} ({{item.Date | date:"dd/MM/yy"}})</h6>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="panel panel-default margin-top-15px">
             <div class="panel-heading">
                 <div class="row">
@@ -23,19 +7,20 @@
                 </div>
             </div>
             <ul class="list-group s-scroll">
-                <li class="list-group-item" data-ng-repeat="item in pathogenicitiesForAuthorisation | orderBy:'Date':true">
-                    <h4 data-ng-show="item.AddAction">Class {{item.Classification}} added for {{item.VariantId}}</h4>
-                    <h4 data-ng-show="!item.AddAction">Class {{item.Classification}} removed for {{item.VariantId}}</h4>
-                    <h5 data-ng-show="item.Evidence">{{item.Evidence}}</h5>
-                    <h6>{{item.UserId}} ({{item.Date | date:"dd/MM/yy"}})</h6>
-                    <button type="button" class="btn btn-success" data-ng-click="authoriseVariantPathogenicity(item.PathogenicityNodeId, true)">
+                <li class="list-group-item" data-ng-repeat="item in pathogenicitiesForAuthorisation | orderBy:'date':true">
+                    <h4>{{item.labels}} {{item.status}} {{item.variantId}}</h4>
+                    <h5 data-ng-show="item.evidence">{{item.evidence}}</h5>
+                    <h6>{{item.fullName}} ({{item.date | date:"dd/MM/yy"}})</h6>
+                    <button type="button" class="btn btn-success" data-ng-click="authoriseVariantPathogenicity(item.pathogenicityNodeId, true)">
                         <i class="fa fa-check"></i> Accept
                     </button>
-                    <button type="button" class="btn btn-warning" data-ng-click="authoriseVariantPathogenicity(item.PathogenicityNodeId, false)">
+                    <button type="button" class="btn btn-warning" data-ng-click="authoriseVariantPathogenicity(item.pathogenicityNodeId, false)">
                         <i class="fa fa-times"></i> Reject
                     </button>
                 </li>
             </ul>
         </div>
     </div>
+    <div class="col-md-4"></div>
+    <div class="col-md-4"></div>
 </div>

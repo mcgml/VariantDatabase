@@ -1,8 +1,8 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{items.VariantId}}</h3>
+    <h3 class="modal-title">{{items.variantId}}</h3>
 </div>
 <div class="modal-body">
-    <table class="table table-condensed no-margin no-padding no-select">
+    <table class="table-responsive table-condensed no-margin no-padding no-select">
         <thead>
         <tr>
             <th width="2.5%"><i class="fa fa-eye"></i></th>
@@ -17,14 +17,14 @@
         </thead>
         <tbody data-ng-repeat="occurrence in items.Occurrences">
         <tr>
-            <td width="2.5%" data-ng-click="openIGVLink(occurrence.RemoteBamFilePath, items.VariantId)"><i class="fa fa-eye"></i></td>
-            <td width="10%">{{occurrence.SampleId}}</td>
-            <td width="10%">{{occurrence.Inheritance}}</td>
-            <td width="15%">{{occurrence.WorklistId}}</td>
-            <td width="15%">{{occurrence.Assay}}</td>
-            <td width="25%">{{occurrence.SeqId}}</td>
-            <td width="15%">{{occurrence.PipelineName}}</td>
-            <td width="7.5%">{{occurrence.PipelineVersion}}</td>
+            <td width="2.5%" data-ng-click="openIGVLink(occurrence.remoteBamFilePath, items.variantId)"><i class="fa fa-eye"></i></td>
+            <td width="10%">{{occurrence.sampleId}}</td>
+            <td width="10%">{{occurrence.inheritance}}</td>
+            <td width="15%">{{occurrence.worklistId}}</td>
+            <td width="15%">{{occurrence.assay}}</td>
+            <td width="25%">{{occurrence.seqId}}</td>
+            <td width="15%">{{occurrence.pipelineName}}</td>
+            <td width="7.5%">{{occurrence.pipelineVersion}}</td>
         </tr>
         </tbody>
     </table>

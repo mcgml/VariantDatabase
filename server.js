@@ -49,7 +49,7 @@ var auth = function(req, res, next){
 };
 
 var comparePassword = function(candidatePassword, user, cb) {
-    bcrypt.compare(candidatePassword, user.Password, function(err, isMatch) {
+    bcrypt.compare(candidatePassword, user.password, function(err, isMatch) {
         if (err) return cb(err);
         cb(null, isMatch);
     });
@@ -60,7 +60,7 @@ var getUserInformation = function(username, cb){
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/getuserinformation",
-            json: { UserId : username.username }
+            json: { userId : username.username }
         },
         function(error, result)
         {
@@ -130,10 +130,10 @@ app.get('/api/variantdatabase/panels', auth, function(req, res) {
         }
     )
 });
-app.get('/api/variantdatabase/getnewpathogenicitiesforauthorisation', auth, function(req, res) {
+app.get('/api/variantdatabase/getpathogenicityforauthorisation', auth, function(req, res) {
     request.get (
         {
-            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/getnewpathogenicitiesforauthorisation",
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/getpathogenicityforauthorisation",
             json: req.body
         },
         function(error, result)
@@ -274,14 +274,14 @@ app.post('/api/variantdatabase/getvirtualpanel', auth, function(req, res) {
     )
 });
 app.post('/api/variantdatabase/updateuserpassword', auth, function(req, res) {
-    bcrypt.hash(req.body.Password, null, null, function(error, hash) {
+    bcrypt.hash(req.body.password, null, null, function(error, hash) {
 
         if (error) throw err;
 
         request.post(
             {
                 uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/updateuserpassword",
-                json: { UserNodeId : req.body.UserNodeId, Password : hash }
+                json: { userNodeId : req.body.userNodeId, password : hash }
             },
             function(error, result)
             {

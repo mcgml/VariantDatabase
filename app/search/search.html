@@ -23,35 +23,35 @@
         <div data-ng-show="variantInformation" class="panel-body">
             <div class="col-md-6">
                 <h3>Details</h3>
-                <table id="variant-information-table" class="table borderless no-select">
+                <table id="variant-information-table" class="table-responsive borderless no-select">
                     <tbody>
-                    <tr><th>Variant</th><td>{{variantInformation.VariantId}}</td></tr>
+                    <tr><th>Variant</th><td>{{variantInformation.variantId}}</td></tr>
                     <tr><th>Functional Annotation</th><td><i class="fa fa-info-circle" data-ng-click="openVariantAnnotationModal(variantInformation)"></i></td></tr>
-                    <tr><th>dbSNP</th><td><a data-ng-show="variantInformation.dbSNPId" href="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs={{variantInformation.dbSNPId}}" target="_blank">{{variantInformation.dbSNPId}}</a></td></tr>
-                    <tr><th>Occurrence</th><td><i data-ng-click="openVariantOccurrenceModal(variantInformation)" class="fa fa-binoculars"></i> {{variantInformation.Occurrence}}</td></tr>
+                    <tr><th>dbSNP</th><td><a data-ng-show="variantInformation.dbSnpId" href="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs={{variantInformation.dbSnpId}}" target="_blank">{{variantInformation.dbSnpId}}</a></td></tr>
+                    <tr><th>Occurrence</th><td><i data-ng-click="openVariantOccurrenceModal(variantInformation)" class="fa fa-binoculars"></i> {{variantInformation.occurrence}}</td></tr>
                     <tr><th>Population</th><td>
                         <div class="btn-toolbar" role="toolbar">
                             <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.onekGPhase3_EAS_AF" tooltip-append-to-body="true" uib-tooltip="1KG East Asian {{variantInformation.onekGPhase3_EAS_AF}}%" data-ng-style="{'background-color' : (variantInformation.onekGPhase3_EAS_AF | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.onekGPhase3_EUR_AF" tooltip-append-to-body="true" uib-tooltip="1KG European {{variantInformation.onekGPhase3_EUR_AF}}%" data-ng-style="{'background-color' : (variantInformation.onekGPhase3_EUR_AF | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.onekGPhase3_AFR_AF" tooltip-append-to-body="true" uib-tooltip="1KG African {{variantInformation.onekGPhase3_AFR_AF}}%" data-ng-style="{'background-color' : (variantInformation.onekGPhase3_AFR_AF | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.onekGPhase3_AMR_AF" tooltip-append-to-body="true" uib-tooltip="1KG Mixed American {{variantInformation.onekGPhase3_AMR_AF}}%" data-ng-style="{'background-color' : (variantInformation.onekGPhase3_AMR_AF | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.onekGPhase3_SAS_AF" tooltip-append-to-body="true" uib-tooltip="1KG South Asian {{variantInformation.onekGPhase3_SAS_AF}}%" data-ng-style="{'background-color' : (variantInformation.onekGPhase3_SAS_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.exacAfrAf" tooltip-append-to-body="true" uib-tooltip="1KG East Asian {{variantInformation.exacAfrAf}}%" data-ng-style="{'background-color' : (variantInformation.exacAfrAf | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.exacAmrAf" tooltip-append-to-body="true" uib-tooltip="1KG European {{variantInformation.exacAmrAf}}%" data-ng-style="{'background-color' : (variantInformation.exacAmrAf | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.exacEasAf" tooltip-append-to-body="true" uib-tooltip="1KG African {{variantInformation.exacEasAf}}%" data-ng-style="{'background-color' : (variantInformation.exacEasAf | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.onekGPhase3_AMR_AF" tooltip-append-to-body="true" uib-tooltip="1KG Mixed American {{variantInformation.onekGPhase3_AMR_AF}}%" data-ng-style="{'background-color' : (variantInformation.onekGPhase3_AMR_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.onekGPhase3_SAS_AF" tooltip-append-to-body="true" uib-tooltip="1KG South Asian {{variantInformation.onekGPhase3_SAS_AF}}%" data-ng-style="{'background-color' : (variantInformation.onekGPhase3_SAS_AF | afpct2colour)}"></button>
                             </div>
                             <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.ExAC_EAS_AF" tooltip-append-to-body="true" uib-tooltip="ExAC East Asian {{variantInformation.ExAC_EAS_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_EAS_AF | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.ExAC_NFE_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Non-Finnish European {{variantInformation.ExAC_NFE_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_NFE_AF | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.ExAC_AFR_AF" tooltip-append-to-body="true" uib-tooltip="ExAC African {{variantInformation.ExAC_AFR_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_AFR_AF | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.ExAC_AMR_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Latino {{variantInformation.ExAC_AMR_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_AMR_AF | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.ExAC_SAS_AF" tooltip-append-to-body="true" uib-tooltip="ExAC South Asian {{variantInformation.ExAC_SAS_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_SAS_AF | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.ExAC_FIN_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Finnish {{variantInformation.ExAC_FIN_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_FIN_AF | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.VariantId)" tooltip-enable="variantInformation.ExAC_OTH_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Other {{variantInformation.ExAC_OTH_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_OTH_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.ExAC_EAS_AF" tooltip-append-to-body="true" uib-tooltip="ExAC East Asian {{variantInformation.ExAC_EAS_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_EAS_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.ExAC_NFE_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Non-Finnish European {{variantInformation.ExAC_NFE_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_NFE_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.ExAC_AFR_AF" tooltip-append-to-body="true" uib-tooltip="ExAC African {{variantInformation.ExAC_AFR_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_AFR_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.ExAC_AMR_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Latino {{variantInformation.ExAC_AMR_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_AMR_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.ExAC_SAS_AF" tooltip-append-to-body="true" uib-tooltip="ExAC South Asian {{variantInformation.ExAC_SAS_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_SAS_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.ExAC_FIN_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Finnish {{variantInformation.ExAC_FIN_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_FIN_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.ExAC_OTH_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Other {{variantInformation.ExAC_OTH_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_OTH_AF | afpct2colour)}"></button>
                             </div>
                         </div>
                     </td></tr>
                     <tr><th>Conservation</th><td>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-sq-xs" tooltip-enable="variantInformation.GERP" tooltip-append-to-body="true" uib-tooltip="GERP {{variantInformation.GERP}}" data-ng-style="{'background-color' : (variantInformation.GERP | gerp2colour)}"></button>
+                            <button type="button" class="btn btn-sq-xs" tooltip-enable="variantInformation.gerp" tooltip-append-to-body="true" uib-tooltip="GERP {{variantInformation.gerp}}" data-ng-style="{'background-color' : (variantInformation.gerp | gerp2colour)}"></button>
                             <button type="button" class="btn btn-sq-xs" tooltip-enable="variantInformation.phyloP" tooltip-append-to-body="true" uib-tooltip="phyloP {{variantInformation.phyloP}}" data-ng-style="{'background-color' : (variantInformation.phyloP | phylop2colour)}"></button>
                             <button type="button" class="btn btn-sq-xs" tooltip-enable="variantInformation.phastCons" tooltip-append-to-body="true" uib-tooltip="phastCons {{variantInformation.phastCons}}" data-ng-style="{'background-color' : (variantInformation.phastCons | phastcons2colour)}"></button>
                         </div>
@@ -62,8 +62,8 @@
                                 <i class="fa fa-external-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></i>
                                 <ul class="dropdown-menu">
                                     <li class="dropdown-header">Browsers</li>
-                                    <li><a data-ng-click="openEnsemblVariantLink(variantInformation.VariantId)">Ensembl</a></li>
-                                    <li><a data-ng-click="openUCSCVariantLink(variantInformation.VariantId)">UCSC</a></li>
+                                    <li><a data-ng-click="openEnsemblVariantLink(variantInformation.variantId)">Ensembl</a></li>
+                                    <li><a data-ng-click="openUCSCVariantLink(variantInformation.variantId)">UCSC</a></li>
                                 </ul>
                             </div>
                         </td>
@@ -90,16 +90,16 @@
                 </button>
             </div>
             <div class="col-md-6">
-                <h3>History <span class="badge">{{variantInformation.History.length}}</span></h3>
+                <h3>History <span class="badge">{{variantInformation.history.length}}</span></h3>
                 <ul class="list-group s-scroll">
-                    <li class="list-group-item" data-ng-repeat="item in variantInformation.History | orderBy:'AddedDate':true">
-                        <p><b>Pathogenicity class {{item.Classification}}</b></p>
-                        <p data-ng-show="item.AddEvidence != null">{{item.AddEvidence}}</p>
-                        <p>Added by {{item.AddedByUserId}} {{item.AddedDate | date:"dd/MM/yy"}}</p>
-                        <p data-ng-show="item.AddAuthorisedByUserId">Add authorised by {{item.AddAuthorisedByUserId}} {{item.AddAuthorisedDate | date:"dd/MM/yy"}}</p>
-                        <p data-ng-show="item.RemovedEvidence != null">{{item.RemovedEvidence}}</p>
-                        <p data-ng-show="item.RemovedByUserId">Removed by {{item.RemovedByUserId}} {{item.RemovedDate | date:"dd/MM/yy"}}</p>
-                        <p data-ng-show="item.RemoveAuthorisedByUserId">Remove authorised by {{item.RemoveAuthorisedByUserId}} {{item.RemoveAuthorisedDate | date:"dd/MM/yy"}}</p>
+                    <li class="list-group-item" data-ng-repeat="item in variantInformation.history | orderBy:'addedDate':true">
+                        <p><b>Pathogenicity class {{item.classification}}</b></p>
+                        <p data-ng-show="item.addEvidence != null">{{item.addEvidence}}</p>
+                        <p>Added by {{item.addedByUserId}} {{item.addedDate | date:"dd/MM/yy"}}</p>
+                        <p data-ng-show="item.addAuthorisedByUserId">Add authorised by {{item.addAuthorisedByUserId}} {{item.addAuthorisedDate | date:"dd/MM/yy"}}</p>
+                        <p data-ng-show="item.removedEvidence != null">{{item.removedEvidence}}</p>
+                        <p data-ng-show="item.removedByUserId">Removed by {{item.removedByUserId}} {{item.removedDate | date:"dd/MM/yy"}}</p>
+                        <p data-ng-show="item.removeAuthorisedByUserId">Remove authorised by {{item.removeAuthorisedByUserId}} {{item.removeAuthorisedDate | date:"dd/MM/yy"}}</p>
                     </li>
                 </ul>
             </div>
@@ -130,15 +130,15 @@
         </div>
         <div data-ng-show="featureInformation" class="panel-body">
             <div class="col-md-6">
-                <h3>Details <i data-ng-show="featureInformation.Preferred" class="fa fa-star"></i></h3>
-                <table id="feature-table" class="table borderless no-select">
+                <h3>Details <i data-ng-show="featureInformation.preferred" class="fa fa-star"></i></h3>
+                <table id="feature-table" class="table-responsive borderless no-select">
                     <tbody>
-                    <tr><th>Transcript</th><td><a id="feature-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{featureInformation.FeatureId}}" target="_blank">{{featureInformation.FeatureId}}</a></td></tr>
+                    <tr><th>Transcript</th><td><a id="feature-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{featureInformation.featureId}}" target="_blank">{{featureInformation.featureId}}</a></td></tr>
                     <tr><th>Strand</th><td>{{featureInformation.Strand}}</td></tr>
-                    <tr><th>CCDS</th><td><a id="ccds-link" href="http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&DATA={{featureInformation.CCDSId}}" target="_blank">{{featureInformation.CCDSId}}</a></td></tr>
-                    <tr><th>Type</th><td>{{featureInformation.FeatureType}}</td></tr>
-                    <tr><th>Exons</th><td>{{featureInformation.TotalExons}}</td></tr>
-                    <tr><th>Canonical</th><td>{{featureInformation.Canonical}}</td></tr>
+                    <tr><th>CCDS</th><td><a id="ccds-link" href="http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&DATA={{featureInformation.ccdsId}}" target="_blank">{{featureInformation.ccdsId}}</a></td></tr>
+                    <tr><th>Type</th><td>{{featureInformation.featureType}}</td></tr>
+                    <tr><th>Exons</th><td>{{featureInformation.totalExons}}</td></tr>
+                    <tr><th>Canonical</th><td>{{featureInformation.canonical}}</td></tr>
                     </tbody>
                 </table>
                 <h3>Preferred Transcript</h3>
@@ -150,12 +150,12 @@
                 </button>
             </div>
             <div class="col-md-6">
-                <h3>History <span class="badge">{{featureInformation.History.length}}</span></h3>
+                <h3>History <span class="badge">{{featureInformation.history.length}}</span></h3>
                 <ul class="list-group s-scroll">
-                    <li class="list-group-item" data-ng-repeat="item in featureInformation.History | orderBy:'Date':true">
-                        <h5>{{item.AddEvidence}}</h5>
-                        <h6>Added by {{item.AddedByUserId}} ({{item.AddedDate | date:"dd/MM/yy"}})</h6>
-                        <h6 data-ng-show="item.AuthorisedByUserId">Authorised by {{item.AuthorisedByUserId}} ({{item.AuthorisedDate | date:"dd/MM/yy"}})</h6>
+                    <li class="list-group-item" data-ng-repeat="item in featureInformation.history | orderBy:'Date':true">
+                        <h5>{{item.addEvidence}}</h5>
+                        <h6>Added by {{item.addedByUserId}} ({{item.addedDate | date:"dd/MM/yy"}})</h6>
+                        <h6 data-ng-show="item.authorisedByUserId">Authorised by {{item.authorisedByUserId}} ({{item.authorisedDate | date:"dd/MM/yy"}})</h6>
                     </li>
                 </ul>
             </div>
@@ -171,7 +171,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="input-group">
-                        <input type="text" class="form-control no-margin" placeholder="Enter Panel" data-ng-model="selectedVirtualPanel" typeahead-template-url="templates/VirtualPanelTypeahead.html" uib-typeahead="virtualPanel as virtualPanel.VirtualPanelName for virtualPanel in virtualPanels | filter:$viewValue | limitTo:5">
+                        <input type="text" class="form-control no-margin" placeholder="Enter Panel" data-ng-model="selectedVirtualPanel" typeahead-template-url="templates/VirtualPanelTypeahead.html" uib-typeahead="virtualPanel as virtualPanel.virtualPanelName for virtualPanel in virtualPanels | filter:$viewValue | limitTo:5">
                         <div class="input-group-btn">
                             <button class="btn btn-primary no-margin" data-ng-click="getVirtualPanel();">
                                 <i class="fa fa-search"></i>
@@ -187,16 +187,16 @@
         <div data-ng-show="virtualPanel" class="panel-body">
             <div class="col-md-6">
                 <h3>Details</h3>
-                <table id="gene-table" class="table borderless no-select">
+                <table id="gene-table" class="table-responsive borderless no-select">
                     <tbody>
-                    <tr><th>Panel Name</th><td>{{virtualPanel.VirtualPanelName}}</td></tr>
-                    <tr><th>Created</th><td>{{virtualPanel.FullName}} {{virtualPanel.Date | date:"dd/MM/yy"}}</td></tr>
+                    <tr><th>Panel Name</th><td>{{virtualPanel.virtualPanelName}}</td></tr>
+                    <tr><th>Created</th><td>{{virtualPanel.fullName}} {{virtualPanel.date | date:"dd/MM/yy"}}</td></tr>
                     </tbody>
                 </table>
             </div>
             <div class="col-md-6">
                 <h3>Content</h3>
-                <table class="table table-bordered table-hover no-select">
+                <table class="table-responsive table-bordered table-hover no-select">
                     <thead>
                     <tr>
                         <th colspan="2" width="100%">
@@ -205,13 +205,13 @@
                     </tr>
                     <tr>
                         <th width="75%" data-ng-click="sortType = 'SymbolId'; sortReverse = !sortReverse">
-                            Symbol <i data-ng-class="sortReverse ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" data-ng-show="sortType == 'SymbolId'"></i>
+                            Symbol <i data-ng-class="sortReverse ? 'fa fa-sort-alpha-desc' : 'fa fa-sort-alpha-asc'" data-ng-show="sortType == 'symbolId'"></i>
                         </th>
                     </tr>
                     </thead>
-                    <tbody data-ng-repeat="symbol in virtualPanel.Symbols | orderBy:sortType:sortReverse | filter:search">
+                    <tbody data-ng-repeat="symbol in virtualPanel.symbols | orderBy:sortType:sortReverse | filter:search">
                     <tr>
-                        <td width="75%"><a id="symbol-link" href="http://omim.org/search?search={{symbol.SymbolId}}" target="_blank">{{symbol.SymbolId}}</a></td>
+                        <td width="75%"><a id="symbol-link" href="http://omim.org/search?search={{symbol.symbolId}}" target="_blank">{{symbol.symbolId}}</a></td>
                     </tr>
                     </tbody>
                 </table>

@@ -1,13 +1,13 @@
 <div class="jumbotron">
-    <div id="welcomeMsg" data-ng-hide="filteredVariants">
+    <div id="welcome-msg" data-ng-hide="filteredVariants">
         <h1>Variant Database</h1>
         <h3>Enter the required information below to get started</h3>
     </div>
-    <nvd3 id="donutChart" options="donutChartOptions" data="filteredVariants.Filters"></nvd3>
+    <nvd3 id="donutChart" options="donutChartOptions" data="filteredVariants.filters"></nvd3>
 </div>
 <div class="col-md-4">
     <div class="input-group">
-        <input type="text" class="form-control" placeholder="Index Dataset" data-ng-model="selectedAnalysis" typeahead-template-url="templates/ProbandTypeahead.html" uib-typeahead="analysis as analysis.SampleId for analysis in analyses | filter:{SampleId:$viewValue} | limitTo:4">
+        <input type="text" class="form-control" placeholder="Index Dataset" data-ng-model="selectedAnalysis" typeahead-template-url="templates/ProbandTypeahead.html" uib-typeahead="analysis as analysis.sampleId for analysis in analyses | filter:{sampleId:$viewValue} | limitTo:4">
         <div class="input-group-btn">
             <button id="exclusionButton" class="btn btn-primary" data-ng-click="openVariantSelectionModal()">
                 <i class="fa fa-filter"></i>
@@ -16,7 +16,7 @@
     </div>
 </div>
 <div class="col-md-4">
-    <select class="form-control" data-ng-model="selectedWorkflow" ng-options="workflow as workflow.Name for workflow in workflows">
+    <select class="form-control" data-ng-model="selectedWorkflow" ng-options="workflow as workflow.name for workflow in workflows">
         <option value="">Stratification Workflow</option>
     </select>
 </div>
@@ -28,10 +28,10 @@
     </div>
 </div>
 <div class="col-md-12" data-ng-hide="selectedVariantFilter === -1">
-    <table id="variant-table" class="table table-bordered">
+    <table id="variant-table" class="table-responsive table-bordered">
         <thead>
         <tr>
-            <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Export"><a></a><i class="fa fa-star"></i></th>
+            <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Export"><input type="checkbox" data-ng-click=""></th>
             <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Annotations"><i class="fa fa-info-circle"></i></th>
             <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Link to other resources"><i class="fa fa-external-link"></i></th>
             <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="View call in IGV"><i class="fa fa-eye"></i></th>
@@ -42,54 +42,54 @@
             <th width="10%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Allele occurrence in this database" data-ng-click="sortType = 'Occurrence'; sortReverse = !sortReverse; currentPage = 0">Observed <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'Occurrence'"></i></th>
         </tr>
         </thead>
-        <tbody data-ng-repeat="variant in filteredVariants.Variants | filter:{Filter:selectedVariantFilter}:true | orderBy:sortType:sortReverse | offset: currentPage * itemsPerPage | limitTo: itemsPerPage track by variant.VariantNodeId" data-ng-click="setSelected(variant.VariantNodeId)" data-ng-class="{selected : variant.VariantNodeId === idSelected}">
+        <tbody data-ng-repeat="variant in filteredVariants.variants | filter:{filter:selectedVariantFilter}:true | orderBy:sortType:sortReverse | offset: currentPage * itemsPerPage | limitTo: itemsPerPage track by variant.variantNodeId" data-ng-click="setSelected(variant.variantNodeId)" data-ng-class="{selected : variant.variantNodeId === idSelected}">
         <tr>
-            <td width="2.5%"><input type="checkbox" data-ng-model="variant.Selected"></td>
+            <td width="2.5%"><input type="checkbox" data-ng-model="variant.selected"></td>
             <td width="2.5%" data-ng-click="openVariantAnnotationModal(variant)"><i class="fa fa-info-circle"></i></td>
             <td width="2.5%">
                 <div class="dropdown">
                     <i class="fa fa-external-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></i>
                     <ul class="dropdown-menu">
                         <li class="dropdown-header">Browsers</li>
-                        <li><a data-ng-click="openEnsemblVariantLink(variant.VariantId)">Ensembl</a></li>
-                        <li><a data-ng-click="openUCSCVariantLink(variant.VariantId)">UCSC</a></li>
-                        <li data-ng-class="{disabled: !variant.dbSNPId}"><a data-ng-click="!variant.dbSNPId || openDbSNPIdVariantLink(variant.dbSNPId)">dbSNP</a></li>
+                        <li><a data-ng-click="openEnsemblVariantLink(variant.variantId)">Ensembl</a></li>
+                        <li><a data-ng-click="openUCSCVariantLink(variant.variantId)">UCSC</a></li>
+                        <li data-ng-class="{disabled: !variant.dbSnpId}"><a data-ng-click="!variant.dbSnpId || openDbSNPIdVariantLink(variant.dbSnpId)">dbSNP</a></li>
                     </ul>
                 </div>
             </td>
-            <td width="2.5%" data-ng-click="openIGVLink(selectedAnalysis.RemoteBamFilePath, variant.VariantId)"><i class="fa fa-eye"></i></td>
+            <td width="2.5%" data-ng-click="openIGVLink(selectedAnalysis.remoteBamFilePath, variant.variantId)"><i class="fa fa-eye"></i></td>
             <td width="12.5%">
                 <div class="text-center" role="toolbar">
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.VariantId)" tooltip-enable="variant.onekGPhase3_EAS_AF" tooltip-append-to-body="true" uib-tooltip="1KG East Asian {{::variant.onekGPhase3_EAS_AF}}%" data-ng-style="::{'background-color' : (variant.onekGPhase3_EAS_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.VariantId)" tooltip-enable="variant.onekGPhase3_EUR_AF" tooltip-append-to-body="true" uib-tooltip="1KG European {{::variant.onekGPhase3_EUR_AF}}%" data-ng-style="::{'background-color' : (variant.onekGPhase3_EUR_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.VariantId)" tooltip-enable="variant.onekGPhase3_AFR_AF" tooltip-append-to-body="true" uib-tooltip="1KG African {{::variant.onekGPhase3_AFR_AF}}%" data-ng-style="::{'background-color' : (variant.onekGPhase3_AFR_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.VariantId)" tooltip-enable="variant.onekGPhase3_AMR_AF" tooltip-append-to-body="true" uib-tooltip="1KG Mixed American {{::variant.onekGPhase3_AMR_AF}}%" data-ng-style="::{'background-color' : (variant.onekGPhase3_AMR_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.VariantId)" tooltip-enable="variant.onekGPhase3_SAS_AF" tooltip-append-to-body="true" uib-tooltip="1KG South Asian {{::variant.onekGPhase3_SAS_AF}}%" data-ng-style="::{'background-color' : (variant.onekGPhase3_SAS_AF | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3EasAf" tooltip-append-to-body="true" uib-tooltip="1KG East Asian {{::variant.kGPhase3EasAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3EasAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3EurAf" tooltip-append-to-body="true" uib-tooltip="1KG European {{::variant.kGPhase3EurAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3EurAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3AfrAf" tooltip-append-to-body="true" uib-tooltip="1KG African {{::variant.kGPhase3AfrAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3AfrAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3AmrAf" tooltip-append-to-body="true" uib-tooltip="1KG Mixed American {{::variant.kGPhase3AmrAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3AmrAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3SasAf" tooltip-append-to-body="true" uib-tooltip="1KG South Asian {{::variant.kGPhase3SasAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3SasAf | afpct2colour)}"></button>
                     </div>
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_EAS_AF" tooltip-append-to-body="true" uib-tooltip="ExAC East Asian {{::variant.ExAC_EAS_AF}}%" data-ng-style="::{'background-color' : (variant.ExAC_EAS_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_NFE_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Non-Finnish European {{::variant.ExAC_NFE_AF}}%" data-ng-style="::{'background-color' : (variant.ExAC_NFE_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_AFR_AF" tooltip-append-to-body="true" uib-tooltip="ExAC African {{::variant.ExAC_AFR_AF}}%" data-ng-style="::{'background-color' : (variant.ExAC_AFR_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_AMR_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Latino {{::variant.ExAC_AMR_AF}}%" data-ng-style="::{'background-color' : (variant.ExAC_AMR_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_SAS_AF" tooltip-append-to-body="true" uib-tooltip="ExAC South Asian {{::variant.ExAC_SAS_AF}}%" data-ng-style="::{'background-color' : (variant.ExAC_SAS_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_FIN_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Finnish {{::variant.ExAC_FIN_AF}}%" data-ng-style="::{'background-color' : (variant.ExAC_FIN_AF | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.VariantId)" tooltip-enable="variant.ExAC_OTH_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Other {{::variant.ExAC_OTH_AF}}%" data-ng-style="::{'background-color' : (variant.ExAC_OTH_AF | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacEasAf" tooltip-append-to-body="true" uib-tooltip="ExAC East Asian {{::variant.exacEasAf}}%" data-ng-style="::{'background-color' : (variant.exacEasAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacNfeAf" tooltip-append-to-body="true" uib-tooltip="ExAC Non-Finnish European {{::variant.exacNfeAf}}%" data-ng-style="::{'background-color' : (variant.exacNfeAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacAfrAf" tooltip-append-to-body="true" uib-tooltip="ExAC African {{::variant.exacAfrAf}}%" data-ng-style="::{'background-color' : (variant.exacAfrAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacAmrAf" tooltip-append-to-body="true" uib-tooltip="ExAC Latino {{::variant.exacAmrAf}}%" data-ng-style="::{'background-color' : (variant.exacAmrAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacSasAf" tooltip-append-to-body="true" uib-tooltip="ExAC South Asian {{::variant.exacSasAf}}%" data-ng-style="::{'background-color' : (variant.exacSasAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacFinAf" tooltip-append-to-body="true" uib-tooltip="ExAC Finnish {{::variant.exacFinAf}}%" data-ng-style="::{'background-color' : (variant.exacFinAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacOthAf" tooltip-append-to-body="true" uib-tooltip="ExAC Other {{::variant.exacOthAf}}%" data-ng-style="::{'background-color' : (variant.exacOthAf | afpct2colour)}"></button>
                     </div>
                 </div>
             </td>
             <td width="7.5%">
                 <div class="text-center" role="toolbar">
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-sq-xs" tooltip-enable="variant.GERP" tooltip-append-to-body="true" uib-tooltip="GERP {{::variant.GERP}}" data-ng-style="::{'background-color' : (variant.GERP | gerp2colour)}"></button>
+                    <button type="button" class="btn btn-sq-xs" tooltip-enable="variant.gerp" tooltip-append-to-body="true" uib-tooltip="GERP {{::variant.gerp}}" data-ng-style="::{'background-color' : (variant.gerp | gerp2colour)}"></button>
                     <button type="button" class="btn btn-sq-xs" tooltip-enable="variant.phyloP" tooltip-append-to-body="true" uib-tooltip="phyloP {{::variant.phyloP}}" data-ng-style="::{'background-color' : (variant.phyloP | phylop2colour)}"></button>
                     <button type="button" class="btn btn-sq-xs" tooltip-enable="variant.phastCons" tooltip-append-to-body="true" uib-tooltip="phastCons {{::variant.phastCons}}" data-ng-style="::{'background-color' : (variant.phastCons | phastcons2colour)}"></button>
                 </div>
                 </div>
             </td>
-            <td width="50%">{{::variant.VariantId}}</td>
-            <td width="10%">{{::variant.Inheritance}}</td>
-            <td width="10%" data-ng-click="openVariantOccurrenceModal(variant)"><i class="fa fa-binoculars"></i> {{::variant.Occurrence}}</td>
+            <td width="50%">{{::variant.variantId}}</td>
+            <td width="10%">{{::variant.inheritance}}</td>
+            <td width="10%" data-ng-click="openVariantOccurrenceModal(variant)"><i class="fa fa-binoculars"></i> {{::variant.occurrence}}</td>
         </tr>
         </tbody>
     </table>

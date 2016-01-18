@@ -12,12 +12,12 @@ bcrypt.hash(password, null, null, function(error, hash) {
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/createnewuser",
             json: {
-                FullName : "Matthew Lyon",
-                JobTitle : "Bioinformatician",
-                UserId : "matt.lyon@wales.nhs.uk",
-                Password : hash,
-                ContactNumber : "02920742361",
-                Admin : true
+                fullName : "Matthew Lyon",
+                jobTitle : "Bioinformatician",
+                userId : "matt.lyon@wales.nhs.uk",
+                password : hash,
+                contactNumber : "00000000000",
+                admin : true
             }
         },
         function(error, result)

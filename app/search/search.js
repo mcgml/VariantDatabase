@@ -31,7 +31,7 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
 
             $http.post('/api/variantdatabase/getvirtualpanel',
                 {
-                    PanelNodeId : $scope.selectedVirtualPanel.PanelNodeId
+                    panelNodeId : $scope.selectedVirtualPanel.PanelNodeId
                 })
                 .then(function(response) {
                     $scope.virtualPanel = response.data;
@@ -59,7 +59,7 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
         $scope.getFeature = function(){
             $http.post('/api/variantdatabase/featureinformation',
                 {
-                    FeatureId : $scope.selectedFeature
+                    featureId : $scope.selectedFeature
                 })
                 .then(function(response) {
                     $scope.featureInformation = response.data;
@@ -73,10 +73,10 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
         $scope.addVariantPathogenicity = function(){
             $http.post('/api/variantdatabase/addvariantpathogenicity',
                 {
-                    VariantNodeId : $scope.variantInformation.VariantNodeId,
-                    UserNodeId : $rootScope.user.UserNodeId,
-                    Classification : $scope.selectedPathogenicity,
-                    Evidence : $scope.pathogenicityEvidenceText
+                    variantNodeId : $scope.variantInformation.variantNodeId,
+                    userNodeId : $rootScope.user.userNodeId,
+                    classification : $scope.selectedPathogenicity,
+                    evidence : $scope.pathogenicityEvidenceText
 
                 })
                 .then(function(response) {
@@ -91,9 +91,9 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
         $scope.removeVariantPathogenicity = function(){
             $http.post('/api/variantdatabase/removevariantpathogenicity',
                 {
-                    PathogenicityNodeId : $scope.variantInformation.PathogenicityNodeId,
-                    UserNodeId : $rootScope.user.UserNodeId,
-                    Evidence : $scope.pathogenicityEvidenceText
+                    pathogenicityNodeId : $scope.variantInformation.pathogenicityNodeId,
+                    userNodeId : $rootScope.user.userNodeId,
+                    evidence : $scope.pathogenicityEvidenceText
                 })
                 .then(function(response) {
                     Notification('Operation successful');
@@ -107,7 +107,7 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
         $scope.getVariantInformation = function(){
             $http.post('/api/variantdatabase/variantinformation',
                 {
-                    VariantId : $scope.selectedVariant
+                    variantId : $scope.selectedVariant
                 })
                 .then(function(response) {
                     $scope.variantInformation = response.data;
@@ -122,17 +122,17 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
 
             $http.post('/api/variantdatabase/variantobservations',
                 {
-                    'VariantNodeId' : variant.VariantNodeId
+                    variantNodeId : variant.variantNodeId
                 })
                 .then(function(response) {
-                    seen.Occurrences = response.data;
+                    seen.occurrences = response.data;
                     Notification('Operation successful');
                 }, function(response) {
                     Notification.error(response);
                     console.log("ERROR: " + response);
                 });
 
-            seen.VariantId = variant.VariantId;
+            seen.variantId = variant.variantId;
 
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -150,10 +150,10 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
         $scope.openVariantAnnotationModal = function (variant) {
             $http.post('/api/variantdatabase/functionalannotation',
                 {
-                    'VariantNodeId' : variant.VariantNodeId
+                    variantNodeId : variant.variantNodeId
                 })
                 .then(function(response) {
-                    variant.Annotation = response.data;
+                    variant.annotation = response.data;
                     Notification('Operation successful');
                 }, function(response) {
                     Notification.error(response);

@@ -125,7 +125,7 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
 
     .filter('offset', function() {
         return function(input, start) {
-            if (input === undefined) return; //todo check
+            if (input === undefined) return;
             start = parseInt(start, 10);
             return input.slice(start);
         };
@@ -281,22 +281,22 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
             keywordSearchFromAnnotationObject: function(annotation){
                 var keywords = '';
 
-                if (annotation.hasOwnProperty('SymbolId')){
+                if (annotation.hasOwnProperty('symbolId')){
                     keywords += " \"";
-                    keywords += annotation.SymbolId;
+                    keywords += annotation.symbolId;
                     keywords += "\"";
                 }
 
-                if (annotation.hasOwnProperty('HGVSc')){
+                if (annotation.hasOwnProperty('hgvsc')){
                     keywords += " \"";
-                    keywords += annotation.HGVSc.substring(2);
+                    keywords += annotation.hgvsc.substring(2);
                     keywords += "\"";
                 }
 
-                if (annotation.hasOwnProperty('HGVSp')){
-                    if (annotation.HGVSp !== "p.="){
+                if (annotation.hasOwnProperty('hgvsp')){
+                    if (annotation.hgvsp !== "p.="){
                         keywords += " \"";
-                        keywords += annotation.HGVSp.substring(2);
+                        keywords += annotation.hgvsp.substring(2);
                         keywords += "\"";
                     }
                 }
@@ -350,9 +350,9 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
 
             $http.post('/api/variantdatabase/addvirtualpanel',
                 {
-                    UserNodeId : $rootScope.user.UserNodeId,
-                    VirtualPanelName : $scope.items,
-                    VirtualPanelList : upload
+                    userNodeId : $rootScope.user.userNodeId,
+                    virtualPanelName : $scope.items,
+                    virtualPanelList : upload
                 })
                 .then(function(response) {
                     Notification('Operation successful');
@@ -383,14 +383,14 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
 
         $scope.addExcludedDataset = function(){
 
-            if ($scope.excludedDataset === undefined || $scope.excludedDataset === '' || !$scope.excludedDataset.hasOwnProperty("RunInfoNodeId")){
+            if ($scope.excludedDataset === undefined || $scope.excludedDataset === '' || !$scope.excludedDataset.hasOwnProperty("runInfoNodeId")){
                 Notification.error("Select sample");
                 return;
             }
 
             var found = false;
             for(var i = 0; i < $scope.savedExcludedDatasets.length; i++) {
-                if ($scope.savedExcludedDatasets[i].RunInfoNodeId == $scope.excludedDataset.RunInfoNodeId) {
+                if ($scope.savedExcludedDatasets[i].runInfoNodeId == $scope.excludedDataset.runInfoNodeId) {
                     found = true;
                     break;
                 }
@@ -406,14 +406,14 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
 
         $scope.addVirtualPanel = function(){
 
-            if ($scope.selectedVirtualPanel === undefined || $scope.selectedVirtualPanel === '' || !$scope.selectedVirtualPanel.hasOwnProperty("PanelNodeId")){
+            if ($scope.selectedVirtualPanel === undefined || $scope.selectedVirtualPanel === '' || !$scope.selectedVirtualPanel.hasOwnProperty("panelNodeId")){
                 Notification.error("Select panel");
                 return;
             }
 
             var found = false;
             for(var i = 0; i < $scope.savedVirtualPanels.length; i++) {
-                if ($scope.savedVirtualPanels[i].PanelNodeId == $scope.selectedVirtualPanel.PanelNodeId) {
+                if ($scope.savedVirtualPanels[i].panelNodeId == $scope.selectedVirtualPanel.panelNodeId) {
                     found = true;
                     break;
                 }
@@ -444,12 +444,12 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
 
             //bank exclusion run node Ids
             for (i = 0; i < $scope.savedExcludedDatasets.length; i++) {
-                retObj.excludeRunInfoNodes.push($scope.savedExcludedDatasets[i].RunInfoNodeId);
+                retObj.excludeRunInfoNodes.push($scope.savedExcludedDatasets[i].runInfoNodeId);
             }
 
             //bank gene panel run Ids
             for (i = 0; i < $scope.savedVirtualPanels.length; i++) {
-                retObj.includePanelNodes.push($scope.savedVirtualPanels[i].PanelNodeId);
+                retObj.includePanelNodes.push($scope.savedVirtualPanels[i].panelNodeId);
             }
 
             $uibModalInstance.close(retObj);

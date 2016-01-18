@@ -12,7 +12,7 @@ angular.module('variantdatabase.login', ['ngResource', 'ngRoute', 'ui-notificati
                 })
                 .success(function(user){
                     $rootScope.user = user;
-                    Notification('Welcome ' + $rootScope.user.FullName);
+                    Notification('Welcome ' + $rootScope.user.fullName);
                     $location.url('/report');
                 })
                 .error(function(){

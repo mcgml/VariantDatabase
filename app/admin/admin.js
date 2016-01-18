@@ -6,8 +6,7 @@ angular.module('variantdatabase.admin', ['ngRoute', 'ui-notification'])
 
         //new pathogenicities for authorisation
         function getNewPathogenicitiesForAuthorisation() {
-            $http.get('/api/variantdatabase/getnewpathogenicitiesforauthorisation', {
-
+            $http.get('/api/variantdatabase/getpathogenicityforauthorisation', {
             }).then(function(response) {
                 $scope.pathogenicitiesForAuthorisation = response.data;
             }, function(response) {
@@ -19,9 +18,9 @@ angular.module('variantdatabase.admin', ['ngRoute', 'ui-notification'])
         $scope.authoriseVariantPathogenicity = function(pathogenicityNodeId, addOrRemove){
             $http.post('/api/variantdatabase/authorisevariantpathogenicity',
                 {
-                    'PathogenicityNodeId' : pathogenicityNodeId,
-                    'UserNodeId' : $rootScope.user.UserNodeId,
-                    'AddorRemove' : addOrRemove
+                    'pathogenicityNodeId' : pathogenicityNodeId,
+                    'userNodeId' : $rootScope.user.userNodeId,
+                    'addorRemove' : addOrRemove
                 })
                 .then(function(response) {
                     Notification('Operation successful');

@@ -1,8 +1,6 @@
 'use strict';
 
 //todo add fields and output for SHIRE import
-//todo center align population frequencies
-//todo check af calculations
 //todo add mutation taster
 //todo splicing
 
@@ -78,7 +76,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
                         elementClick: function(e) {
                             $scope.selectedVariantFilter = e.index;
                             $scope.currentPage = 0;
-                            $scope.pageCount = Math.ceil($scope.filteredVariants.Filters[$scope.selectedVariantFilter]["y"] / $scope.itemsPerPage) - 1;
+                            $scope.pageCount = Math.ceil($scope.filteredVariants.filters[$scope.selectedVariantFilter]["y"] / $scope.itemsPerPage) - 1;
                             $scope.$apply();
                         }
                     }
@@ -111,7 +109,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
         $scope.getFilteredVariants = function () {
             $scope.selectedVariantFilter = -1; //reset piechart filter
 
-            if ($scope.selectedAnalysis === undefined){
+            if ($scope.selectedAnalysis === undefined || $scope.selectedAnalysis.runInfoNodeId === undefined){
                 Notification.error("Select index dataset");
                 return;
             }
@@ -122,8 +120,8 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
             }
 
             //define obj for sending to server
-            savedVariantFilters.RunInfoNodeId = $scope.selectedAnalysis.RunInfoNodeId;
-            savedVariantFilters.workflowName = $scope.selectedWorkflow.Name;
+            savedVariantFilters.runInfoNodeId = $scope.selectedAnalysis.runInfoNodeId;
+            savedVariantFilters.workflowName = $scope.selectedWorkflow.name;
 
             if (!savedVariantFilters.hasOwnProperty('excludeRunInfoNodes')){
                 savedVariantFilters.excludeRunInfoNodes = [];
@@ -135,7 +133,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
             $http.post('/api/variantdatabase/getfilteredvariants', savedVariantFilters)
                 .then(function(response) {
                     $scope.filteredVariants = response.data;
-                    $scope.donutChartOptions.chart.title = response.data.Total;
+                    $scope.donutChartOptions.chart.title = response.data.total;
                     Notification('Operation successful');
                 }, function(response) {
                     Notification.error(response);
@@ -147,10 +145,10 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
 
             $http.post('/api/variantdatabase/functionalannotation',
                 {
-                    'VariantNodeId' : variant.VariantNodeId
+                    'variantNodeId' : variant.variantNodeId
                 })
                 .then(function(response) {
-                    variant.Annotation = response.data;
+                    variant.annotation = response.data;
                 }, function(response) {
                     Notification.error(response);
                     console.log("ERROR: " + response);
@@ -174,16 +172,16 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
 
             $http.post('/api/variantdatabase/variantobservations',
                 {
-                    'VariantNodeId' : variant.VariantNodeId
+                    'variantNodeId' : variant.variantNodeId
                 })
                 .then(function(response) {
-                    seen.Occurrences = response.data;
+                    seen.occurrences = response.data;
                 }, function(response) {
                     Notification.error(response);
                     console.log("ERROR: " + response);
                 });
 
-            seen.VariantId = variant.VariantId;
+            seen.variantId = variant.variantId;
 
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -227,17 +225,17 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
             //skip missing dataset
             if ($scope.filteredVariants === null) return;
 
-            for (var key in $scope.filteredVariants.Variants) {
-                if ($scope.filteredVariants.Variants.hasOwnProperty(key)) {
-                    if ($scope.filteredVariants.Variants[key].Selected){
+            for (var key in $scope.filteredVariants.variants) {
+                if ($scope.filteredVariants.variants.hasOwnProperty(key)) {
+                    if ($scope.filteredVariants.variants[key].selected){
 
                         var tempObj = {};
 
-                        tempObj.SampleId = $scope.selectedAnalysis["SampleId"];
-                        tempObj.SeqId = $scope.selectedAnalysis["SeqId"];
-                        tempObj.WorklistId = $scope.selectedAnalysis["WorklistId"];
-                        tempObj.VariantId = $scope.filteredVariants.Variants[key]["VariantId"];
-                        tempObj.Inheritance = $scope.filteredVariants.Variants[key]["Inheritance"];
+                        tempObj.sampleId = $scope.selectedAnalysis["sampleId"];
+                        tempObj.seqId = $scope.selectedAnalysis["seqId"];
+                        tempObj.worklistId = $scope.selectedAnalysis["worklistId"];
+                        tempObj.variantId = $scope.filteredVariants.variants[key]["variantId"];
+                        tempObj.inheritance = $scope.filteredVariants.variants[key]["inheritance"];
 
                         saved.push(tempObj);
 
@@ -263,8 +261,8 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
         $scope.openExACVariantLink = function(variant){
             $window.open(framework.getExACVariantLink() + framework.convertVariantToExAC(variant), '_blank');
         };
-        $scope.openDbSNPIdVariantLink = function(dbSNPId){
-            $window.open(framework.getDbSNPIdVariantLink() + dbSNPId, '_blank');
+        $scope.openDbSNPIdVariantLink = function(dbSnpId){
+            $window.open(framework.getDbSNPIdVariantLink() + dbSnpId, '_blank');
         };
 
         //populate typeaheads on pageload
