@@ -35,6 +35,15 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
             $scope.idSelected = idSelected;
         };
 
+        $scope.checkAll = function () {
+            for (var key in $scope.filteredVariants.variants) {
+                if ($scope.filteredVariants.variants.hasOwnProperty(key) && $scope.filteredVariants.variants[key].filter === $scope.selectedVariantFilter) {
+                    $scope.filteredVariants.variants[key].selected = $scope.selectedAll;
+                }
+            }
+
+        };
+
         $scope.setPage = function(n) {
             $scope.currentPage = n;
             $anchorScroll('donutChart');
@@ -77,6 +86,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
                             $scope.selectedVariantFilter = e.index;
                             $scope.currentPage = 0;
                             $scope.pageCount = Math.ceil($scope.filteredVariants.filters[$scope.selectedVariantFilter]["y"] / $scope.itemsPerPage) - 1;
+                            $scope.selectedAll = false;
                             $scope.$apply();
                         }
                     }

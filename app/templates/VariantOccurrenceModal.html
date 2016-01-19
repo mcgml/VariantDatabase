@@ -2,7 +2,8 @@
     <h3 class="modal-title">{{items.variantId}}</h3>
 </div>
 <div class="modal-body">
-    <table class="table-responsive table-condensed no-margin no-padding no-select">
+    <div class="table-responsive">
+    <table class="table no-margin no-padding no-select">
         <thead>
         <tr>
             <th width="2.5%"><i class="fa fa-eye"></i></th>
@@ -15,7 +16,7 @@
             <th width="7.5%">PipelineVersion</th>
         </tr>
         </thead>
-        <tbody data-ng-repeat="occurrence in items.Occurrences">
+        <tbody data-ng-repeat="occurrence in items.occurrences">
         <tr>
             <td width="2.5%" data-ng-click="openIGVLink(occurrence.remoteBamFilePath, items.variantId)"><i class="fa fa-eye"></i></td>
             <td width="10%">{{occurrence.sampleId}}</td>
@@ -28,6 +29,7 @@
         </tr>
         </tbody>
     </table>
+        </div>
 </div>
 <div class="modal-footer">
     <button class="btn btn-warning" type="button" data-ng-click="cancel()">Close</button>

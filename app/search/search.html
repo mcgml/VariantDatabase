@@ -23,7 +23,8 @@
         <div data-ng-show="variantInformation" class="panel-body">
             <div class="col-md-6">
                 <h3>Details</h3>
-                <table id="variant-information-table" class="table-responsive borderless no-select">
+                <div class="table-responsive">
+                <table id="variant-information-table" class="table borderless no-select">
                     <tbody>
                     <tr><th>Variant</th><td>{{variantInformation.variantId}}</td></tr>
                     <tr><th>Functional Annotation</th><td><i class="fa fa-info-circle" data-ng-click="openVariantAnnotationModal(variantInformation)"></i></td></tr>
@@ -32,20 +33,20 @@
                     <tr><th>Population</th><td>
                         <div class="btn-toolbar" role="toolbar">
                             <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.exacAfrAf" tooltip-append-to-body="true" uib-tooltip="1KG East Asian {{variantInformation.exacAfrAf}}%" data-ng-style="{'background-color' : (variantInformation.exacAfrAf | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.exacAmrAf" tooltip-append-to-body="true" uib-tooltip="1KG European {{variantInformation.exacAmrAf}}%" data-ng-style="{'background-color' : (variantInformation.exacAmrAf | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.exacEasAf" tooltip-append-to-body="true" uib-tooltip="1KG African {{variantInformation.exacEasAf}}%" data-ng-style="{'background-color' : (variantInformation.exacEasAf | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.onekGPhase3_AMR_AF" tooltip-append-to-body="true" uib-tooltip="1KG Mixed American {{variantInformation.onekGPhase3_AMR_AF}}%" data-ng-style="{'background-color' : (variantInformation.onekGPhase3_AMR_AF | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.onekGPhase3_SAS_AF" tooltip-append-to-body="true" uib-tooltip="1KG South Asian {{variantInformation.onekGPhase3_SAS_AF}}%" data-ng-style="{'background-color' : (variantInformation.onekGPhase3_SAS_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.kGPhase3EASAf" tooltip-append-to-body="true" uib-tooltip="1KG East Asian {{variantInformation.kGPhase3EASAf}}%" data-ng-style="{'background-color' : (variantInformation.kGPhase3EASAf | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.kGPhase3EURAf" tooltip-append-to-body="true" uib-tooltip="1KG European {{variantInformation.kGPhase3EURAf}}%" data-ng-style="{'background-color' : (variantInformation.kGPhase3EURAf | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.kGPhase3AFRAf" tooltip-append-to-body="true" uib-tooltip="1KG African {{variantInformation.kGPhase3AFRAf}}%" data-ng-style="{'background-color' : (variantInformation.kGPhase3AFRAf | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.kGPhase3AMRAf" tooltip-append-to-body="true" uib-tooltip="1KG Mixed American {{variantInformation.kGPhase3AMRAf}}%" data-ng-style="{'background-color' : (variantInformation.kGPhase3AMRAf | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.kGPhase3SASAf" tooltip-append-to-body="true" uib-tooltip="1KG South Asian {{variantInformation.kGPhase3SASAf}}%" data-ng-style="{'background-color' : (variantInformation.kGPhase3SASAf | afpct2colour)}"></button>
                             </div>
                             <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.ExAC_EAS_AF" tooltip-append-to-body="true" uib-tooltip="ExAC East Asian {{variantInformation.ExAC_EAS_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_EAS_AF | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.ExAC_NFE_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Non-Finnish European {{variantInformation.ExAC_NFE_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_NFE_AF | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.ExAC_AFR_AF" tooltip-append-to-body="true" uib-tooltip="ExAC African {{variantInformation.ExAC_AFR_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_AFR_AF | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.ExAC_AMR_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Latino {{variantInformation.ExAC_AMR_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_AMR_AF | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.ExAC_SAS_AF" tooltip-append-to-body="true" uib-tooltip="ExAC South Asian {{variantInformation.ExAC_SAS_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_SAS_AF | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.ExAC_FIN_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Finnish {{variantInformation.ExAC_FIN_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_FIN_AF | afpct2colour)}"></button>
-                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.ExAC_OTH_AF" tooltip-append-to-body="true" uib-tooltip="ExAC Other {{variantInformation.ExAC_OTH_AF}}%" data-ng-style="{'background-color' : (variantInformation.ExAC_OTH_AF | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.exacEASAf" tooltip-append-to-body="true" uib-tooltip="ExAC East Asian {{variantInformation.exacEASAf}}%" data-ng-style="{'background-color' : (variantInformation.exacEASAf | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.exacNFEAf" tooltip-append-to-body="true" uib-tooltip="ExAC Non-Finnish European {{variantInformation.exacNFEAf}}%" data-ng-style="{'background-color' : (variantInformation.exacNFEAf | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.exacAFRAf" tooltip-append-to-body="true" uib-tooltip="ExAC African {{variantInformation.exacAFRAf}}%" data-ng-style="{'background-color' : (variantInformation.exacAFRAf | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.exacAMRAf" tooltip-append-to-body="true" uib-tooltip="ExAC Latino {{variantInformation.exacAMRAf}}%" data-ng-style="{'background-color' : (variantInformation.exacAMRAf | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.exacSASAf" tooltip-append-to-body="true" uib-tooltip="ExAC South Asian {{variantInformation.exacSASAf}}%" data-ng-style="{'background-color' : (variantInformation.exacSASAf | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.exacFINAf" tooltip-append-to-body="true" uib-tooltip="ExAC Finnish {{variantInformation.exacFINAf}}%" data-ng-style="{'background-color' : (variantInformation.exacFINAf | afpct2colour)}"></button>
+                                <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variantInformation.variantId)" tooltip-enable="variantInformation.exacOTHAf" tooltip-append-to-body="true" uib-tooltip="ExAC Other {{variantInformation.exacOTHAf}}%" data-ng-style="{'background-color' : (variantInformation.exacOTHAf | afpct2colour)}"></button>
                             </div>
                         </div>
                     </td></tr>
@@ -70,6 +71,7 @@
                     </tr>
                     </tbody>
                 </table>
+                    </div>
                 <form role="form">
                     <div class="form-group">
                         <h3>Pathogenicity</h3>
@@ -131,16 +133,18 @@
         <div data-ng-show="featureInformation" class="panel-body">
             <div class="col-md-6">
                 <h3>Details <i data-ng-show="featureInformation.preferred" class="fa fa-star"></i></h3>
-                <table id="feature-table" class="table-responsive borderless no-select">
+                <div class="table-responsive">
+                <table id="feature-table" class="table borderless no-select">
                     <tbody>
                     <tr><th>Transcript</th><td><a id="feature-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{featureInformation.featureId}}" target="_blank">{{featureInformation.featureId}}</a></td></tr>
-                    <tr><th>Strand</th><td>{{featureInformation.Strand}}</td></tr>
+                    <tr><th>Strand</th><td>{{featureInformation.strand}}</td></tr>
                     <tr><th>CCDS</th><td><a id="ccds-link" href="http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&DATA={{featureInformation.ccdsId}}" target="_blank">{{featureInformation.ccdsId}}</a></td></tr>
                     <tr><th>Type</th><td>{{featureInformation.featureType}}</td></tr>
                     <tr><th>Exons</th><td>{{featureInformation.totalExons}}</td></tr>
                     <tr><th>Canonical</th><td>{{featureInformation.canonical}}</td></tr>
                     </tbody>
                 </table>
+                </div>
                 <h3>Preferred Transcript</h3>
                 <div class="form-group">
                     <textarea class="form-control" placeholder="Give evidence" rows="3" data-ng-model="preferredFeatureEvidenceText"></textarea>
@@ -187,16 +191,19 @@
         <div data-ng-show="virtualPanel" class="panel-body">
             <div class="col-md-6">
                 <h3>Details</h3>
-                <table id="gene-table" class="table-responsive borderless no-select">
+                <div class="table-responsive">
+                <table id="gene-table" class="table borderless no-select">
                     <tbody>
                     <tr><th>Panel Name</th><td>{{virtualPanel.virtualPanelName}}</td></tr>
                     <tr><th>Created</th><td>{{virtualPanel.fullName}} {{virtualPanel.date | date:"dd/MM/yy"}}</td></tr>
                     </tbody>
                 </table>
+                </div>
             </div>
             <div class="col-md-6">
                 <h3>Content</h3>
-                <table class="table-responsive table-bordered table-hover no-select">
+                <div class="table-responsive">
+                <table class="table no-select">
                     <thead>
                     <tr>
                         <th colspan="2" width="100%">
@@ -215,6 +222,7 @@
                     </tr>
                     </tbody>
                 </table>
+                    </div>
             </div>
         </div>
     </div>

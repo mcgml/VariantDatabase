@@ -4,20 +4,22 @@
             <h3 class="panel-title">Variant Database v1.0.0</h3>
         </div>
         <div class="panel-body">
-            <table id="about-table" class="table-responsive borderless no-select">
-                <tbody>
-                <tr><th>Annotation Source</th><td><a id="annotation-link" href="http://sep2015.archive.ensembl.org/Homo_sapiens/Info/Index" target="_blank">Ensembl v82</a></td></tr>
-                <tr><th>dbSNP</th><td><a id="dbSNP-link" href="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_summary.cgi?view+summary=view+summary&build_id=138" target="_blank">v138</a></td></tr>
-                <tr><th>1000 Genomes Population Frequency</th><td>Phase 3</td></tr>
-                <tr><th>ExAC Population Frequency</th><td>v0.3</td></tr>
-                <tr><th>GERP++</th><td>Retrieved 30/10/15</td></tr>
-                <tr><th>PhastCons 100-way</th><td>Retrieved 30/10/15</td></tr>
-                <tr><th>PhyloP 100-way</th><td>Retrieved 30/10/15</td></tr>
-                <tr><th colspan="2"><hr id="horizontal-line"></th></tr>
-                <tr><th>Author</th><td><a id="email-link" href="mailto:matt.lyon@wales.nhs.uk" target="_top">Matt Lyon (Institute of Medical Genetics, Cardiff)</a></td></tr>
-                <tr><th>Powered by</th><td><a id="neo4j-link" href="http://neo4j.com/">Neo4j</a></td></tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table id="about-table" class="table borderless no-select">
+                    <tbody>
+                    <tr><th>Annotation Source</th><td><a id="annotation-link" href="http://sep2015.archive.ensembl.org/Homo_sapiens/Info/Index" target="_blank">Ensembl v82</a></td></tr>
+                    <tr><th>dbSNP</th><td><a id="dbSNP-link" href="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_summary.cgi?view+summary=view+summary&build_id=138" target="_blank">v138</a></td></tr>
+                    <tr><th>1000 Genomes Population Frequency</th><td>Phase 3 (0-1% red, 1-10% yellow, >10% green, null grey)</td></tr>
+                    <tr><th>ExAC Population Frequency</th><td>v0.3  (0-1% red, 1-10% yellow, >10% green, null grey)</td></tr>
+                    <tr><th>GERP++</th><td>Retrieved 30/10/15 (>= 2 red, 0-2 yellow, < 0 green, null grey)</td></tr>
+                    <tr><th>PhastCons 100-way</th><td>Retrieved 30/10/15 (>= 0 red, < 0 & >= -4 yellow, < -4 green, null grey)</td></tr>
+                    <tr><th>PhyloP 100-way</th><td>Retrieved 30/10/15 (inverse <= 0.01 red, > 0.01 & <= 0.05 yellow, > 0.05 green, null grey)</td></tr>
+                    <tr><th colspan="2"><hr id="horizontal-line"></th></tr>
+                    <tr><th>Author</th><td><a id="email-link" href="mailto:matt.lyon@wales.nhs.uk" target="_top">Matt Lyon (Institute of Medical Genetics, Cardiff)</a></td></tr>
+                    <tr><th>Powered by</th><td><a id="neo4j-link" href="http://neo4j.com/">Neo4j</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

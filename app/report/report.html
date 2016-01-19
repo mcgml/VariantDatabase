@@ -28,10 +28,11 @@
     </div>
 </div>
 <div class="col-md-12" data-ng-hide="selectedVariantFilter === -1">
-    <table id="variant-table" class="table-responsive table-bordered">
+    <div class="table-responsive">
+    <table id="variant-table" class="table">
         <thead>
         <tr>
-            <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Export"><input type="checkbox" data-ng-click=""></th>
+            <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Export"><input type="checkbox" data-ng-model="selectedAll" data-ng-click="checkAll()"></th>
             <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Annotations"><i class="fa fa-info-circle"></i></th>
             <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Link to other resources"><i class="fa fa-external-link"></i></th>
             <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="View call in IGV"><i class="fa fa-eye"></i></th>
@@ -61,20 +62,20 @@
             <td width="12.5%">
                 <div class="text-center" role="toolbar">
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3EasAf" tooltip-append-to-body="true" uib-tooltip="1KG East Asian {{::variant.kGPhase3EasAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3EasAf | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3EurAf" tooltip-append-to-body="true" uib-tooltip="1KG European {{::variant.kGPhase3EurAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3EurAf | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3AfrAf" tooltip-append-to-body="true" uib-tooltip="1KG African {{::variant.kGPhase3AfrAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3AfrAf | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3AmrAf" tooltip-append-to-body="true" uib-tooltip="1KG Mixed American {{::variant.kGPhase3AmrAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3AmrAf | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3SasAf" tooltip-append-to-body="true" uib-tooltip="1KG South Asian {{::variant.kGPhase3SasAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3SasAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3EASAf" tooltip-append-to-body="true" uib-tooltip="1KG East Asian {{::variant.kGPhase3EASAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3EASAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3EURAf" tooltip-append-to-body="true" uib-tooltip="1KG European {{::variant.kGPhase3EURAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3EURAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3AFRAf" tooltip-append-to-body="true" uib-tooltip="1KG African {{::variant.kGPhase3AFRAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3AFRAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3AMRAf" tooltip-append-to-body="true" uib-tooltip="1KG Mixed American {{::variant.kGPhase3AMRAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3AMRAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3SASAf" tooltip-append-to-body="true" uib-tooltip="1KG South Asian {{::variant.kGPhase3SASAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3SASAf | afpct2colour)}"></button>
                     </div>
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacEasAf" tooltip-append-to-body="true" uib-tooltip="ExAC East Asian {{::variant.exacEasAf}}%" data-ng-style="::{'background-color' : (variant.exacEasAf | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacNfeAf" tooltip-append-to-body="true" uib-tooltip="ExAC Non-Finnish European {{::variant.exacNfeAf}}%" data-ng-style="::{'background-color' : (variant.exacNfeAf | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacAfrAf" tooltip-append-to-body="true" uib-tooltip="ExAC African {{::variant.exacAfrAf}}%" data-ng-style="::{'background-color' : (variant.exacAfrAf | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacAmrAf" tooltip-append-to-body="true" uib-tooltip="ExAC Latino {{::variant.exacAmrAf}}%" data-ng-style="::{'background-color' : (variant.exacAmrAf | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacSasAf" tooltip-append-to-body="true" uib-tooltip="ExAC South Asian {{::variant.exacSasAf}}%" data-ng-style="::{'background-color' : (variant.exacSasAf | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacFinAf" tooltip-append-to-body="true" uib-tooltip="ExAC Finnish {{::variant.exacFinAf}}%" data-ng-style="::{'background-color' : (variant.exacFinAf | afpct2colour)}"></button>
-                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacOthAf" tooltip-append-to-body="true" uib-tooltip="ExAC Other {{::variant.exacOthAf}}%" data-ng-style="::{'background-color' : (variant.exacOthAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacEASAf" tooltip-append-to-body="true" uib-tooltip="ExAC East Asian {{::variant.exacEASAf}}%" data-ng-style="::{'background-color' : (variant.exacEASAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacNFEAf" tooltip-append-to-body="true" uib-tooltip="ExAC Non-Finnish European {{::variant.exacNFEAf}}%" data-ng-style="::{'background-color' : (variant.exacNFEAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacAFRAf" tooltip-append-to-body="true" uib-tooltip="ExAC African {{::variant.exacAFRAf}}%" data-ng-style="::{'background-color' : (variant.exacAFRAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacAMRAf" tooltip-append-to-body="true" uib-tooltip="ExAC Latino {{::variant.exacAMRAf}}%" data-ng-style="::{'background-color' : (variant.exacAMRAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacSASAf" tooltip-append-to-body="true" uib-tooltip="ExAC South Asian {{::variant.exacSASAf}}%" data-ng-style="::{'background-color' : (variant.exacSASAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacFINAf" tooltip-append-to-body="true" uib-tooltip="ExAC Finnish {{::variant.exacFINAf}}%" data-ng-style="::{'background-color' : (variant.exacFINAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacOTHAf" tooltip-append-to-body="true" uib-tooltip="ExAC Other {{::variant.exacOTHAf}}%" data-ng-style="::{'background-color' : (variant.exacOTHAf | afpct2colour)}"></button>
                     </div>
                 </div>
             </td>
@@ -93,6 +94,7 @@
         </tr>
         </tbody>
     </table>
+    </div>
     <nav>
         <ul class="pagination no-select">
             <li data-ng-class="prevPageDisabled()">

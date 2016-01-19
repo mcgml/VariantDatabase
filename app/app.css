@@ -29,9 +29,12 @@
 #export-button {
     margin-bottom : 15px !important;
 }
-#horizontal-line{
+#horizontal-line {
     margin-top: 0;
     margin-bottom: 0;
+}
+.dropdown {
+    position:absolute;
 }
 
 /*list group*/

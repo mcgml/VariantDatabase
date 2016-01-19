@@ -24,14 +24,14 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
         $scope.getVirtualPanel = function() {
 
             //check panel exists
-            if ($scope.selectedVirtualPanel.PanelNodeId === undefined){
+            if ($scope.selectedVirtualPanel.panelNodeId === undefined){
                 openNewPanelModal($scope.selectedVirtualPanel);
                 return;
             }
 
             $http.post('/api/variantdatabase/getvirtualpanel',
                 {
-                    panelNodeId : $scope.selectedVirtualPanel.PanelNodeId
+                    panelNodeId : $scope.selectedVirtualPanel.panelNodeId
                 })
                 .then(function(response) {
                     $scope.virtualPanel = response.data;
