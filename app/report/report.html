@@ -30,7 +30,7 @@
 <div class="col-md-12" data-ng-hide="selectedVariantFilter === -1">
     <div class="table-responsive">
     <table id="variant-table" class="table">
-        <thead>
+        <thead class="no-select">
         <tr>
             <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Export"><input type="checkbox" data-ng-model="selectedAll" data-ng-click="checkAll()"></th>
             <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Annotations"><i class="fa fa-info-circle"></i></th>
@@ -38,9 +38,11 @@
             <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="View call in IGV"><i class="fa fa-eye"></i></th>
             <th width="12.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Allele frequencies from other studies. Hover over data points for more information">Population</th>
             <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Nucleotide conservation. Hover over data points for more information">Conservation</th>
-            <th width="50%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Variant call (hg19/GRCh37)">Variant</th>
-            <th width="10%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Inheritance" data-ng-click="sortType = 'Inheritance'; sortReverse = !sortReverse; currentPage = 0">Inheritance <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'Inheritance'"></i></th>
-            <th width="10%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Allele occurrence in this database" data-ng-click="sortType = 'Occurrence'; sortReverse = !sortReverse; currentPage = 0">Observed <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'Occurrence'"></i></th>
+            <th width="37.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Variant call (hg19/GRCh37)">Variant</th>
+            <th width="5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Variant type" data-ng-click="sortType = 'type'; sortReverse = !sortReverse; currentPage = 0">Type <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'type'"></i></th>
+            <th width="10%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Inheritance" data-ng-click="sortType = 'inheritance'; sortReverse = !sortReverse; currentPage = 0">Inheritance <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'inheritance'"></i></th>
+            <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Phred based quality" data-ng-click="sortType = 'quality'; sortReverse = !sortReverse; currentPage = 0">Quality <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'quality'"></i></th>
+            <th width="10%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Allele occurrence in this database" data-ng-click="sortType = 'occurrence'; sortReverse = !sortReverse; currentPage = 0">Observed <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'occurrence'"></i></th>
         </tr>
         </thead>
         <tbody data-ng-repeat="variant in filteredVariants.variants | filter:{filter:selectedVariantFilter}:true | orderBy:sortType:sortReverse | offset: currentPage * itemsPerPage | limitTo: itemsPerPage track by variant.variantNodeId" data-ng-click="setSelected(variant.variantNodeId)" data-ng-class="{selected : variant.variantNodeId === idSelected}">
@@ -88,8 +90,10 @@
                 </div>
                 </div>
             </td>
-            <td width="50%">{{::variant.variantId}}</td>
+            <td width="37.5%">{{::variant.variantId}}</td>
+            <td width="5%">{{::variant.type | uppercase}}</td>
             <td width="10%">{{::variant.inheritance}}</td>
+            <td width="7.5%">{{::variant.quality}}</td>
             <td width="10%" data-ng-click="openVariantOccurrenceModal(variant)"><i class="fa fa-binoculars"></i> {{::variant.occurrence}}</td>
         </tr>
         </tbody>
