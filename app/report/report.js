@@ -4,9 +4,9 @@
 //todo add mutation taster
 //todo splicing
 
-angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.bootstrap', 'ui-notification', 'nvd3'])
+angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ui.bootstrap', 'ui-notification', 'nvd3' ,'ngFileSaver'])
 
-    .controller('ReportCtrl', ['$scope', '$http', 'Notification', '$uibModal', '$window','framework', '$anchorScroll', function ($scope, $http, Notification, $uibModal, $window, framework, $anchorScroll) {
+    .controller('ReportCtrl', ['$rootScope', '$scope', '$http', 'Notification', '$uibModal', '$window','framework', '$anchorScroll','FileSaver', 'Blob', function ($rootScope, $scope, $http, Notification, $uibModal, $window, framework, $anchorScroll, FileSaver, Blob) {
 
         $scope.selectedVariantFilter = -1;
         $scope.idSelected = null;
@@ -225,35 +225,32 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngCsv', 'ui.
 
         };
 
-        $scope.getCsvHeaders = function () {
-            return ["SampleId", "SeqId", "WorklistId", "VariantId", "Inheritance"];
-        };
+        $scope.exportSelected = function (){
+            var variantNodeIds = [];
 
-        $scope.exportVariants = function(){
-            var saved = [];
-
-            //skip missing dataset
-            if ($scope.filteredVariants === null) return;
-
-            for (var key in $scope.filteredVariants.variants) {
-                if ($scope.filteredVariants.variants.hasOwnProperty(key)) {
-                    if ($scope.filteredVariants.variants[key].selected){
-
-                        var tempObj = {};
-
-                        tempObj.sampleId = $scope.selectedAnalysis["sampleId"];
-                        tempObj.seqId = $scope.selectedAnalysis["seqId"];
-                        tempObj.worklistId = $scope.selectedAnalysis["worklistId"];
-                        tempObj.variantId = $scope.filteredVariants.variants[key]["variantId"];
-                        tempObj.inheritance = $scope.filteredVariants.variants[key]["inheritance"];
-
-                        saved.push(tempObj);
-
-                    }
+            angular.forEach($scope.filteredVariants.variants, function(exportVariant) {
+                if (exportVariant.selected){
+                    variantNodeIds.push(exportVariant.variantNodeId);
                 }
-            }
+            });
 
-            return saved;
+            //get annotations
+            $http.post('/api/variantdatabase/getvariantreport', {
+
+                userNodeId : $rootScope.user.userNodeId,
+                runInfoNodeId : $scope.selectedAnalysis.runInfoNodeId,
+                variantNodeIds : variantNodeIds
+
+            }).then(function(response) {
+
+                var data = new Blob([response.data], { type: 'text/plain;charset=utf-8' });
+                FileSaver.saveAs(data, 'export.csv');
+
+            }, function(response) {
+                Notification.error(response);
+                console.log("ERROR: " + response);
+            });
+
         };
 
         $scope.openEnsemblVariantLink = function(variant){

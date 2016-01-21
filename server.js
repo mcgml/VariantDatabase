@@ -292,6 +292,19 @@ app.post('/api/variantdatabase/updateuserpassword', auth, function(req, res) {
 
     });
 });
+app.post('/api/variantdatabase/getvariantreport', function(req, res) {
+    request.post(
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/getvariantreport",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            res.send(result.body);
+        }
+    )
+});
 app.post('/api/variantdatabase/returninputjson', function(req, res) {
     request.post(
         {
