@@ -5,7 +5,7 @@
     </div>
     <nvd3 id="donutChart" options="donutChartOptions" data="filteredVariants.filters"></nvd3>
 </div>
-<div class="col-md-4">
+<div class="col-md-4 margin-bottom-15px">
     <div class="input-group">
         <input type="text" class="form-control" placeholder="Index Dataset" data-ng-model="selectedAnalysis" typeahead-template-url="templates/ProbandTypeahead.html" uib-typeahead="analysis as analysis.sampleId for analysis in analyses | filter:{sampleId:$viewValue} | limitTo:4">
         <div class="input-group-btn">
@@ -15,12 +15,12 @@
         </div>
     </div>
 </div>
-<div class="col-md-4">
+<div class="col-md-4 margin-bottom-15px">
     <select class="form-control" data-ng-model="selectedWorkflow" ng-options="workflow as workflow.name for workflow in workflows">
         <option value="">Stratification Workflow</option>
     </select>
 </div>
-<div class="col-md-4">
+<div class="col-md-4 margin-bottom-15px">
     <div class="btn-group" role="group">
         <button type="button" class="btn btn-success" data-ng-click="getFilteredVariants()">
             <i class="fa fa-search"></i> Search

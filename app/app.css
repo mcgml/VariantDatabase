@@ -8,6 +8,9 @@
 .margin-top-15px {
     margin-top : 15px;
 }
+.margin-bottom-15px {
+    margin-bottom : 15px;
+}
 .jumbotron {
     height : 300px;
     margin-bottom : 15px;
@@ -23,7 +26,6 @@
     margin : 1px !important;
 }
 #variant-table {
-    margin-top : 15px;
     margin-bottom : 0 !important;
 }
 #export-button {
