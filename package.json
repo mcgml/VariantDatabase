@@ -24,6 +24,7 @@
     "angular-resource": "^1.4.8",
     "angular-route": "^1.4.8",
     "angular-sanitize": "^1.4.8",
+    "angular-ui-bootstrap": "^1.1.1",
     "angular-ui-notification": "^0.1.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.14.1",
