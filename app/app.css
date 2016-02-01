@@ -35,10 +35,15 @@
     margin-top: 0;
     margin-bottom: 0;
 }
-.dropdown {
-    position:absolute;
+.overflow{
+    overflow: scroll;
 }
-
+#variant-table {
+    table-layout: fixed;
+}
+td, .modal-title{
+    word-wrap:break-word
+}
 /*list group*/
 .s-scroll {
     max-height : 250px;

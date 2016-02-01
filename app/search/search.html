@@ -95,13 +95,13 @@
                 <h3>History <span class="badge">{{variantInformation.history.length}}</span></h3>
                 <ul class="list-group s-scroll">
                     <li class="list-group-item" data-ng-repeat="item in variantInformation.history | orderBy:'addedDate':true">
-                        <p><b>Pathogenicity class {{item.classification}}</b></p>
-                        <p data-ng-show="item.addEvidence != null">{{item.addEvidence}}</p>
-                        <p>Added by {{item.addedByUserId}} {{item.addedDate | date:"dd/MM/yy"}}</p>
-                        <p data-ng-show="item.addAuthorisedByUserId">Add authorised by {{item.addAuthorisedByUserId}} {{item.addAuthorisedDate | date:"dd/MM/yy"}}</p>
-                        <p data-ng-show="item.removedEvidence != null">{{item.removedEvidence}}</p>
-                        <p data-ng-show="item.removedByUserId">Removed by {{item.removedByUserId}} {{item.removedDate | date:"dd/MM/yy"}}</p>
-                        <p data-ng-show="item.removeAuthorisedByUserId">Remove authorised by {{item.removeAuthorisedByUserId}} {{item.removeAuthorisedDate | date:"dd/MM/yy"}}</p>
+                        <p><b>Pathogenicity class {{item.added.classification}}</b></p>
+                        <p data-ng-show="item.added.evidence != null">{{item.added.evidence}}</p>
+                        <p>Added by {{item.added.fullName}} {{item.added.date | date:"dd/MM/yy"}}</p>
+                        <p data-ng-show="item.addedAuth.fullName">Authorised by {{item.addedAuth.fullName}} {{item.addedAuth.date | date:"dd/MM/yy"}}</p>
+                        <p data-ng-show="item.removed.evidence != null">{{item.removed.evidence}}</p>
+                        <p data-ng-show="item.removed.fullName">Removed by {{item.removed.fullName}} {{item.removed.date | date:"dd/MM/yy"}}</p>
+                        <p data-ng-show="item.removedAuth.fullName">Authorised by {{item.removedAuth.fullName}} {{item.removedAuth.date | date:"dd/MM/yy"}}</p>
                     </li>
                 </ul>
             </div>
