@@ -10,7 +10,7 @@ bcrypt.hash(password, null, null, function(error, hash) {
 
     request.post (
         {
-            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/createnewuser",
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/user/add",
             json: {
                 fullName : "Matthew Lyon",
                 jobTitle : "Bioinformatician",

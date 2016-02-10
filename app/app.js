@@ -348,7 +348,7 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
 
             if (upload.length == 0) return;
 
-            $http.post('/api/variantdatabase/addvirtualpanel',
+            $http.post('/api/variantdatabase/panels/add',
                 {
                     userNodeId : $rootScope.user.userNodeId,
                     virtualPanelName : $scope.items,
@@ -373,7 +373,7 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
         $scope.savedExcludedDatasets = [];
         $scope.savedVirtualPanels = [];
 
-        $http.get('/api/variantdatabase/panels', {}
+        $http.get('/api/variantdatabase/panels/list', {}
         ).then(function(response) {
             $scope.virtualPanels = response.data;
         }, function(response) {

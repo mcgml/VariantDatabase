@@ -95,7 +95,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ui.bootstrap
         };
 
         function getAnalyses() {
-            $http.get('/api/variantdatabase/analyses', {
+            $http.get('/api/variantdatabase/analyses/list', {
 
             }).then(function(response) {
                 $scope.analyses = response.data;
@@ -106,7 +106,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ui.bootstrap
         }
 
         function getWorkflows() {
-            $http.get('/api/variantdatabase/workflows', {
+            $http.get('/api/variantdatabase/workflows/list', {
 
             }).then(function (response) {
                 $scope.workflows = response.data;
@@ -140,7 +140,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ui.bootstrap
                 savedVariantFilters.includePanelNodes = [];
             }
 
-            $http.post('/api/variantdatabase/getfilteredvariants', savedVariantFilters)
+            $http.post('/api/variantdatabase/variant/filter', savedVariantFilters)
                 .then(function(response) {
                     $scope.filteredVariants = response.data;
                     $scope.donutChartOptions.chart.title = response.data.total;
@@ -153,7 +153,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ui.bootstrap
 
         $scope.openVariantAnnotationModal = function (variant) {
 
-            $http.post('/api/variantdatabase/functionalannotation',
+            $http.post('/api/variantdatabase/annotation/info',
                 {
                     'variantNodeId' : variant.variantNodeId
                 })
@@ -180,7 +180,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ui.bootstrap
         $scope.openVariantOccurrenceModal = function (variant) {
             var seen = {};
 
-            $http.post('/api/variantdatabase/variantobservations',
+            $http.post('/api/variantdatabase/variant/counts',
                 {
                     'variantNodeId' : variant.variantNodeId
                 })
@@ -235,7 +235,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ui.bootstrap
             });
 
             //get annotations
-            $http.post('/api/variantdatabase/getvariantreport', {
+            $http.post('/api/variantdatabase/report', {
 
                 userNodeId : $rootScope.user.userNodeId,
                 runInfoNodeId : $scope.selectedAnalysis.runInfoNodeId,

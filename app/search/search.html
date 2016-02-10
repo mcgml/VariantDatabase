@@ -93,15 +93,13 @@
             </div>
             <div class="col-md-6">
                 <h3>History <span class="badge">{{variantInformation.history.length}}</span></h3>
-                <ul class="list-group s-scroll">
-                    <li class="list-group-item" data-ng-repeat="item in variantInformation.history | orderBy:'addedDate':true">
-                        <p><b>Pathogenicity class {{item.added.classification}}</b></p>
-                        <p data-ng-show="item.added.evidence != null">{{item.added.evidence}}</p>
-                        <p>Added by {{item.added.fullName}} {{item.added.date | date:"dd/MM/yy"}}</p>
-                        <p data-ng-show="item.addedAuth.fullName">Authorised by {{item.addedAuth.fullName}} {{item.addedAuth.date | date:"dd/MM/yy"}}</p>
-                        <p data-ng-show="item.removed.evidence != null">{{item.removed.evidence}}</p>
-                        <p data-ng-show="item.removed.fullName">Removed by {{item.removed.fullName}} {{item.removed.date | date:"dd/MM/yy"}}</p>
-                        <p data-ng-show="item.removedAuth.fullName">Authorised by {{item.removedAuth.fullName}} {{item.removedAuth.date | date:"dd/MM/yy"}}</p>
+                <ul class="list-group">
+                    <li class="list-group-item" data-ng-repeat="item in variantInformation.history">
+                        <p><b>{{item.event}} {{item.value}}</b></p>
+                        <p data-ng-show="item.evidence != null">{{item.evidence}}</p>
+                        <p>{{item.status}}</p>
+                        <p>Added by {{item.add.fullName}} {{item.add.date | date:"dd/MM/yy"}}</p>
+                        <p data-ng-show="item.auth">Authorised by {{item.auth.fullName}} {{item.auth.date | date:"dd/MM/yy"}}</p>
                     </li>
                 </ul>
             </div>
@@ -145,21 +143,31 @@
                     </tbody>
                 </table>
                 </div>
-                <h3>Preferred Transcript</h3>
+                <form role="form">
+                    <div class="form-group">
+                        <h3>Preferred Transcript</h3>
+                        <select class="form-control" data-ng-model="selectedTranscriptPreference">
+                            <option value="1">True</option>
+                            <option value="2">False</option>
+                        </select>
+                    </div>
+                </form>
                 <div class="form-group">
-                    <textarea class="form-control" placeholder="Give evidence" rows="3" data-ng-model="preferredFeatureEvidenceText"></textarea>
+                    <textarea class="form-control" placeholder="Give evidence" rows="3" data-ng-model="preferedTrancriptEvidenceText"></textarea>
                 </div>
-                <button type="button" data-ng-class="{'btn btn-success': !featureInformation.Preferred, 'btn btn-warning': featureInformation.Preferred}" data-ng-click="changeFeaturePreference(featureInformation); preferredFeatureEvidenceText = ''">
+                <button type="button" class="btn btn-success" data-ng-click="addVariantPathogenicity()">
                     <i class="fa fa-pencil"></i> Update
                 </button>
             </div>
             <div class="col-md-6">
                 <h3>History <span class="badge">{{featureInformation.history.length}}</span></h3>
-                <ul class="list-group s-scroll">
-                    <li class="list-group-item" data-ng-repeat="item in featureInformation.history | orderBy:'Date':true">
-                        <h5>{{item.addEvidence}}</h5>
-                        <h6>Added by {{item.addedByUserId}} ({{item.addedDate | date:"dd/MM/yy"}})</h6>
-                        <h6 data-ng-show="item.authorisedByUserId">Authorised by {{item.authorisedByUserId}} ({{item.authorisedDate | date:"dd/MM/yy"}})</h6>
+                <ul class="list-group">
+                    <li class="list-group-item" data-ng-repeat="item in featureInformation.history">
+                        <p><b>{{item.event}} {{item.value}}</b></p>
+                        <p data-ng-show="item.evidence != null">{{item.evidence}}</p>
+                        <p>{{item.status}}</p>
+                        <p>Added by {{item.add.fullName}} {{item.add.date | date:"dd/MM/yy"}}</p>
+                        <p data-ng-show="item.auth">Authorised by {{item.auth.fullName}} {{item.auth.date | date:"dd/MM/yy"}}</p>
                     </li>
                 </ul>
             </div>

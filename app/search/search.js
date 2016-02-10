@@ -29,7 +29,7 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
                 return;
             }
 
-            $http.post('/api/variantdatabase/getvirtualpanel',
+            $http.post('/api/variantdatabase/panels/info',
                 {
                     panelNodeId : $scope.selectedVirtualPanel.panelNodeId
                 })
@@ -57,7 +57,7 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
         }
 
         $scope.getFeature = function(){
-            $http.post('/api/variantdatabase/featureinformation',
+            $http.post('/api/variantdatabase/feature/info',
                 {
                     featureId : $scope.selectedFeature
                 })
@@ -71,7 +71,7 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
         };
 
         $scope.addVariantPathogenicity = function(){
-            $http.post('/api/variantdatabase/addvariantpathogenicity',
+            $http.post('/api/variantdatabase/variant/addpathogenicity',
                 {
                     variantNodeId : $scope.variantInformation.variantNodeId,
                     userNodeId : $rootScope.user.userNodeId,
@@ -83,29 +83,13 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
                     Notification($scope.selectedPathogenicity + ' classification successfully added');
                     $scope.getVariantInformation();
                 }, function(response) {
-                    Notification.error(response);
-                    console.log("ERROR: " + response);
-                });
-        };
-
-        $scope.removeVariantPathogenicity = function(){
-            $http.post('/api/variantdatabase/removevariantpathogenicity',
-                {
-                    pathogenicityNodeId : $scope.variantInformation.pathogenicityNodeId,
-                    userNodeId : $rootScope.user.userNodeId,
-                    evidence : $scope.pathogenicityEvidenceText
-                })
-                .then(function(response) {
-                    Notification('Operation successful');
-                    $scope.getVariantInformation();
-                }, function(response) {
-                    Notification.error(response);
+                    Notification.error(response.data);
                     console.log("ERROR: " + response);
                 });
         };
 
         $scope.getVariantInformation = function(){
-            $http.post('/api/variantdatabase/variantinformation',
+            $http.post('/api/variantdatabase/variant/info',
                 {
                     variantId : $scope.selectedVariant
                 })
@@ -120,7 +104,7 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
         $scope.openVariantOccurrenceModal = function (variant) {
             var seen = {};
 
-            $http.post('/api/variantdatabase/variantobservations',
+            $http.post('/api/variantdatabase/variant/counts',
                 {
                     variantNodeId : variant.variantNodeId
                 })
@@ -148,7 +132,7 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
         };
 
         $scope.openVariantAnnotationModal = function (variant) {
-            $http.post('/api/variantdatabase/functionalannotation',
+            $http.post('/api/variantdatabase/annotation/info',
                 {
                     variantNodeId : variant.variantNodeId
                 })
@@ -175,7 +159,7 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
         };
 
         function getAnalyses() {
-            $http.get('/api/variantdatabase/analyses', {
+            $http.get('/api/variantdatabase/analyses/list', {
 
             }).then(function(response) {
                 $scope.analyses = response.data;
@@ -186,7 +170,7 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
         }
 
         function getPanels() {
-            $http.get('/api/variantdatabase/panels', {
+            $http.get('/api/variantdatabase/panels/list', {
 
             }).then(function(response) {
                 $scope.virtualPanels = response.data;

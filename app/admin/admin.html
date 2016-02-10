@@ -6,15 +6,15 @@
                     <h3 class="panel-title">Variant Pathogenicity <span class="badge">{{pathogenicitiesForAuthorisation.length}}</span></h3>
                 </div>
             </div>
-            <ul class="list-group s-scroll">
-                <li class="list-group-item" data-ng-repeat="item in pathogenicitiesForAuthorisation | orderBy:'date':true">
-                    <h4>{{item.labels}} {{item.status}} {{item.variantId}}</h4>
+            <ul class="list-group">
+                <li class="list-group-item" data-ng-repeat="item in pathogenicitiesForAuthorisation">
+                    <h4><span class="badge">{{item.value}}</span> {{item.variantId}}</h4>
                     <h5 data-ng-show="item.evidence">{{item.evidence}}</h5>
-                    <h6>{{item.fullName}} ({{item.date | date:"dd/MM/yy"}})</h6>
-                    <button type="button" class="btn btn-success" data-ng-click="authoriseVariantPathogenicity(item.pathogenicityNodeId, true)">
+                    <h6>{{item.add.fullName}} ({{item.add.date | date:"dd/MM/yy"}})</h6>
+                    <button type="button" class="btn btn-success" data-ng-click="authoriseVariantPathogenicity(item.eventNodeId, true)">
                         <i class="fa fa-check"></i> Accept
                     </button>
-                    <button type="button" class="btn btn-warning" data-ng-click="authoriseVariantPathogenicity(item.pathogenicityNodeId, false)">
+                    <button type="button" class="btn btn-warning" data-ng-click="authoriseVariantPathogenicity(item.eventNodeId, false)">
                         <i class="fa fa-times"></i> Reject
                     </button>
                 </li>
