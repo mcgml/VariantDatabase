@@ -34,7 +34,7 @@
             <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Export"><input type="checkbox" data-ng-model="selectedAll" data-ng-click="checkAll()"></th>
             <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Annotations"><i class="fa fa-info-circle"></i></th>
             <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Link to other resources"><i class="fa fa-external-link"></i></th>
-            <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="View call in IGV"><i class="fa fa-eye"></i></th>
+            <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="View in IGV"><img src="/images/igv.jpg"></th>
             <th width="12.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Allele frequencies from other studies. Hover over data points for more information">Population</th>
             <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Nucleotide conservation. Hover over data points for more information">Conservation</th>
             <th width="30%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Variant call (hg19/GRCh37)">Variant</th>
@@ -60,7 +60,7 @@
                     </ul>
                 </div>
             </td>
-            <td width="2.5%" data-ng-click="openIGVLink(selectedAnalysis.remoteBamFilePath, variant.variantId)"><i class="fa fa-eye"></i></td>
+            <td width="2.5%" data-ng-click="openIGVLink(selectedAnalysis.remoteBamFilePath, variant.variantId)"><img src="/images/igv.jpg"></td>
             <td width="12.5%">
                 <div class="text-center" role="toolbar">
                     <div class="btn-group" role="group">
