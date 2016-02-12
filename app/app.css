@@ -11,10 +11,22 @@
 .margin-bottom-15px {
     margin-bottom : 15px;
 }
+.margin-left-10px {
+    margin-left : 10px;
+}
 .jumbotron {
     height : 300px;
     margin-bottom : 15px;
     padding-top : 25px;
+}
+.drop-down-position{
+    position: absolute;
+}
+.panel-height{
+    height: 300px;
+}
+.overflow-scroll{
+    overflow: scroll;
 }
 #welcome-msg{
     margin-left : 15px;

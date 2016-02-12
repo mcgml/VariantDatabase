@@ -193,6 +193,16 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
         };
     })
 
+    .filter('yesNoFilter', function() {
+        return function (input) {
+            if (input){
+                return "Yes";
+            } else {
+                return "No";
+            }
+        };
+    })
+
     .factory('framework', function() {
         var cat20 = ["#008cba", "#aec7e8", "#e99002", "#ffbb78", "#43ac6a", "#98df8a", "#d62728", "#ff9896"];
 
@@ -329,6 +339,17 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
                 Notification.error("Cannot add unapproved gene");
                 return;
             }
+
+            //check gene is not already in list
+            for (var key in $scope.savedGenes) {
+                if ($scope.savedGenes.hasOwnProperty(key)) {
+                    if ($scope.savedGenes[key] === gene){
+                        Notification.error("Gene already added to list");
+                        return;
+                    }
+                }
+            }
+
             $scope.savedGenes.push(gene);
         };
 

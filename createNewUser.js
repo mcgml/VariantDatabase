@@ -14,10 +14,10 @@ bcrypt.hash(password, null, null, function(error, hash) {
             json: {
                 fullName : "Matthew Lyon",
                 jobTitle : "Bioinformatician",
-                userId : "matt.lyon@wales.nhs.uk",
+                userId : "matt2.lyon@wales.nhs.uk",
                 password : hash,
                 contactNumber : "00000000000",
-                admin : true
+                admin : false
             }
         },
         function(error, result)

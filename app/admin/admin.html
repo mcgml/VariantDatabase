@@ -1,19 +1,20 @@
 <div class="col-md-4">
-    <div class="panel panel-default margin-top-15px">
+    <div class="panel panel-default panel-height overflow-scroll margin-top-15px">
         <div class="panel-heading">
             <div class="row">
-                <h3 class="panel-title">Variant Pathogenicity <span class="badge">{{pathogenicitiesForAuthorisation.length}}</span></h3>
+                <h3 class="panel-title"><span class="badge">{{pathogenicitiesForAuthorisation.length}}</span> Variant Pathogenicity</h3>
             </div>
         </div>
         <ul class="list-group">
             <li class="list-group-item" data-ng-repeat="item in pathogenicitiesForAuthorisation">
-                <h4><span class="badge">{{item.value}}</span> {{item.variantId}}</h4>
-                <h5 data-ng-show="item.evidence">{{item.evidence}}</h5>
+                <h4><i data-ng-click="openVariantAnnotationModal(item)" class="fa fa-info-circle"></i> {{item.variantId}}</h4>
+                <h5>Class: {{item.value}}</h5>
+                <h6 data-ng-show="item.evidence">{{item.evidence}}</h6>
                 <h6>{{item.add.fullName}} ({{item.add.date | date:"dd/MM/yy"}})</h6>
-                <button type="button" class="btn btn-success" data-ng-click="authorise(item.eventNodeId, true)">
+                <button type="button" class="btn btn-primary" data-ng-class="{disabled: !user.admin}" data-ng-click="authorise(item.eventNodeId, true)">
                     <i class="fa fa-check"></i> Accept
                 </button>
-                <button type="button" class="btn btn-warning" data-ng-click="authorise(item.eventNodeId, false)">
+                <button type="button" class="btn btn-warning margin-left-10px" data-ng-class="{disabled: !user.admin}" data-ng-click="authorise(item.eventNodeId, false)">
                     <i class="fa fa-times"></i> Reject
                 </button>
             </li>
@@ -21,21 +22,22 @@
     </div>
 </div>
 <div class="col-md-4">
-    <div class="panel panel-default margin-top-15px">
+    <div class="panel panel-default panel-height overflow-scroll margin-top-15px">
         <div class="panel-heading">
             <div class="row">
-                <h3 class="panel-title">Transcript Preference <span class="badge">{{transcriptPreferencesForAuthorisation.length}}</span></h3>
+                <h3 class="panel-title"><span class="badge">{{transcriptPreferencesForAuthorisation.length}}</span> Transcript Preferences</h3>
             </div>
         </div>
         <ul class="list-group">
             <li class="list-group-item" data-ng-repeat="item in transcriptPreferencesForAuthorisation">
-                <h4><span class="badge">{{item.value}}</span> {{item.featureId}}</h4>
-                <h5 data-ng-show="item.evidence">{{item.evidence}}</h5>
+                <h4>{{item.featureId}}</h4>
+                <h5>Preferred: {{item.value | yesNoFilter}}</h5>
+                <h6 data-ng-show="item.evidence">{{item.evidence}}</h6>
                 <h6>{{item.add.fullName}} ({{item.add.date | date:"dd/MM/yy"}})</h6>
-                <button type="button" class="btn btn-success" data-ng-click="authorise(item.eventNodeId, true)">
+                <button type="button" class="btn btn-primary" data-ng-class="{disabled: !user.admin}" data-ng-click="authorise(item.eventNodeId, true)">
                     <i class="fa fa-check"></i> Accept
                 </button>
-                <button type="button" class="btn btn-warning" data-ng-click="authorise(item.eventNodeId, false)">
+                <button type="button" class="btn btn-warning margin-left-10px" data-ng-class="{disabled: !user.admin}" data-ng-click="authorise(item.eventNodeId, false)">
                     <i class="fa fa-times"></i> Reject
                 </button>
             </li>
