@@ -494,7 +494,7 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
 
     }])
 
-    .controller('VariantAnnotationCtrl', ['$scope', '$uibModalInstance', 'items', '$window', 'framework', function ($scope, $uibModalInstance, items, $window, framework) {
+    .controller('VariantAnnotationCtrl', ['$scope', '$uibModalInstance', 'items', '$window', 'framework', '$http', function ($scope, $uibModalInstance, items, $window, framework, $http) {
         $scope.items = items;
         $scope.idSelected = null;
 
@@ -545,6 +545,7 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
                 $window.open(framework.getSuperfamilyLink() + accessions[i].replace('SSF', ''), '_blank');
             }
         };
+
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };

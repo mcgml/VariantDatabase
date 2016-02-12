@@ -112,6 +112,7 @@ td, .modal-title{
 #feature-table > tbody > tr > td, #feature-table > tbody > tr > th,
 #about-table > tbody > tr > td, #about-table > tbody > tr > th,
 #gene-table > tbody > tr > td, #gene-table > tbody > tr > th,
+#sample-information-table > tbody > tr > td, #sample-information-table > tbody > tr > th,
 #variant-information-table > tbody > tr > td, #variant-information-table > tbody > tr > th {
     font-size: 14px;
     padding-left : 0;

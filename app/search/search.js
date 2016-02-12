@@ -70,6 +70,20 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
                 });
         };
 
+        $scope.getSample = function(){
+            $http.post('/api/variantdatabase/sample/info',
+                {
+                    sampleId : $scope.selectedSample
+                })
+                .then(function(response) {
+                    $scope.sampleInformation = response.data;
+                    Notification('Operation successful');
+                }, function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+        };
+
         $scope.addFeaturePreference = function(){
             $http.post('/api/variantdatabase/feature/addpreference',
                 {
