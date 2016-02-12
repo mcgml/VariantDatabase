@@ -70,6 +70,24 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
                 });
         };
 
+        $scope.addFeaturePreference = function(){
+            $http.post('/api/variantdatabase/feature/addpreference',
+                {
+                    featureNodeId : $scope.featureInformation.featureNodeId,
+                    userNodeId : $rootScope.user.userNodeId,
+                    featurePreference : $scope.selectedTranscriptPreference,
+                    evidence : $scope.preferedTrancriptEvidenceText
+
+                })
+                .then(function(response) {
+                    Notification('Feature preference successfully added');
+                    $scope.getFeature();
+                }, function(response) {
+                    Notification.error(response.data);
+                    console.log("ERROR: " + response);
+                });
+        };
+
         $scope.addVariantPathogenicity = function(){
             $http.post('/api/variantdatabase/variant/addpathogenicity',
                 {

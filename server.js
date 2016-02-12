@@ -295,6 +295,40 @@ app.post('/api/variantdatabase/feature/info', auth, function(req, res) {
         }
     )
 });
+app.post('/api/variantdatabase/feature/addpreference', auth, function(req, res) {
+    request.post(
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/feature/addpreference",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            if (result.statusCode != 200) {
+                res.status(result.statusCode).send(result.body);
+            } else {
+                res.send(result.body);
+            }
+        }
+    )
+});
+app.get('/api/variantdatabase/feature/pendingauth', auth, function(req, res) {
+    request.get (
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/feature/pendingauth",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            if (result.statusCode != 200) {
+                res.status(result.statusCode).send(result.body);
+            } else {
+                res.send(result.body);
+            }
+        }
+    )
+});
 app.post('/api/variantdatabase/annotation/info', auth, function(req, res) {
     request.post(
         {

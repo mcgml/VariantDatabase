@@ -15,16 +15,27 @@ angular.module('variantdatabase.admin', ['ngRoute', 'ui-notification'])
             })
         }
 
-        $scope.authoriseVariantPathogenicity = function(pathogenicityNodeId, addOrRemove){
+        function getNewTranscriptPreferencesForAuthorisation() {
+            $http.get('/api/variantdatabase/feature/pendingauth', {
+            }).then(function(response) {
+                $scope.transcriptPreferencesForAuthorisation = response.data;
+            }, function(response) {
+                Notification.error(response);
+                console.log("ERROR: " + response);
+            })
+        }
+
+        $scope.authorise = function(eventNodeId, addOrRemove){
             $http.post('/api/variantdatabase/admin/authevent',
                 {
-                    eventNodeId : pathogenicityNodeId,
+                    eventNodeId : eventNodeId,
                     userNodeId : $rootScope.user.userNodeId,
                     addOrRemove : addOrRemove
                 })
                 .then(function(response) {
                     Notification('Operation successful');
                     getNewPathogenicitiesForAuthorisation();
+                    getNewTranscriptPreferencesForAuthorisation();
                 }, function(response) {
                     Notification.error(response);
                     console.log("ERROR: " + response);
@@ -33,5 +44,6 @@ angular.module('variantdatabase.admin', ['ngRoute', 'ui-notification'])
 
         //load widgets on page load
         getNewPathogenicitiesForAuthorisation();
+        getNewTranscriptPreferencesForAuthorisation();
 
     }]);

@@ -94,7 +94,7 @@
             <div class="col-md-6">
                 <h3>History <span class="badge">{{variantInformation.history.length}}</span></h3>
                 <ul class="list-group">
-                    <li class="list-group-item" data-ng-repeat="item in variantInformation.history">
+                    <li class="list-group-item" data-ng-repeat="item in variantInformation.history | orderBy:'$index':true">
                         <p><b>{{item.event}} {{item.value}}</b></p>
                         <p data-ng-show="item.evidence != null">{{item.evidence}}</p>
                         <p>{{item.status}}</p>
@@ -139,7 +139,7 @@
                     <tr><th>CCDS</th><td><a id="ccds-link" href="http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&DATA={{featureInformation.ccdsId}}" target="_blank">{{featureInformation.ccdsId}}</a></td></tr>
                     <tr><th>Type</th><td>{{featureInformation.featureType}}</td></tr>
                     <tr><th>Exons</th><td>{{featureInformation.totalExons}}</td></tr>
-                    <tr><th>Canonical</th><td>{{featureInformation.canonical}}</td></tr>
+                    <tr><th>Preference</th><td>{{featureInformation.preference}}</td></tr>
                     </tbody>
                 </table>
                 </div>
@@ -147,22 +147,22 @@
                     <div class="form-group">
                         <h3>Preferred Transcript</h3>
                         <select class="form-control" data-ng-model="selectedTranscriptPreference">
-                            <option value="1">True</option>
-                            <option value="2">False</option>
+                            <option value="true">True</option>
+                            <option value="false">False</option>
                         </select>
                     </div>
                 </form>
                 <div class="form-group">
                     <textarea class="form-control" placeholder="Give evidence" rows="3" data-ng-model="preferedTrancriptEvidenceText"></textarea>
                 </div>
-                <button type="button" class="btn btn-success" data-ng-click="addVariantPathogenicity()">
+                <button type="button" class="btn btn-success" data-ng-click="addFeaturePreference()">
                     <i class="fa fa-pencil"></i> Update
                 </button>
             </div>
             <div class="col-md-6">
                 <h3>History <span class="badge">{{featureInformation.history.length}}</span></h3>
                 <ul class="list-group">
-                    <li class="list-group-item" data-ng-repeat="item in featureInformation.history">
+                    <li class="list-group-item" data-ng-repeat="item in featureInformation.history | orderBy:'$index':true">
                         <p><b>{{item.event}} {{item.value}}</b></p>
                         <p data-ng-show="item.evidence != null">{{item.evidence}}</p>
                         <p>{{item.status}}</p>
