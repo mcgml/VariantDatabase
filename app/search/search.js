@@ -70,6 +70,20 @@ angular.module('variantdatabase.search', ['ngRoute', 'ui.bootstrap', 'ui-notific
                 });
         };
 
+        $scope.getSymbol = function(){
+            $http.post('/api/variantdatabase/symbol/info',
+                {
+                    symbolId : $scope.selectedSymbol
+                })
+                .then(function(response) {
+                    $scope.symbolInformation = response.data;
+                    Notification('Operation successful');
+                }, function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+        };
+
         $scope.getSample = function(){
             $http.post('/api/variantdatabase/sample/info',
                 {

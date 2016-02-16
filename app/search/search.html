@@ -290,5 +290,71 @@
     </div>
 </div>
 <div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="panel-title">Search Genes</h3>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control no-margin" placeholder="Enter Gene" data-ng-model="selectedSymbol">
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary no-margin" data-ng-click="getSymbol();">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            <button class="btn btn-warning no-margin" data-ng-click="selectedSymbol = ''; symbolInformation = '';">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-ng-show="symbolInformation" class="panel-body">
+            <div class="col-md-6">
+                <h3>Disorders</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead><tr><th>OMIM disorder</th></tr></thead>
+                        <tbody data-ng-repeat="disorder in symbolInformation.disorders">
+                        <tr><td>{{disorder.disorder}}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h3>Transcripts</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Transcript</th>
+                            <th>Strand</th>
+                            <th>CCDS</th>
+                            <th>Type</th>
+                            <th>Exons</th>
+                            <th>Canonical</th>
+                            <th>Preference</th>
+                        </tr>
+                        </thead>
+                        <tbody data-ng-repeat="feature in symbolInformation.features">
+                        <tr>
+                            <td>{{feature.featureId}}</td>
+                            <td>{{feature.strand}}</td>
+                            <td>{{feature.ccdsId}}</td>
+                            <td>{{feature.featureType}}</td>
+                            <td>{{feature.totalExons}}</td>
+                            <td>{{feature.canonical |yesNoFilter}}</td>
+                            <td>{{feature.preference |yesNoFilter}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12">
     <p></p>
 </div>

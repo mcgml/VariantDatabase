@@ -93,7 +93,7 @@
             <td width="30%">{{::variant.variantId}}</td>
             <td width="5%">{{::variant.type | uppercase}}</td>
             <td width="7.5%">{{::variant.classification}}</td>
-            <td width="7.5%">{{::variant.severe}}</td>
+            <td width="7.5%">{{::variant.severe | yesNoFilter}}</td>
             <td width="10%">{{::variant.inheritance}}</td>
             <td width="10%" data-ng-click="openVariantOccurrenceModal(variant)"><i class="fa fa-binoculars"></i> {{::variant.occurrence}}</td>
         </tr>
