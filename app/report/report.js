@@ -263,7 +263,7 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngAnimate', 
             }).then(function(response) {
 
                 var data = new Blob([response.data], { type: 'text/plain;charset=utf-8' });
-                FileSaver.saveAs(data, 'export.csv');
+                FileSaver.saveAs(data, 'export.txt');
 
             }, function(response) {
                 Notification.error(response);
