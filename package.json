@@ -19,6 +19,7 @@
   "homepage": "https://github.com/mcgml/VariantDatabase#readme",
   "dependencies": {
     "angular": "^1.5.0",
+    "angular-animate": "^1.5.0",
     "angular-file-saver": "^1.0.3",
     "angular-nvd3": "^1.0.5",
     "angular-resource": "^1.5.0",

@@ -1,7 +1,7 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.login', 'variantdatabase.report', 'variantdatabase.search', 'variantdatabase.account', 'variantdatabase.admin', 'variantdatabase.about'])
+angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.login', 'variantdatabase.report', 'variantdatabase.search', 'variantdatabase.account', 'variantdatabase.admin', 'variantdatabase.about', 'variantdatabase.test'])
 
     .config(function(NotificationProvider) {
         NotificationProvider.setOptions(
@@ -102,6 +102,13 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
             .when('/search', {
                 templateUrl: 'search/search.html',
                 controller: 'SearchCtrl',
+                resolve: {
+                    loggedin: checkLoggedin
+                }
+            })
+            .when('/test', {
+                templateUrl: 'test/test.html',
+                controller: 'TestCtrl',
                 resolve: {
                     loggedin: checkLoggedin
                 }

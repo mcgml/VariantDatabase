@@ -1,0 +1,22 @@
+<form role="form">
+    <div class="form-group">
+        <select class="form-control" data-ng-model="pathogenicity">
+            <option value="1">Benign Variant</option>
+            <option value="2">Likely Benign Variant</option>
+            <option value="3">Unclassified Variant</option>
+            <option value="4">Likely Pathogenic Variant</option>
+            <option value="5">Pathogenic Variant</option>
+        </select>
+    </div>
+</form>
+<div class="form-group">
+    <textarea class="form-control" placeholder="Give evidence" rows="3" data-ng-model="evidence"></textarea>
+</div>
+<div class="btn-group margin-top-15px" role="group"> 
+    <button type="button" class="btn btn-primary" data-ng-click="variantPathogenicity.add(variant.variantNodeId, pathogenicity, evidence)"> 
+        <i class="fa fa-tick"></i> Add 
+    </button> 
+    <button type="button" class="btn btn-danger margin-left-10px" data-ng-click="variant.isOpen = false"> 
+        <i class="fa fa-cross"></i> Close
+    </button> 
+</div> 

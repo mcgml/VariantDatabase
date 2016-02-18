@@ -92,10 +92,10 @@
             </td>
             <td width="30%">{{::variant.variantId}}</td>
             <td width="5%">{{::variant.type | uppercase}}</td>
-            <td width="7.5%">{{::variant.classification}}</td>
+            <td width="7.5%"><i class="fa fa-pencil-square" uib-popover-template="variantPathogenicity.templateUrl" popover-title="Add Variant Class" popover-is-open="variant.isOpen"></i> {{::variant.classification}}</td>
             <td width="7.5%">{{::variant.severe | yesNoFilter}}</td>
             <td width="10%">{{::variant.inheritance}}</td>
-            <td width="10%" data-ng-click="openVariantOccurrenceModal(variant)"><i class="fa fa-binoculars"></i> {{::variant.occurrence}}</td>
+            <td width="10%"><i class="fa fa-binoculars" data-ng-click="openVariantOccurrenceModal(variant)"></i> {{::variant.occurrence}}</td>
         </tr>
         </tbody>
     </table>

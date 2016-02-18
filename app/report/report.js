@@ -4,7 +4,7 @@
 //todo add mutation taster
 //todo splicing
 
-angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ui.bootstrap', 'ui-notification', 'nvd3' ,'ngFileSaver'])
+angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngAnimate', 'ui.bootstrap', 'ui-notification', 'nvd3' ,'ngFileSaver'])
 
     .controller('ReportCtrl', ['$rootScope', '$scope', '$http', 'Notification', '$uibModal', '$window','framework', '$anchorScroll','FileSaver', 'Blob', function ($rootScope, $scope, $http, Notification, $uibModal, $window, framework, $anchorScroll, FileSaver, Blob) {
 
@@ -13,6 +13,25 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ui.bootstrap
         $scope.itemsPerPage = 25;
         $scope.currentPage = 0;
         var savedVariantFilters = {};
+
+        $scope.variantPathogenicity = {
+            templateUrl: 'templates/AddVariantPathogenicityPopover.html',
+            add : function(nodeId,pathogenicity,evidence) {
+                $http.post('/api/variantdatabase/variant/addpathogenicity',
+                    {
+                        variantNodeId: nodeId,
+                        userNodeId: $rootScope.user.userNodeId,
+                        classification: pathogenicity,
+                        evidence: evidence
+                    })
+                    .then(function (response) {
+                        Notification(pathogenicity + ' classification successfully added');
+                    }, function (response) {
+                        Notification.error(response.data);
+                        console.log("ERROR: " + response);
+                    });
+            }
+        };
 
         $scope.range = function() {
             var rangeSize = 10;
