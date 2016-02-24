@@ -1,0 +1,23 @@
+<table class="table">
+    <tr>
+        <th>Name
+        </th>
+        <th>Employees
+        </th>
+        <th>Head Office
+        </th>
+        <th>Action
+        </th>
+    </tr>
+    <tr ng-repeat="company in companies  | filter: searchKeyword ">
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+            <input type="button" value="Remove" class="btn btn-primary" ng-click="removeRow(company.name)"/>
+        </td>
+    </tr>
+</table>

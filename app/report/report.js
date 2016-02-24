@@ -258,12 +258,13 @@ angular.module('variantdatabase.report', ['ngRoute', 'ngSanitize', 'ngAnimate', 
 
                 userNodeId : $rootScope.user.userNodeId,
                 runInfoNodeId : $scope.selectedAnalysis.runInfoNodeId,
-                variantNodeIds : variantNodeIds
+                variantNodeIds : variantNodeIds,
+                workflowName : $scope.selectedWorkflow.name
 
             }).then(function(response) {
 
                 var data = new Blob([response.data], { type: 'text/plain;charset=utf-8' });
-                FileSaver.saveAs(data, 'export.txt');
+                FileSaver.saveAs(data, 'export.tsv');
 
             }, function(response) {
                 Notification.error(response);

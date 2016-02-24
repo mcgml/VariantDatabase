@@ -24,7 +24,7 @@
             <div class="col-md-6">
                 <h3>Details</h3>
                 <div class="table-responsive">
-                <table id="variant-information-table" class="table borderless no-select">
+                <table id="variant-information-table" class="table borderless">
                     <tbody>
                     <tr><th>Variant</th><td>{{variantInformation.variantId}}</td></tr>
                     <tr><th>Functional Annotation</th><td><i class="fa fa-info-circle" data-ng-click="openVariantAnnotationModal(variantInformation)"></i></td></tr>
@@ -132,7 +132,7 @@
             <div class="col-md-6">
                 <h3>Details <i data-ng-show="featureInformation.preferred" class="fa fa-star"></i></h3>
                 <div class="table-responsive">
-                <table id="feature-table" class="table borderless no-select">
+                <table id="feature-table" class="table borderless">
                     <tbody>
                     <tr><th>Transcript</th><td><a id="feature-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{featureInformation.featureId}}" target="_blank">{{featureInformation.featureId}}</a></td></tr>
                     <tr><th>Strand</th><td>{{featureInformation.strand}}</td></tr>
@@ -200,7 +200,7 @@
             <div class="col-md-6">
                 <h3>Details</h3>
                 <div class="table-responsive">
-                <table id="gene-table" class="table borderless no-select">
+                <table id="gene-table" class="table borderless">
                     <tbody>
                     <tr><th>Panel Name</th><td>{{virtualPanel.virtualPanelName}}</td></tr>
                     <tr><th>Created</th><td>{{virtualPanel.fullName}} {{virtualPanel.date | date:"dd/MM/yy"}}</td></tr>
@@ -211,7 +211,7 @@
             <div class="col-md-6">
                 <h3>Content</h3>
                 <div class="table-responsive">
-                <table class="table no-select">
+                <table class="table">
                     <thead>
                     <tr>
                         <th colspan="2" width="100%">
@@ -259,7 +259,7 @@
         </div>
         <div data-ng-show="sampleInformation" class="panel-body">
             <h3>Details</h3>
-            <table id="sample-information-table" class="table borderless no-select">
+            <table id="sample-information-table" class="table borderless">
                 <tbody>
                 <tr><th>SampleId</th><td>{{sampleInformation.sampleId}}</td></tr>
                 <tr><th>Tissue</th><td>{{sampleInformation.tissue}}</td></tr>

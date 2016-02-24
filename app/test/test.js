@@ -4,33 +4,44 @@ angular.module('variantdatabase.test', ['ngRoute', 'ngSanitize', 'ngAnimate', 'u
 
     .controller('TestCtrl', ['$rootScope', '$scope', '$http', 'Notification', '$uibModal', '$window','framework', '$anchorScroll','FileSaver', 'Blob', function ($rootScope, $scope, $http, Notification, $uibModal, $window, framework, $anchorScroll, FileSaver, Blob) {
 
-        $scope.variantPathogenicity = {
-            templateUrl: 'templates/AddVariantPathogenicityPopover.html',
-            isOpen: false,
-            open : function() {
-                $scope.variantPathogenicity.isOpen = true;
-            },
-            close : function() {
-                $scope.variantPathogenicity.isOpen = false;
-            },
-            add : function(nodeId) {
-                $http.post('/api/variantdatabase/diagnostic/return',
-                    {
-                        variantNodeId: nodeId,
-                        userNodeId: $rootScope.user.userNodeId,
-                        classification: $scope.pathogenicity,
-                        evidence: $scope.evidence
+        $scope.companies = [
+            { 'name':'Infosys Technologies',
+                'employees': 125000,
+                'headoffice': 'Bangalore'},
+            { 'name':'Cognizant Technologies',
+                'employees': 100000,
+                'headoffice': 'Bangalore'},
+            { 'name':'Wipro',
+                'employees': 115000,
+                'headoffice': 'Bangalore'},
+            { 'name':'Tata Consultancy Services (TCS)',
+                'employees': 150000,
+                'headoffice': 'Bangalore'},
+            { 'name':'HCL Technologies',
+                'employees': 90000,
+                'headoffice': 'Noida'}
+        ];
 
-                    })
-                    .then(function (response) {
-                        Notification(pathogenicity + ' classification successfully added');
-                        $scope.variantPathogenicity.close();
-                    }, function (response) {
-                        Notification.error(response.data);
-                        console.log("ERROR: " + response);
-                    });
-            }
+        $scope.addRow = function(){
+            $scope.companies.push({ 'name':$scope.name, 'employees': $scope.employees, 'headoffice':$scope.headoffice });
+            $scope.name='';
+            $scope.employees='';
+            $scope.headoffice='';
         };
 
+        $scope.removeRow = function(name){
+            var index = -1;
+            var comArr = eval( $scope.companies );
+            for( var i = 0; i < comArr.length; i++ ) {
+                if( comArr[i].name === name ) {
+                    index = i;
+                    break;
+                }
+            }
+            if( index === -1 ) {
+                alert( "Something gone wrong" );
+            }
+            $scope.companies.splice( index, 1 );
+        };
 
     }]);
