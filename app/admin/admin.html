@@ -1,47 +1,115 @@
-<div class="col-md-4">
-    <div class="panel panel-default panel-height overflow-scroll margin-top-15px">
-        <div class="panel-heading">
-            <div class="row">
-                <h3 class="panel-title"><span class="badge">{{pathogenicitiesForAuthorisation.length}}</span> Variant Pathogenicity</h3>
-            </div>
-        </div>
-        <ul class="list-group">
-            <li class="list-group-item" data-ng-repeat="item in pathogenicitiesForAuthorisation">
-                <h4><i data-ng-click="openVariantAnnotationModal(item)" class="fa fa-info-circle"></i> {{item.variantId}}</h4>
-                <h5>Class: {{item.value}}</h5>
-                <h6 data-ng-show="item.evidence">{{item.evidence}}</h6>
-                <h6>{{item.add.fullName}} ({{item.add.date | date:"dd/MM/yy"}})</h6>
-                <button type="button" class="btn btn-primary" data-ng-class="{disabled: !user.admin}" data-ng-click="authorise(item.eventNodeId, true)">
-                    <i class="fa fa-check"></i> Accept
+<div class="col-md-12">
+    <h3>Review Variants</h3>
+    <input type="text" class="form-control no-margin" placeholder="Search" data-ng-model="searchVariant">
+    <table id="variant-table" class="table">
+        <thead class="no-select">
+        <tr>
+            <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Authorise">Authorise&nbsp<i class="fa fa-cog"></i></th>
+            <th width="17.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Request">Request&nbsp<i class="fa fa-user"></i></th>
+            <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Annotations"><i class="fa fa-info-circle"></i></th>
+            <th width="2.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Link to other resources"><i class="fa fa-external-link"></i></th>
+            <th width="12.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Allele frequencies from other studies. Hover over data points for more information">Population</th>
+            <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Nucleotide conservation. Hover over data points for more information">Conservation</th>
+            <th width="30%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Variant call (hg19/GRCh37)" data-ng-click="sortType = 'variantId'; sortReverse = !sortReverse; currentPage = 0">Type <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'variantId'"></i></th>
+            <th width="5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Variant type" data-ng-click="sortType = 'type'; sortReverse = !sortReverse; currentPage = 0">Type <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'type'"></i></th>
+            <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Functional consequence severity" data-ng-click="sortType = 'severe'; sortReverse = !sortReverse; currentPage = 0">Severe <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'severe'"></i></th>
+            <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Allele occurrence in this database" data-ng-click="sortType = 'occurrence'; sortReverse = !sortReverse; currentPage = 0">Observed <i data-ng-class="sortReverse ? 'fa fa-sort-numeric-desc' : 'fa fa-sort-numeric-asc'" data-ng-show="sortType == 'occurrence'"></i></th>
+        </tr>
+        </thead>
+        <tbody data-ng-repeat="variant in pathogenicitiesForAuthorisation | filter:{variantId:searchVariant} | orderBy:sortType:sortReverse track by variant.variantNodeId" data-ng-click="setSelected(variant.variantNodeId)" data-ng-class="{selected : variant.variantNodeId === idSelected}">
+        <tr>
+            <td width="7.5%">
+                <button type="button" class="btn btn-xs btn-primary" data-ng-class="{disabled: !user.admin}" data-ng-click="authorise(variant.eventNodeId, true)">
+                    <i class="fa fa-check"></i>
                 </button>
-                <button type="button" class="btn btn-warning margin-left-10px" data-ng-class="{disabled: !user.admin}" data-ng-click="authorise(item.eventNodeId, false)">
-                    <i class="fa fa-times"></i> Reject
+                <button type="button" class="btn btn-xs btn-warning" data-ng-class="{disabled: !user.admin}" data-ng-click="authorise(variant.eventNodeId, false)">
+                    <i class="fa fa-times"></i>
                 </button>
-            </li>
-        </ul>
-    </div>
+            </td>
+            <td width="17.5%"><b>Class {{variant.value}}</b><br><em>{{variant.evidence}}</em><br>{{variant.add.fullName}}&nbsp({{variant.add.date | date:"dd/MM/yy"}})</td>
+            <td width="2.5%" data-ng-click="openVariantAnnotationModal(variant)"><i class="fa fa-info-circle"></i></td>
+            <td width="2.5%">
+                <div class="dropdown">
+                    <i class="fa fa-external-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></i>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-header">Browsers</li>
+                        <li><a data-ng-click="openEnsemblVariantLink(variant.variantId)">Ensembl</a></li>
+                        <li><a data-ng-click="openUCSCVariantLink(variant.variantId)">UCSC</a></li>
+                        <li data-ng-class="{disabled: !variant.dbSnpId}"><a data-ng-click="!variant.dbSnpId || openDbSNPIdVariantLink(variant.dbSnpId)">dbSNP</a></li>
+                    </ul>
+                </div>
+            </td>
+            <td width="12.5%">
+                <div class="text-center" role="toolbar">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3EASAf" tooltip-append-to-body="true" uib-tooltip="1KG East Asian {{::variant.kGPhase3EASAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3EASAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3EURAf" tooltip-append-to-body="true" uib-tooltip="1KG European {{::variant.kGPhase3EURAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3EURAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3AFRAf" tooltip-append-to-body="true" uib-tooltip="1KG African {{::variant.kGPhase3AFRAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3AFRAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3AMRAf" tooltip-append-to-body="true" uib-tooltip="1KG Mixed American {{::variant.kGPhase3AMRAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3AMRAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="open1kgVariantLink(variant.variantId)" tooltip-enable="variant.kGPhase3SASAf" tooltip-append-to-body="true" uib-tooltip="1KG South Asian {{::variant.kGPhase3SASAf}}%" data-ng-style="::{'background-color' : (variant.kGPhase3SASAf | afpct2colour)}"></button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacEASAf" tooltip-append-to-body="true" uib-tooltip="ExAC East Asian {{::variant.exacEASAf}}%" data-ng-style="::{'background-color' : (variant.exacEASAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacNFEAf" tooltip-append-to-body="true" uib-tooltip="ExAC Non-Finnish European {{::variant.exacNFEAf}}%" data-ng-style="::{'background-color' : (variant.exacNFEAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacAFRAf" tooltip-append-to-body="true" uib-tooltip="ExAC African {{::variant.exacAFRAf}}%" data-ng-style="::{'background-color' : (variant.exacAFRAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacAMRAf" tooltip-append-to-body="true" uib-tooltip="ExAC Latino {{::variant.exacAMRAf}}%" data-ng-style="::{'background-color' : (variant.exacAMRAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacSASAf" tooltip-append-to-body="true" uib-tooltip="ExAC South Asian {{::variant.exacSASAf}}%" data-ng-style="::{'background-color' : (variant.exacSASAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacFINAf" tooltip-append-to-body="true" uib-tooltip="ExAC Finnish {{::variant.exacFINAf}}%" data-ng-style="::{'background-color' : (variant.exacFINAf | afpct2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" data-ng-click="openExACVariantLink(variant.variantId)" tooltip-enable="variant.exacOTHAf" tooltip-append-to-body="true" uib-tooltip="ExAC Other {{::variant.exacOTHAf}}%" data-ng-style="::{'background-color' : (variant.exacOTHAf | afpct2colour)}"></button>
+                    </div>
+                </div>
+            </td>
+            <td width="7.5%">
+                <div class="text-center" role="toolbar">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-sq-xs" tooltip-enable="variant.gerp" tooltip-append-to-body="true" uib-tooltip="GERP {{::variant.gerp}}" data-ng-style="::{'background-color' : (variant.gerp | gerp2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" tooltip-enable="variant.phyloP" tooltip-append-to-body="true" uib-tooltip="phyloP {{::variant.phyloP}}" data-ng-style="::{'background-color' : (variant.phyloP | phylop2colour)}"></button>
+                        <button type="button" class="btn btn-sq-xs" tooltip-enable="variant.phastCons" tooltip-append-to-body="true" uib-tooltip="phastCons {{::variant.phastCons}}" data-ng-style="::{'background-color' : (variant.phastCons | phastcons2colour)}"></button>
+                    </div>
+                </div>
+            </td>
+            <td width="30%">{{::variant.variantId}}</td>
+            <td width="5%">{{::variant.type | uppercase}}</td>
+            <td width="7.5%">{{::variant.severe | yesNoFilter}}</td>
+            <td width="7.5%"><i class="fa fa-binoculars" data-ng-click="openVariantOccurrenceModal(variant)"></i> {{::variant.occurrence}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <hr>
+    <h3>Review Transcripts</h3>
+    <input type="text" class="form-control no-margin" placeholder="Search" data-ng-model="searchTranscript">
+    <table class="table">
+        <thead class="no-select">
+        <tr>
+            <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Authorise">Authorise&nbsp<i class="fa fa-cog"></i></th>
+            <th width="17.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Request">Request&nbsp<i class="fa fa-user"></i></th>
+            <th width="17.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Transcript identifier">Transcript</th>
+            <th width="17.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Transcript strand">Strand</th>
+            <th width="17.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="CCDS identifier">CCDS</th>
+            <th width="17.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Feature type">Type</th>
+            <th width="17.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Number of exons">Exons</th>
+            <th width="17.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Preferred transcript">Preferred</th>
+        </tr>
+        </thead>
+        <tbody data-ng-repeat="transcript in transcriptPreferencesForAuthorisation | filter:{featureId:searchTranscript} | orderBy:sortType:sortReverse track by transcript.featureNodeId" data-ng-click="setSelected(transcript.featureNodeId)" data-ng-class="{selected : transcript.featureNodeId === idSelected}">
+        <tr>
+            <td width="7.5%">
+                <button type="button" class="btn btn-xs btn-primary" data-ng-class="{disabled: !user.admin}" data-ng-click="authorise(transcript.eventNodeId, true)">
+                    <i class="fa fa-check"></i>
+                </button>
+                <button type="button" class="btn btn-xs btn-warning" data-ng-class="{disabled: !user.admin}" data-ng-click="authorise(transcript.eventNodeId, false)">
+                    <i class="fa fa-times"></i>
+                </button>
+            </td>
+            <td width="17.5%"><b>Preferred&nbsp{{transcript.value | yesNoFilter}}</b><br><em>{{transcript.evidence}}</em><br>{{transcript.add.fullName}}&nbsp({{transcript.add.date | date:"dd/MM/yy"}})</td>
+            <td><a id="feature-link" href="http://grch37.ensembl.org/Homo_sapiens/Location/View?t={{transcript.featureId}}" target="_blank">{{transcript.featureId}}</a></td>
+            <td>{{transcript.strand}}</td>
+            <td><a id="ccds-link" href="http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&DATA={{transcript.ccdsId}}" target="_blank">{{transcript.ccdsId}}</a></td>
+            <td>{{transcript.featureType}}</td>
+            <td>{{transcript.totalExons}}</td>
+            <td>{{transcript.preference}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <hr>
 </div>
-<div class="col-md-4">
-    <div class="panel panel-default panel-height overflow-scroll margin-top-15px">
-        <div class="panel-heading">
-            <div class="row">
-                <h3 class="panel-title"><span class="badge">{{transcriptPreferencesForAuthorisation.length}}</span> Transcript Preferences</h3>
-            </div>
-        </div>
-        <ul class="list-group">
-            <li class="list-group-item" data-ng-repeat="item in transcriptPreferencesForAuthorisation">
-                <h4>{{item.featureId}}</h4>
-                <h5>Preferred: {{item.value | yesNoFilter}}</h5>
-                <h6 data-ng-show="item.evidence">{{item.evidence}}</h6>
-                <h6>{{item.add.fullName}} ({{item.add.date | date:"dd/MM/yy"}})</h6>
-                <button type="button" class="btn btn-primary" data-ng-class="{disabled: !user.admin}" data-ng-click="authorise(item.eventNodeId, true)">
-                    <i class="fa fa-check"></i> Accept
-                </button>
-                <button type="button" class="btn btn-warning margin-left-10px" data-ng-class="{disabled: !user.admin}" data-ng-click="authorise(item.eventNodeId, false)">
-                    <i class="fa fa-times"></i> Reject
-                </button>
-            </li>
-        </ul>
-    </div>
-</div>
-<div class="col-md-4"></div>

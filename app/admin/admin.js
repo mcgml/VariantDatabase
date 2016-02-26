@@ -74,6 +74,40 @@ angular.module('variantdatabase.admin', ['ngRoute', 'ui-notification', 'ui.boots
             });
         };
 
+        $scope.openVariantOccurrenceModal = function (variant) {
+            var seen = {};
+
+            $http.post('/api/variantdatabase/variant/counts',
+                {
+                    'variantNodeId' : variant.variantNodeId
+                })
+                .then(function(response) {
+                    seen.occurrences = response.data;
+                }, function(response) {
+                    Notification.error(response);
+                    console.log("ERROR: " + response);
+                });
+
+            seen.variantId = variant.variantId;
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'templates/VariantOccurrenceModal.html',
+                controller: 'VariantOccurrenceCtrl',
+                windowClass: 'app-modal-window',
+                resolve: {
+                    items: function () {
+                        return seen;
+                    }
+                }
+            });
+
+        };
+
+        $scope.setSelected = function (idSelected) {
+            $scope.idSelected = idSelected;
+        };
+
         //load widgets on page load
         getNewPathogenicitiesForAuthorisation();
         getNewTranscriptPreferencesForAuthorisation();
