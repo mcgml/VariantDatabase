@@ -112,4 +112,41 @@
         </tbody>
     </table>
     <hr>
+    <h3>Review QC</h3>
+    <input type="text" class="form-control no-margin" placeholder="Search" data-ng-model="searchAnalyses">
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="7.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Authorise">Authorise&nbsp<i class="fa fa-cog"></i></th>
+            <th width="17.5%" tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Request">Request&nbsp<i class="fa fa-user"></i></th>
+            <th><i class="fa fa-flask"></i>&nbspSampleId</th>
+            <th><i class="fa fa-list"></i>&nbspWorklistId</th>
+            <th><i class="fa fa-desktop"></i>&nbspSeqId</th>
+            <th tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Genotypic gender"><i class="fa fa-user"></i>&nbspGender</th>
+            <th tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Contamination estimation using SNPs"><i class="fa fa-exclamation"></i>&nbspContamination</th>
+            <th tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Percentage of data greater or equal to 30x"><i class="fa fa-percent"></i>&nbsp30x</th>
+            <th tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Percentage of data PCR duplication"><i class="fa fa-balance-scale"></i>&nbspDuplication</th>
+        </tr>
+        </thead>
+        <tbody data-ng-repeat="analysis in analysesForAuthorisation | filter:searchAnalyses">
+        <tr>
+            <td width="7.5%">
+                <button type="button" class="btn btn-xs btn-primary" data-ng-class="{disabled: !user.admin}" data-ng-click="authorise(analysis.eventNodeId, true)">
+                    <i class="fa fa-check"></i>
+                </button>
+                <button type="button" class="btn btn-xs btn-warning" data-ng-class="{disabled: !user.admin}" data-ng-click="authorise(analysis.eventNodeId, false)">
+                    <i class="fa fa-times"></i>
+                </button>
+            </td>
+            <td width="17.5%"><b>{{analysis.value | passOrFailFilter}}</b><br><em>{{analysis.evidence}}</em><br>{{analysis.add.fullName}}&nbsp({{analysis.add.date | date:"dd/MM/yy"}})</td>
+            <td>{{analysis.sampleId}}</td>
+            <td>{{analysis.worklistId}}</td>
+            <td>{{analysis.seqId}}</td>
+            <td>{{analysis.genotypicGender | naFilter}}</td>
+            <td>{{analysis.contamination  | naFilter}}</td>
+            <td>{{analysis.percentAbove30 | naFilter}}</td>
+            <td>{{analysis.duplicationRate | naFilter}}</td>
+        </tr>
+        </tbody>
+    </table>
 </div>

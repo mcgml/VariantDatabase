@@ -25,6 +25,16 @@ angular.module('variantdatabase.admin', ['ngRoute', 'ui-notification', 'ui.boots
             })
         }
 
+        function getNewAnalysesForAuthorisation() {
+            $http.get('/api/variantdatabase/analyses/pendingauth', {
+            }).then(function(response) {
+                $scope.analysesForAuthorisation = response.data;
+            }, function(response) {
+                Notification.error(response);
+                console.log("ERROR: " + response);
+            })
+        }
+
         $scope.authorise = function(eventNodeId, addOrRemove){
 
             if (!$rootScope.user.admin){
@@ -42,6 +52,7 @@ angular.module('variantdatabase.admin', ['ngRoute', 'ui-notification', 'ui.boots
                     Notification('Operation successful');
                     getNewPathogenicitiesForAuthorisation();
                     getNewTranscriptPreferencesForAuthorisation();
+                    getNewAnalysesForAuthorisation();
                 }, function(response) {
                     Notification.error(response);
                     console.log("ERROR: " + response);
@@ -111,5 +122,6 @@ angular.module('variantdatabase.admin', ['ngRoute', 'ui-notification', 'ui.boots
         //load widgets on page load
         getNewPathogenicitiesForAuthorisation();
         getNewTranscriptPreferencesForAuthorisation();
+        getNewAnalysesForAuthorisation();
 
     }]);

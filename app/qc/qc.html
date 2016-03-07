@@ -1,0 +1,39 @@
+<div class="col-md-12">
+    <h3>Samples Awaiting QC</h3>
+    <input type="text" class="form-control no-margin" placeholder="Search" data-ng-model="search">
+    <table class="table">
+        <thead>
+        <tr>
+            <th><i class="fa fa-flask"></i>&nbspSampleId</th>
+            <th><i class="fa fa-list"></i>&nbspWorklistId</th>
+            <th><i class="fa fa-desktop"></i>&nbspSeqId</th>
+            <th tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Genotypic gender"><i class="fa fa-user"></i>&nbspGender</th>
+            <th tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Contamination estimation using SNPs"><i class="fa fa-exclamation"></i>&nbspContamination</th>
+            <th tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Percentage of data greater or equal to 30x"><i class="fa fa-percent"></i>&nbsp30x</th>
+            <th tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Percentage of data PCR duplication"><i class="fa fa-balance-scale"></i>&nbspDuplication</th>
+            <th><i class="fa fa-comment-o"></i>&nbspComment</th>
+            <th tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Pass or fail QC"><i class="fa fa-cog"></i>&nbspQC</th>
+        </tr>
+        </thead>
+        <tbody data-ng-repeat="analysis in analyses | filter:search">
+        <tr>
+            <td>{{analysis.sampleId}}</td>
+            <td>{{analysis.worklistId}}</td>
+            <td>{{analysis.seqId}}</td>
+            <td>{{analysis.genotypicGender | naFilter}}</td>
+            <td>{{analysis.estimatedContamination  | naFilter}}</td>
+            <td>{{analysis.percentageGt30 | naFilter}}</td>
+            <td>{{analysis.duplicationRate | naFilter}}</td>
+            <td><input type="text" class="form-control no-margin" placeholder="Comment" data-ng-model="analysis.comment"></td>
+            <td>
+                <button tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Pass QC" type="button" class="btn btn-xs btn-primary" data-ng-click="addQc(analysis.runInfoNodeId, true, analysis.comment)">
+                    <i class="fa fa-check"></i>
+                </button>
+                <button tooltip-popup-delay='500' tooltip-append-to-body="true" uib-tooltip="Fail QC" type="button" class="btn btn-xs btn-warning" data-ng-click="addQc(analysis.runInfoNodeId, false, analysis.comment)">
+                    <i class="fa fa-times"></i>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

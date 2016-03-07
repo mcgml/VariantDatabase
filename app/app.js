@@ -1,7 +1,7 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.login', 'variantdatabase.report', 'variantdatabase.search', 'variantdatabase.account', 'variantdatabase.admin', 'variantdatabase.about', 'variantdatabase.test'])
+angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.login', 'variantdatabase.report', 'variantdatabase.search', 'variantdatabase.account', 'variantdatabase.admin', 'variantdatabase.about', 'variantdatabase.qc', 'variantdatabase.test'])
 
     .config(function(NotificationProvider) {
         NotificationProvider.setOptions(
@@ -106,6 +106,13 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
                     loggedin: checkLoggedin
                 }
             })
+            .when('/qc', {
+                templateUrl: 'qc/qc.html',
+                controller: 'QcCtrl',
+                resolve: {
+                    loggedin: checkLoggedin
+                }
+            })
             .when('/test', {
                 templateUrl: 'test/test.html',
                 controller: 'TestCtrl',
@@ -206,6 +213,24 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
                 return "Yes";
             } else {
                 return "No";
+            }
+        };
+    })
+
+    .filter('passOrFailFilter', function() {
+        return function (input) {
+            if (input){
+                return "PASS";
+            } else {
+                return "FAIL";
+            }
+        };
+    })
+
+    .filter('naFilter', function() {
+        return function (input) {
+            if (input == undefined){
+                return "N/A";
             }
         };
     })

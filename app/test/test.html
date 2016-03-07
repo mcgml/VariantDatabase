@@ -1,0 +1,12 @@
+<div class="col-md-12">
+    <input type="text" class="form-control no-margin" placeholder="Search" data-ng-model="searchTerm">
+    <button type="button" class="btn btn-primary" data-ng-click="searchPubmedByTerm()">
+        <i class="fa fa-search"></i>
+    </button>
+    <h4>{{pubmedAbstracts}}</h4>
+    <ul class="list-group">
+        <li class="list-group-item" data-ng-repeat="item in pubmedAbstracts">
+            <h6>{{item}}</h6>
+        </li>
+    </ul>
+</div>

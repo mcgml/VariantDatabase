@@ -125,6 +125,23 @@ app.get('/api/variantdatabase/workflows/list', auth, function(req, res) {
         }
     )
 });
+app.get('/api/variantdatabase/analyses/pendingqc', auth, function(req, res) {
+    request.get (
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/analyses/pendingqc",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            if (result.statusCode != 200) {
+                res.status(result.statusCode).send(result.body);
+            } else {
+                res.send(result.body);
+            }
+        }
+    )
+});
 app.get('/api/variantdatabase/analyses/list', auth, function(req, res) {
     request.get (
         {
@@ -163,6 +180,23 @@ app.post('/api/variantdatabase/panels/info', auth, function(req, res) {
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/panels/info",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            if (result.statusCode != 200) {
+                res.status(result.statusCode).send(result.body);
+            } else {
+                res.send(result.body);
+            }
+        }
+    )
+});
+app.post('/api/variantdatabase/analyses/addqc', auth, function(req, res) {
+    request.post(
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/analyses/addqc",
             json: req.body
         },
         function(error, result)
@@ -265,6 +299,23 @@ app.get('/api/variantdatabase/variant/pendingauth', auth, function(req, res) {
     request.get (
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/variant/pendingauth",
+            json: req.body
+        },
+        function(error, result)
+        {
+            if (error) throw err;
+            if (result.statusCode != 200) {
+                res.status(result.statusCode).send(result.body);
+            } else {
+                res.send(result.body);
+            }
+        }
+    )
+});
+app.get('/api/variantdatabase/analyses/pendingauth', auth, function(req, res) {
+    request.get (
+        {
+            uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/analyses/pendingauth",
             json: req.body
         },
         function(error, result)
