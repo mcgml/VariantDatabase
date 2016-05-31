@@ -488,7 +488,7 @@ app.post('/api/variantdatabase/admin/authevent', auth, function(req, res) {
         }
     )
 });
-app.post('/api/variantdatabase/report', function(req, res) {
+app.post('/api/variantdatabase/report', auth, function(req, res) {
     request.post(
         {
             uri:"http://127.0.0.1:7474/awmgs/plugins/variantdatabase/report",
@@ -526,7 +526,7 @@ app.post('/logout', function(req, res){
 
 // application -------------------------------------------------------------
 app.get('*', function(req, res) {
-    res.sendfile('./app/index.html'); // load the single view file (angular will handle the page changes on the front-end)
+    res.sendFile('./app/index.html'); // load the single view file (angular will handle the page changes on the front-end)
 });
 
 // listen (start app with node server.js) ======================================
