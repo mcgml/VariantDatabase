@@ -353,25 +353,21 @@ angular.module('variantdatabase', [ 'ngResource', 'ngRoute', 'variantdatabase.lo
         $scope.items = items;
         $scope.savedGenes = [];
 
-        $scope.checkHGNC = function(){
-            $http({
-                method: 'GET',
-                url: 'http://rest.genenames.org/fetch/symbol/' + $scope.search
-            }).then(function successCallback(response) {
-                $scope.searchedGenes = response.data.response.docs;
+        $scope.checkInternalGeneNames = function(){
+            $http.post('/api/variantdatabase/symbol/info',
+            {
+                symbolId : $scope.search
+            })
+            .then(function(response) {
+                $scope.searchedGenes = response.data;
                 Notification('Operation successful');
-            }, function errorCallback(response) {
+            }, function(response) {
                 Notification.error(response);
                 console.log("ERROR: " + response);
             });
         };
 
         $scope.addGene = function(gene){
-            if (gene.status !== "Approved"){
-                Notification.error("Cannot add unapproved gene");
-                return;
-            }
-
             //check gene is not already in list
             for (var key in $scope.savedGenes) {
                 if ($scope.savedGenes.hasOwnProperty(key)) {
